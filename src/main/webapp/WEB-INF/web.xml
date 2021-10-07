@@ -16,7 +16,7 @@
             -->
     <servlet>
         <servlet-name>pingServlet</servlet-name>
-        <servlet-class>servlets.PingServlet</servlet-class>
+        <servlet-class>Servlets.PingServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>pingServlet</servlet-name>
@@ -24,12 +24,12 @@
     </servlet-mapping>
 
     <servlet>
-        <servlet-name>carServlet</servlet-name>
-        <servlet-class>servlets.CarServlet</servlet-class>
+        <servlet-name>userServlet</servlet-name>
+        <servlet-class>Servlets.UserServlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>carServlet</servlet-name>
-        <url-pattern>/car</url-pattern>
+        <servlet-name>userServlet</servlet-name>
+        <url-pattern>/user</url-pattern>
     </servlet-mapping>
 
     <servlet>
@@ -42,6 +42,6 @@
     </servlet-mapping>
 
     <listener>
-        <listener-class>services.DependencyLoaderListener</listener-class>
+        <listener-class>Services.DependencyLoaderListener</listener-class>
     </listener>
 </web-app>
