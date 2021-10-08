@@ -1,7 +1,10 @@
 package Services;
 
+import Utils.ConnectionManagerCat;
+
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+import java.sql.Connection;
 
 /**
  * This class is tied to the startup and shutdown of tomcat. Just implement
@@ -10,9 +13,10 @@ import javax.servlet.ServletContextListener;
  *      in your deployment descriptor (web.xml) under the listener tag.
  */
 public class DependencyLoaderListener implements ServletContextListener {
+    Connection conn;
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-
+        this.conn = ConnectionManagerCat.getConnection();
     }
 
     @Override
@@ -20,3 +24,4 @@ public class DependencyLoaderListener implements ServletContextListener {
 
     }
 }
+
