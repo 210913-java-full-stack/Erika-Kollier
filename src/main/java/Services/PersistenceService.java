@@ -1,19 +1,30 @@
-package Services;
+package services;
 
-import Models.User;
+import DAOs.CarDAO;
+import models.CarModel;
+import utils.ConnectionManager;
+
+import java.sql.SQLException;
 
 public class PersistenceService {
-    private static User user;
+    private static CarModel car;
+    private static CarDAO cDAO;
 
     static {
-        user = new User();
+        cDAO = new CarDAO(ConnectionManager.getConnection());
+
+        try {
+            car = cDAO.getCarByID(1);
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
     }
 
-    public static User getData() {
-        return user;
+    public static CarModel getData() {
+        return car;
     }
 
-    public static void setData(User u) {
-        user = u;
+    public static void setData(CarModel c) {
+        car = c;
     }
 }
