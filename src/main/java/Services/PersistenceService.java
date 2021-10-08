@@ -3,17 +3,24 @@ package Services;
 import Models.User;
 
 public class PersistenceService {
-    private static User user;
+    private static Object data;
+    private static int requestCount;
 
     static {
-        user = new User();
+
     }
 
-    public static User getData() {
-        return user;
+    public static User getUserData() {
+        if (data == null) {
+            // create a placeholder instance of user to avoid a null send off
+            data = new User();
+        }
+
+        requestCount++;
+        return (User) data;
     }
 
-    public static void setData(User u) {
-        user = u;
+    public static void setUserData(User u) {
+        data = u;
     }
 }
