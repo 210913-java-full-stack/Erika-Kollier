@@ -16,17 +16,17 @@
 - [ ] Advanced UI Framework (Angular or React)
 
 ### Minimum Viable Product
-- [ ] As a user, I can see all available flights from a city to a city.
-- [ ] As a user, I can purchase one or more tickets on a flight.
-- [ ] As a user, I can check in for my flight.
-- [ ] As a user, I can cancel my ticket.
-- [ ] As an administrator, I can schedule a new flight.
-- [ ] As an administrator, I can cancel a flight.
-- [ ] As an administrator, I can see all users with tickets for a flight.
+- [ ] As a user, I can see all available train routes from a city to a city.
+- [ ] As a user, I can purchase one or more train tickets.
+- [ ] As a user, I can check in for the train.
+- [ ] As a user, I can cancel my train ticket.
+- [ ] As an administrator, I can schedule a new train route.
+- [ ] As an administrator, I can cancel a train route.
+- [ ] As an administrator, I can see all users with tickets for a specific train route.
 
 ### Bonus Stories
-- [ ] As an administrator, I can cancel a ticket on any flight.
-- [ ] As an pilot, I can initiate takeoff of a flight. (No more new tickets or cancellations)
+- [ ] As an administrator, I can cancel a ticket for any train.
+- [ ] As a conductor, I can initiate takeoff the train leaving the station. (No more new tickets or cancellations)
 
 ## Tech Stack
  - Java 8
