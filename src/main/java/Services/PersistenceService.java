@@ -13,7 +13,7 @@ public class PersistenceService {
     public static User getUserData() {
         if (data == null) {
             // create a placeholder instance of user to avoid a null send off
-            data = new User();
+            data = new User(null);
         }
 
         requestCount++;
