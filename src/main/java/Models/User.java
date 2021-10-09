@@ -1,14 +1,36 @@
 package Models;
 
+import Repositories.TrainRepo;
+import Repositories.UserRepo;
+
 import java.util.ArrayList;
 
 public class User {
     private UserRole role;
     private ArrayList<Ticket> tickets;
+    private String username, password;
 
-    public User(UserRole role) {
-        tickets = new ArrayList<>();
+    public User(UserRole role, String username, String password) {
+        this.username = username;
+        this.password = password;
         this.role = role;
+        tickets = new ArrayList<>();
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public UserRole getRole() {
@@ -32,19 +54,25 @@ public class User {
     }
 
     abstract class UserRole{
-        public void viewTrips(){
+        UserRepo uDAO = new UserRepo();
+        TrainRepo tDAO = new TrainRepo();
 
-        } // See train trips from city to city
+        public ArrayList<Train> viewTrips(){
+            return null;
+            // return tDAO.getAllTrips
+        } // See trips for  from city to city
 
         public void purchaseTicket(Ticket t){
-            tickets.add(null); // On purchase, add ticket to ArrayList
-        } // Make a purchase of one or more tickets for the train
+            // Purchase Ticket
+            tickets.add(t); // On purchase, add ticket to ArrayList
+        }
 
         /**
          * Pass a parameter indicating they have arrived to the train
          */
-        public void checkIn(){
-
+        public void checkIn(Train t){
+            // On check in, assign user to train
+            // t.addPassenger();
         }
 
         /**
@@ -69,7 +97,8 @@ public class User {
          * @param t
          */
         void cancelTrip(Train t){
-
+            t.setPassengers(null);
+            t.setAvailable(false);
         }
 
         /**

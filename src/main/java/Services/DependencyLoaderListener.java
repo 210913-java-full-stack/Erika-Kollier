@@ -13,10 +13,10 @@ import java.sql.Connection;
  *      in your deployment descriptor (web.xml) under the listener tag.
  */
 public class DependencyLoaderListener implements ServletContextListener {
-    Connection conn;
+    //Connection conn;
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-        this.conn = ConnectionManagerCat.getConnection();
+        /*this.conn = ConnectionManagerCat.getConnection();*/
     }
 
     @Override

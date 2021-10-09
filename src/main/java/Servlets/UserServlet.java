@@ -17,9 +17,7 @@ public class UserServlet extends HttpServlet {
         resp.setContentType("application/json");
 
         JSONArray jArray = new JSONArray();
-
         // jArray.put("user", arrayOfUsers);
-
 
         resp.getWriter().print(jArray);
     }

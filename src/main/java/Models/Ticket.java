@@ -2,7 +2,7 @@ package Models;
 
 import java.util.Date;
 
-public class Ticket {
+public class Ticket extends IDAbstract<Integer>{
     private Date date;
     private String description;
 

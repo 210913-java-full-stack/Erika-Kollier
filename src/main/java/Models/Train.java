@@ -1,17 +1,75 @@
 package Models;
 
-import java.util.Date;
+import java.util.*;
 
-public class Train {
+public class Train extends IDAbstract<Integer>{
     private String originStation, arrivalStation, departureTime, arrivalTime;
+    private int passengersOnTrip, id;
+    private Ticket myTicket;
     private Date dateInfo;
+    private boolean isAvailable;
 
-    public Train(){
+    // A train has passengers
+    private ArrayList<User> passengers;
 
+    public Train(String description){
+        generateIDs();
+
+        this.rnd = new Random();
+        this.id = assignID();
+        this.myTicket = generateTicket();
     }
 
+    public void addPassengersOnTrip(User u){
+        passengers.add(u);
+    }
+
+    /**
+     * Generate a ticket
+     * @return
+     */
     public Ticket generateTicket(){
         return (new Ticket(new Date(), "Empty Content"));
+    }
+
+    public boolean isAvailable() {
+        return isAvailable;
+    }
+
+    public void setAvailable(boolean available) {
+        isAvailable = available;
+    }
+
+    public int getPassengersOnTrip() {
+        return passengersOnTrip;
+    }
+
+    public void setPassengersOnTrip(int passengersOnTrip) {
+        this.passengersOnTrip = passengersOnTrip;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public Ticket getMyTicket() {
+        return myTicket;
+    }
+
+    public void setMyTicket(Ticket myTicket) {
+        this.myTicket = myTicket;
+    }
+
+    public ArrayList<User> getPassengers() {
+        return passengers;
+    }
+
+    public void setPassengers(ArrayList<User> passengers) {
+        this.passengers = passengers;
     }
 
     public String getOriginStation() {

@@ -1,6 +1,5 @@
 package Repositories;
 
-import Models.Ticket;
 import Models.User;
 
 import java.util.ArrayList;
