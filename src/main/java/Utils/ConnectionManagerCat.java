@@ -28,10 +28,6 @@ public class ConnectionManagerCat {
         if(conn == null) {
             try {
                 ClassLoader cl = Thread.currentThread().getContextClassLoader();
-                URL[] urls = ((URLClassLoader)cl).getURLs();
-                for (URL url: urls) {
-                    System.out.println(url.getFile());
-                }
 
                 InputStream input = cl.getResourceAsStream("connection.properties");
                 Properties props = new Properties();
