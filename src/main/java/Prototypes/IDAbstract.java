@@ -1,4 +1,4 @@
-package Models;
+package Prototypes;
 
 import java.util.Iterator;
 import java.util.LinkedHashSet;
@@ -11,8 +11,16 @@ public abstract class IDAbstract <T> {
     protected final int MAX_NUM = 500;
     protected T id;
 
+    // Create a method that grabs all IDs from the specific class's tables and put them in a list
+
     /**
-     * Assign random ID to train
+     * This abstract method pulls the IDs from the DB table related to the class this method is called in.
+     * With the fetched IDs, check them against the generatedIDs Collection and delete every ID that is already used
+     */
+    public abstract void checkIDs();
+
+    /**
+     * Assign random ID to <T> then remove it
      * @return
      */
     protected T assignID(){
@@ -22,8 +30,6 @@ public abstract class IDAbstract <T> {
             id = itr.next();
             itr.remove();
         }
-
-        generatedIDs.clear();
 
         return id;
     }
