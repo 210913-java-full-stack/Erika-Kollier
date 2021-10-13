@@ -1,14 +1,22 @@
 package Repositories;
 
 import Models.Junction;
-import Prototypes.IDAbstract;
+import Prototypes.BehindTheScenes;
 import Prototypes.IRepo;
+import org.hibernate.HibernateException;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.logging.Logger;
 
-public class JunctionRepo extends IDAbstract<Integer> implements IRepo<Junction> {
+public class JunctionRepo extends BehindTheScenes<Integer> implements IRepo<Junction> {
     // Variables
     private Junction junction;
+    private List<Junction> junctions;
+
+    // Error Logger
+    private static Logger logger = Logger.getLogger(JunctionRepo.class.getName());
 
     @Override
     public void checkIDs() {
@@ -16,12 +24,29 @@ public class JunctionRepo extends IDAbstract<Integer> implements IRepo<Junction>
     }
 
     @Override
-    public ArrayList<Junction> getAll() {
-        return null;
+    public List<Junction> getAll() {
+        try {
+            session = sessionFactory.openSession();
+            tx = session.beginTransaction();
+            junctions = session.createQuery( "FROM Junction").list();
+
+            for (Iterator itr = junctions.iterator(); itr.hasNext();){
+                junction = (Junction) itr.next();
+            }
+            tx.commit();
+        } catch (HibernateException e){
+            if (tx != null)
+                tx.rollback();
+            logger.warning("TrainRepo has encountered a problem: " + e);
+        } finally {
+            session.close();
+        }
+
+        return junctions;
     }
 
     @Override
-    public ArrayList<Junction> getByID(int ID) {
+    public Junction getByID(int ID) {
         return null;
     }
 

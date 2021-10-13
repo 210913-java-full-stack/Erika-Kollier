@@ -2,7 +2,8 @@ package Servlets;
 
 import Models.User;
 import Repositories.UserRepo;
-import org.json.JSONArray;
+
+import Services.PersistenceService;
 import org.json.JSONObject;
 
 import javax.servlet.ServletException;
@@ -14,15 +15,28 @@ import java.io.IOException;
 public class UserServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        UserRepo ur = new UserRepo();
-
         resp.setStatus(202);
         resp.setContentType("application/json");
-
         JSONObject jOBj = new JSONObject();
-        jOBj.put("Users", ur.getAll());
 
-        resp.getWriter().print(jOBj);
+        String param = req.getParameter("param");
+        Integer id = Integer.parseInt(req.getParameter("id"));
+
+        if (param != null) {
+            switch (param) {
+                case "all":
+                    jOBj.put("Users", PersistenceService.getAllUsers());
+                    resp.getWriter().print(jOBj);
+                default:
+                    jOBj.put("Requested User", PersistenceService.getUserByName(param));
+                    resp.getWriter().print(jOBj);
+            }
+        }
+
+        if (id != 0){
+            jOBj.put("Requested User", PersistenceService.getUserByID(id));
+            resp.getWriter().print(jOBj);
+        }
     }
 
     @Override

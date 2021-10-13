@@ -62,6 +62,7 @@ public class User {
     }
 
     public String toString(){
-        return userID + " ( " + role + " )" + ": " + username + " " + password;
+        return "User ID: " + userID + " (" + role +  ") " + "\n" +
+                "Username: " + username + ", " + "Password: " + password;
     }
 }

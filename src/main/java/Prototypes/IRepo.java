@@ -1,10 +1,11 @@
 package Prototypes;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public interface IRepo <T> {
-    ArrayList<T> getAll();
-    ArrayList<T> getByID(int ID);
+    List<T> getAll();
+    T getByID(int ID);
     void save(T t);
     void deleteByID(int ID);
 }

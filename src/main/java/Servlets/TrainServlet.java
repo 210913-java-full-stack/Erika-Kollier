@@ -1,5 +1,9 @@
 package Servlets;
 
+import Services.PersistenceService;
+import org.json.JSONObject;
+
+import javax.persistence.Parameter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -9,7 +13,28 @@ import java.io.IOException;
 public class TrainServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        resp.setStatus(202);
+        resp.setContentType("application/json");
+        JSONObject jOBj = new JSONObject();
 
+        String param = req.getParameter("param");
+        Integer id = Integer.parseInt(req.getParameter("id"));
+
+        if (param != null) {
+            switch (param) {
+                case "all":
+                    jOBj.put("Trains", PersistenceService.getAllTrains());
+                    resp.getWriter().print(jOBj);
+                default:
+                    jOBj.put("Train " + req.getParameter("param"), PersistenceService.getTrainByID(Integer.parseInt(param)));
+                    resp.getWriter().print(jOBj);
+            }
+        }
+
+        if (id != 0){
+            jOBj.put("Requested User", PersistenceService.getUserByID(id));
+            resp.getWriter().print(jOBj);
+        }
     }
 
     @Override

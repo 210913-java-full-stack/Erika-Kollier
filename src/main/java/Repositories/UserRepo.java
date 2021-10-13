@@ -2,33 +2,24 @@ package Repositories;
 
 import Models.Ticket;
 import Models.User;
-import Prototypes.IDAbstract;
+import Prototypes.BehindTheScenes;
 import Prototypes.IRepo;
-import com.fasterxml.classmate.AnnotationConfiguration;
+
 import org.hibernate.*;
-import org.hibernate.boot.MetadataSources;
-import org.hibernate.boot.registry.StandardServiceRegistry;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 
 import java.util.Iterator;
-import java.util.List;
-
-import javax.persistence.Query;
-import javax.swing.text.html.HTMLDocument;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Logger;
 
-public class UserRepo extends IDAbstract<Integer> implements IRepo<User>{
+public class UserRepo extends BehindTheScenes<Integer> implements IRepo<User>{
     // Variables
     private User user = null;
-    private ArrayList<User> users;
-    protected ArrayList<Ticket> tickets;
+    private List<User> users;
+    protected List<Ticket> tickets;
 
-    // Hibernate Variables
-    StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure().build();
-    SessionFactory sessionFactory = new MetadataSources( registry ).buildMetadata().buildSessionFactory();
-    Session session = sessionFactory.openSession();
-    Transaction tx = null;
-
+    // Error Logger
+    private static Logger logger = Logger.getLogger(UserRepo.class.getName());
 
     public UserRepo(){
         users = new ArrayList<>();
@@ -49,19 +40,20 @@ public class UserRepo extends IDAbstract<Integer> implements IRepo<User>{
      * @return
      */
     @Override
-    public ArrayList<User> getAll() {
+    public List<User> getAll() {
         try {
+            session = sessionFactory.openSession();
             tx = session.beginTransaction();
-            users = (ArrayList<User>) session.createQuery( "FROM User").list();
+            users = session.createQuery( "FROM User").list();
 
             for (Iterator itr = users.iterator(); itr.hasNext();){
                 user = (User) itr.next();
             }
             tx.commit();
-        }  catch (HibernateException e){
+        } catch (HibernateException e){
             if (tx != null)
                 tx.rollback();
-            e.printStackTrace();
+            logger.warning("UserRepo has encountered a problem: " + e);
         } finally {
             session.close();
         }
@@ -70,8 +62,25 @@ public class UserRepo extends IDAbstract<Integer> implements IRepo<User>{
     }
 
     @Override
-    public ArrayList<User> getByID(int ID) {
-        return null;
+    public User getByID(int ID) {
+        try {
+            sessionFactory.openSession();
+            tx = session.beginTransaction();
+            users = session.createQuery("FROM Train t WHERE t.trainID = " + ID).list();
+
+            for (Iterator itr = users.iterator(); itr.hasNext();){
+                user = (User) itr.next();
+            }
+            tx.commit();
+        } catch (HibernateException e) {
+            if (tx != null)
+                tx.rollback();
+            logger.warning("TrainRepo has encountered a problem: " + e);
+        } finally {
+            session.close();
+        }
+
+        return user;
     }
 
     @Override
@@ -82,5 +91,26 @@ public class UserRepo extends IDAbstract<Integer> implements IRepo<User>{
     @Override
     public void deleteByID(int ID) {
 
+    }
+
+    public User getByName(String name) {
+        try {
+            Session session = sessionFactory.openSession();
+            tx = session.beginTransaction();
+            users = session.createQuery( "FROM User u WHERE u.username = " + name).list();
+
+            for (Iterator itr = users.iterator(); itr.hasNext();){
+                user = (User) itr.next();
+            }
+            tx.commit();
+        } catch (HibernateException e){
+            if (tx != null)
+                tx.rollback();
+            logger.warning("UserRepo has encountered a problem: " + e);
+        } finally {
+            session.close();
+        }
+
+        return user;
     }
 }

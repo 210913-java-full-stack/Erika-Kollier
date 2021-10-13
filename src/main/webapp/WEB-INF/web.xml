@@ -14,6 +14,7 @@
     <!--This tells tomcat where to find the servlet and what name to register it as. We can use
             the name of the servlet later to reference this instance.
             -->
+    <!-- Ping Servlet -->
     <servlet>
         <servlet-name>pingServlet</servlet-name>
         <servlet-class>Servlets.PingServlet</servlet-class>
@@ -23,6 +24,8 @@
         <url-pattern>/ping</url-pattern>
     </servlet-mapping>
 
+    <!-- User Servlets -->
+    <!-- Get All -->
     <servlet>
         <servlet-name>userServlet</servlet-name>
         <servlet-class>Servlets.UserServlet</servlet-class>
@@ -31,6 +34,19 @@
         <servlet-name>userServlet</servlet-name>
         <url-pattern>/users</url-pattern>
     </servlet-mapping>
+
+    <!-- Get By ID -->
+
+    <!-- Train Servlet here -->
+    <servlet>
+        <servlet-name>trainServlet</servlet-name>
+        <servlet-class>Servlets.TrainServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>trainServlet</servlet-name>
+        <url-pattern>/trains</url-pattern>
+    </servlet-mapping>
+
 
     <listener>
         <listener-class>Services.DependencyLoaderListener</listener-class>
