@@ -1,14 +1,14 @@
 package Repositories;
 
-import Models.Ticket;
+import Models.Junction;
 import Prototypes.IDAbstract;
 import Prototypes.IRepo;
 
 import java.util.ArrayList;
 
-public class TicketRepo extends IDAbstract<Integer> implements IRepo<Ticket> {
+public class JunctionRepo extends IDAbstract<Integer> implements IRepo<Junction> {
     // Variables
-    private Ticket ticket;
+    private Junction junction;
 
     @Override
     public void checkIDs() {
@@ -16,17 +16,17 @@ public class TicketRepo extends IDAbstract<Integer> implements IRepo<Ticket> {
     }
 
     @Override
-    public ArrayList<Ticket> getAll() {
+    public ArrayList<Junction> getAll() {
         return null;
     }
 
     @Override
-    public ArrayList<Ticket> getByID(int ID) {
+    public ArrayList<Junction> getByID(int ID) {
         return null;
     }
 
     @Override
-    public void save(Ticket ticket) {
+    public void save(Junction junction) {
 
     }
 
@@ -34,5 +34,4 @@ public class TicketRepo extends IDAbstract<Integer> implements IRepo<Ticket> {
     public void deleteByID(int ID) {
 
     }
-    // TO GET DESCRIPTION JOIN ON TRAIN TABLE AND GET THE INFORMATION FROM THERE
 }

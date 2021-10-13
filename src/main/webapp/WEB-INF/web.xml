@@ -29,16 +29,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>userServlet</servlet-name>
-        <url-pattern>/user</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>jacksonServlet</servlet-name>
-        <servlet-class>servlet.JacksonServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>jacksonServlet</servlet-name>
-        <url-pattern>/jackson</url-pattern>
+        <url-pattern>/users</url-pattern>
     </servlet-mapping>
 
     <listener>

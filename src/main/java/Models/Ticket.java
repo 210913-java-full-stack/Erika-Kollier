@@ -1,28 +1,35 @@
 package Models;
 
-import java.util.Date;
+import javax.persistence.*;
 
-public class Ticket extends IDAbstract<Integer>{
-    private Date date;
+@Entity
+@Table(name = "TICKETS")
+public class Ticket{
+    // Variables
+    private int ticketID;
     private String description;
 
-    public Ticket(Date date, String description) {
-        this.date = date;
-        this.description = description;
+    /**
+     * Non-Parameterized Constructor
+     */
+    public Ticket() {
+
     }
 
-    public Date getDate() {
-        return date;
+    @Id
+    @Column(name = "TICKET_ID")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public int getTicketID() {
+        return ticketID;
+    }
+    public void setTicketID(int ticketID) {
+        this.ticketID = ticketID;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
+    @Column(name = "DESCRIPTION")
     public String getDescription() {
         return description;
     }
-
     public void setDescription(String description) {
         this.description = description;
     }
