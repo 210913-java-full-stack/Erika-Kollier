@@ -1,114 +1,83 @@
 package Models;
 
+import org.hibernate.SessionFactory;
+
+import javax.persistence.*;
+import javax.security.auth.login.AppConfigurationEntry;
+import javax.security.auth.login.Configuration;
 import java.util.*;
 
-public class Train extends IDAbstract<Integer>{
-    private String originStation, arrivalStation, departureTime, arrivalTime;
-    private int passengersOnTrip, id;
-    private Ticket myTicket;
-    private Date dateInfo;
-    private boolean isAvailable;
-
-    // A train has passengers
-    private ArrayList<User> passengers;
-
-    public Train(String description){
-        generateIDs();
-
-        this.rnd = new Random();
-        this.id = assignID();
-        this.myTicket = generateTicket();
-    }
-
-    public void addPassengersOnTrip(User u){
-        passengers.add(u);
-    }
+@Entity
+@Table(name = "TRAINS")
+public class Train{
+    // Variables
+    private int trainID, ticketID, passengers;
+    private String arrivalStation, departureStation;
+    private Date arrivalInfo, departureInfo;
 
     /**
-     * Generate a ticket
-     * @return
+     * Non-Parameterized Constructor
      */
-    public Ticket generateTicket(){
-        return (new Ticket(new Date(), "Empty Content"));
+    public Train(){
+
     }
 
-    public boolean isAvailable() {
-        return isAvailable;
+    @Id
+    @Column(name = "TRAIN_ID")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public int getTrainId() {
+        return trainID;
+    }
+    public void setTrainId(int id) {
+        this.trainID = id;
     }
 
-    public void setAvailable(boolean available) {
-        isAvailable = available;
+    @Column(name = "TICKET_ID")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public int getTicketId() {
+        return ticketID;
+    }
+    public void setTicketId(int id) {
+        this.ticketID = id;
     }
 
-    public int getPassengersOnTrip() {
-        return passengersOnTrip;
-    }
-
-    public void setPassengersOnTrip(int passengersOnTrip) {
-        this.passengersOnTrip = passengersOnTrip;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public Ticket getMyTicket() {
-        return myTicket;
-    }
-
-    public void setMyTicket(Ticket myTicket) {
-        this.myTicket = myTicket;
-    }
-
-    public ArrayList<User> getPassengers() {
-        return passengers;
-    }
-
-    public void setPassengers(ArrayList<User> passengers) {
-        this.passengers = passengers;
-    }
-
-    public String getOriginStation() {
-        return originStation;
-    }
-
-    public void setOriginStation(String originStation) {
-        this.originStation = originStation;
-    }
-
+    @Column(name = "ARRIVAL_STATION")
     public String getArrivalStation() {
         return arrivalStation;
     }
-
     public void setArrivalStation(String arrivalStation) {
         this.arrivalStation = arrivalStation;
     }
 
-    public String getDepartureTime() {
-        return departureTime;
+    @Column(name = "PASSENGERS")
+    public int getPassengers() {
+        return passengers;
+    }
+    public void setPassengers(int passengersOnTrip) {
+        this.passengers = passengersOnTrip;
     }
 
-    public void setDepartureTime(String departureTime) {
-        this.departureTime = departureTime;
+    @Column(name = "DEPARTURE_STATION")
+    public String getDepartureStation() {
+        return departureStation;
+    }
+    public void setDepartureStation(String departureStation) {
+        this.departureStation = departureStation;
     }
 
-    public String getArrivalTime() {
-        return arrivalTime;
+    @Column(name = "ARRIVAL_INFO")
+    public Date getArrivalInfo() {
+        return arrivalInfo;
+    }
+    public void setArrivalInfo(Date arrivalInfo) {
+        this.arrivalInfo = arrivalInfo;
     }
 
-    public void setArrivalTime(String arrivalTime) {
-        this.arrivalTime = arrivalTime;
+    @Column(name = "DEPARTURE_INFO")
+    public Date getDepartureInfo() {
+        return departureInfo;
     }
-
-    public Date getDateInfo() {
-        return dateInfo;
-    }
-
-    public void setDateInfo(Date dateInfo) {
-        this.dateInfo = dateInfo;
+    public void setDepartureInfo(Date departureInfo) {
+        this.departureInfo = departureInfo;
     }
 }

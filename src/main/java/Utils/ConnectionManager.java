@@ -38,6 +38,8 @@ public class ConnectionManager {
                         props.getProperty("user") + "&password=" +
                         props.getProperty("password");
 
+                System.out.println(connString);
+
                 conn = DriverManager.getConnection(connString);
             } catch(SQLException | IOException e) {
                 e.printStackTrace();

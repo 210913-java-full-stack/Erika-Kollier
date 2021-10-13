@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+    <session-factory>
+        <!-- SQL Dialect -->
+        <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+
+        <!-- Database Connection Settings -->
+        <property name="hibernate.connection.driver_class">org.mariadb.jdbc.Driver</property>
+        <property name="hibernate.connection.url">jdbc:mariadb://practice.cnybvnomlu5g.us-east-2.rds.amazonaws.com:3306/Project1?useSSL=false</property>
+        <property name="hibernate.connection.username">admin</property>
+        <property name="hibernate.connection.password">qiDQk36%KWMm</property>
+
+        <!-- Connection Pool Size (built-in) -->
+        <property name="hibernate.connection.pool.size">1</property>
+
+        <!-- show all generate SQL query -->
+        <property name="show_sql">true</property>
+
+        <!-- Mention here all the model classes along with their package name -->
+        <mapping class="Models.Train"/>
+        <mapping class="Models.User"/>
+        <mapping class="Models.Ticket"/>
+        <mapping class="Models.Junction"/>
+        <mapping class="Models.Role"/>
+    </session-factory>
+</hibernate-configuration>

@@ -1,6 +1,7 @@
 package Servlets;
 
 import Models.User;
+import Repositories.UserRepo;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -13,17 +14,30 @@ import java.io.IOException;
 public class UserServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        UserRepo ur = new UserRepo();
+
         resp.setStatus(202);
         resp.setContentType("application/json");
 
-        JSONArray jArray = new JSONArray();
-        // jArray.put("user", arrayOfUsers);
+        JSONObject jOBj = new JSONObject();
+        jOBj.put("Users", ur.getAll());
 
-        resp.getWriter().print(jArray);
+        resp.getWriter().print(jOBj);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         super.doPost(req, resp);
+    }
+
+    @Override
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        super.doDelete(req, resp);
+    }
+
+    @Override
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        // For single updates
+        super.doPut(req, resp);
     }
 }
