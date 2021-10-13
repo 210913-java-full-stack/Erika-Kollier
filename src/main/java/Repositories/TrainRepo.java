@@ -1,18 +1,27 @@
 package Repositories;
 
 import Models.*;
-import Prototypes.IDAbstract;
+import Prototypes.BehindTheScenes;
 import Prototypes.IRepo;
 
-import java.util.ArrayList;
-import java.util.Random;
+import org.hibernate.HibernateException;
 
-public class TrainRepo extends IDAbstract<Integer> implements IRepo<Train> {
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Random;
+import java.util.logging.Logger;
+
+public class TrainRepo extends BehindTheScenes<Integer> implements IRepo<Train> {
     // Variables
     private Train aTrain;
-    private ArrayList<User> passengers;
-    private Ticket myTicket;
+    private List<Train> trains;
+    private List<User> passengers;
+    private Train myTicket;
     private boolean isAvailable;
+
+    // Error Logger
+    private static Logger logger = Logger.getLogger(TrainRepo.class.getName());
 
     // SET YOUR MAIN OBJECT ID USING assignID();
     // aTrain.setID(assignID());
@@ -42,8 +51,8 @@ public class TrainRepo extends IDAbstract<Integer> implements IRepo<Train> {
      * Generate a ticket
      * @return
      */
-    public Ticket generateTicket(){
-        return (new Ticket());
+    public Train generateTicket(){
+        return (new Train());
     }
 
     //region Getters and Setters
@@ -55,15 +64,15 @@ public class TrainRepo extends IDAbstract<Integer> implements IRepo<Train> {
         isAvailable = available;
     }
 
-    public Ticket getMyTicket() {
+    public Train getMyTicket() {
         return myTicket;
     }
 
-    public void setMyTicket(Ticket myTicket) {
+    public void setMyTicket(Train myTicket) {
         this.myTicket = myTicket;
     }
 
-    public ArrayList<User> getPassengers() {
+    public List<User> getPassengers() {
         return passengers;
     }
 
@@ -72,13 +81,47 @@ public class TrainRepo extends IDAbstract<Integer> implements IRepo<Train> {
     }
 
     @Override
-    public ArrayList<Train> getAll() {
-        return null;
+    public List<Train> getAll() {
+        try {
+            session = sessionFactory.openSession();
+            tx = session.beginTransaction();
+            trains = (ArrayList<Train>) session.createQuery("FROM Train").list();
+
+            for (Iterator itr = trains.iterator(); itr.hasNext();) {
+                aTrain = (Train) itr.next();
+            }
+            tx.commit();
+        } catch (HibernateException e) {
+            if (tx != null)
+                tx.rollback();
+            logger.warning("TrainRepo has encountered a problem: " + e);
+        } finally {
+            session.close();
+        }
+
+        return trains;
     }
 
     @Override
-    public ArrayList<Train> getByID(int ID) {
-        return null;
+    public Train getByID(int ID) {
+        try {
+            sessionFactory.openSession();
+            tx = session.beginTransaction();
+            trains = session.createQuery("FROM Train t WHERE t.trainID = " + ID).list();
+
+            for (Iterator itr = trains.iterator(); itr.hasNext();){
+                aTrain = (Train) itr.next();
+            }
+            tx.commit();
+        } catch (HibernateException e) {
+            if (tx != null)
+                tx.rollback();
+            logger.warning("TrainRepo has encountered a problem: " + e);
+        } finally {
+            session.close();
+        }
+
+        return aTrain;
     }
 
     @Override

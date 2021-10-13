@@ -14,6 +14,7 @@ public class Train{
     private int trainID, ticketID, passengers;
     private String arrivalStation, departureStation;
     private Date arrivalInfo, departureInfo;
+    private boolean isAvailable;
 
     /**
      * Non-Parameterized Constructor
@@ -41,20 +42,20 @@ public class Train{
         this.ticketID = id;
     }
 
-    @Column(name = "ARRIVAL_STATION")
-    public String getArrivalStation() {
-        return arrivalStation;
-    }
-    public void setArrivalStation(String arrivalStation) {
-        this.arrivalStation = arrivalStation;
-    }
-
     @Column(name = "PASSENGERS")
     public int getPassengers() {
         return passengers;
     }
     public void setPassengers(int passengersOnTrip) {
         this.passengers = passengersOnTrip;
+    }
+
+    @Column(name = "ARRIVAL_STATION")
+    public String getArrivalStation() {
+        return arrivalStation;
+    }
+    public void setArrivalStation(String arrivalStation) {
+        this.arrivalStation = arrivalStation;
     }
 
     @Column(name = "DEPARTURE_STATION")
@@ -79,5 +80,22 @@ public class Train{
     }
     public void setDepartureInfo(Date departureInfo) {
         this.departureInfo = departureInfo;
+    }
+
+    @Column(name = "AVAILABLE")
+    public boolean isAvailable() {
+        return isAvailable;
+    }
+    public void setAvailable(boolean available) {
+        isAvailable = available;
+    }
+
+    public String toString(){
+        return "Train ID: " + trainID +
+                " Ticket ID: " + ticketID +
+                " Passengers: " + passengers +
+                " Arrival Info: " + arrivalStation + " " + arrivalInfo +
+                " Departure Info: " + departureStation + " " + arrivalInfo +
+                " Availability: " + isAvailable;
     }
 }
