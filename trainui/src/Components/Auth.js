@@ -18,8 +18,8 @@ const paperStyle = {
   margin: "20px auto",
 };
 const btnStyle = { margin: "16px 0" };
-const textStyle = { color: "#3f51b5" };
-
+const textStyle = { color: "#3f51b5", fontWeight: "light" };
+const textStyle2 = { color: "black", fontWeight: "bold" };
 /**
  * Initalize calling useState, accepts the inital value and returns 2 values the current state and function updates the state. Props(properties) passing into the function
  * @param {*} props
@@ -99,12 +99,12 @@ const Auth = (props) => {
 
   return (
     <div className="auth">
-      <Typography variant="h2" style={textStyle}>
-        Welcome to the Train Company
-      </Typography>
       <Grid>
         <Paper elevation={10} style={paperStyle}>
           <Grid align="center">
+            <Typography variant="h4" style={textStyle2}>
+              Train Company
+            </Typography>
             <h2 style={textStyle}>{login ? "Sign in" : "Sign up"}</h2>
           </Grid>
           {signupForm()}
