@@ -1,18 +1,21 @@
 package Repositories;
 
+import Logging.*;
 import Models.*;
 import Prototypes.BehindTheScenes;
 import Prototypes.IRepo;
 
 import org.hibernate.HibernateException;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Random;
-import java.util.logging.Logger;
+import java.util.UUID;
+import java.util.logging.*;
 
-public class TrainRepo extends BehindTheScenes<Integer> implements IRepo<Train> {
+public class TrainRepo extends BehindTheScenes implements IRepo<Train> {
     // Variables
     private Train aTrain;
     private List<Train> trains;
@@ -27,15 +30,28 @@ public class TrainRepo extends BehindTheScenes<Integer> implements IRepo<Train> 
     // aTrain.setID(assignID());
 
     public TrainRepo(){
-        generateIDs();
+        try {
+            LogManager.getLogManager().readConfiguration(new FileInputStream("logger.properties"));
+        } catch (SecurityException | IOException e1) {
+            e1.printStackTrace();
+        }
+        logger.setLevel(Level.FINE);
+        logger.addHandler(new ConsoleHandler());
+        //adding custom handler
+        logger.addHandler(new LoggingHandler());
+        try {
+            //FileHandler file name with max size and number of log files limit
+            Handler fileHandler = new FileHandler("src/main/logs/logger.log", 2000, 5);
+            fileHandler.setFormatter(new LoggingFormatter());
 
-        this.rnd = new Random();
-        this.id = assignID();
-    }
+            //setting custom filter for FileHandler
+            fileHandler.setFilter(new LoggingFilter());
 
-    @Override
-    public void checkIDs(){
+            logger.addHandler(fileHandler);
 
+        } catch (SecurityException | IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -85,7 +101,7 @@ public class TrainRepo extends BehindTheScenes<Integer> implements IRepo<Train> 
         try {
             session = sessionFactory.openSession();
             tx = session.beginTransaction();
-            trains = (ArrayList<Train>) session.createQuery("FROM Train").list();
+            trains = session.createQuery("FROM Train").list();
 
             for (Iterator itr = trains.iterator(); itr.hasNext();) {
                 aTrain = (Train) itr.next();
@@ -103,11 +119,13 @@ public class TrainRepo extends BehindTheScenes<Integer> implements IRepo<Train> 
     }
 
     @Override
-    public Train getByID(int ID) {
+    public Train getByID(UUID ID) {
         try {
             sessionFactory.openSession();
             tx = session.beginTransaction();
-            trains = session.createQuery("FROM Train t WHERE t.trainID = " + ID).list();
+            typedQuery = session.createQuery("FROM Train WHERE trainID = :trainID");
+            typedQuery.setParameter("trainID", ID);
+
 
             for (Iterator itr = trains.iterator(); itr.hasNext();){
                 aTrain = (Train) itr.next();
@@ -130,7 +148,7 @@ public class TrainRepo extends BehindTheScenes<Integer> implements IRepo<Train> 
     }
 
     @Override
-    public void deleteByID(int ID) {
+    public void deleteByID(UUID ID) {
 
     }
     //endregion

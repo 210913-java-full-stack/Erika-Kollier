@@ -5,23 +5,18 @@ import Prototypes.BehindTheScenes;
 import Prototypes.IRepo;
 import org.hibernate.HibernateException;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 import java.util.logging.Logger;
 
-public class JunctionRepo extends BehindTheScenes<Integer> implements IRepo<Junction> {
+public class JunctionRepo extends BehindTheScenes implements IRepo<Junction> {
     // Variables
     private Junction junction;
     private List<Junction> junctions;
 
     // Error Logger
     private static Logger logger = Logger.getLogger(JunctionRepo.class.getName());
-
-    @Override
-    public void checkIDs() {
-
-    }
 
     @Override
     public List<Junction> getAll() {
@@ -46,7 +41,7 @@ public class JunctionRepo extends BehindTheScenes<Integer> implements IRepo<Junc
     }
 
     @Override
-    public Junction getByID(int ID) {
+    public Junction getByID(UUID ID) {
         return null;
     }
 
@@ -56,7 +51,7 @@ public class JunctionRepo extends BehindTheScenes<Integer> implements IRepo<Junc
     }
 
     @Override
-    public void deleteByID(int ID) {
+    public void deleteByID(UUID ID) {
 
     }
 }

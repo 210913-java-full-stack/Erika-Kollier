@@ -6,6 +6,7 @@ import Repositories.UserRepo;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class PersistenceService {
     private static Object data;
@@ -22,12 +23,12 @@ public class PersistenceService {
         return ur.getAll();
     }
 
-    public static User getUserByName(String name){
+    public static User getUserByFirstName(String name){
         requestCount++;
-        return ur.getByName(name);
+        return ur.getByFirstName(name);
     }
 
-    public static User getUserByID(int ID){
+    public static User getUserByID(UUID ID){
         requestCount++;
         return ur.getByID(ID);
     }
@@ -37,7 +38,7 @@ public class PersistenceService {
         return tr.getAll();
     }
 
-    public static Train getTrainByID(int ID){
+    public static Train getTrainByID(UUID ID){
         requestCount++;
         return tr.getByID(ID);
     }

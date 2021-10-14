@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.UUID;
 
 public class TrainServlet extends HttpServlet {
     @Override
@@ -18,22 +19,16 @@ public class TrainServlet extends HttpServlet {
         JSONObject jOBj = new JSONObject();
 
         String param = req.getParameter("param");
-        Integer id = Integer.parseInt(req.getParameter("id"));
 
         if (param != null) {
             switch (param) {
                 case "all":
                     jOBj.put("Trains", PersistenceService.getAllTrains());
                     resp.getWriter().print(jOBj);
-                default:
-                    jOBj.put("Train " + req.getParameter("param"), PersistenceService.getTrainByID(Integer.parseInt(param)));
-                    resp.getWriter().print(jOBj);
+                /*default:
+                    jOBj.put("Train " + req.getParameter("param"), PersistenceService.getTrainByID(UUID.fromString(param));
+                    resp.getWriter().print(jOBj);*/
             }
-        }
-
-        if (id != 0){
-            jOBj.put("Requested User", PersistenceService.getUserByID(id));
-            resp.getWriter().print(jOBj);
         }
     }
 

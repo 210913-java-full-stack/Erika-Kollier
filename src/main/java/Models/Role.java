@@ -9,6 +9,10 @@ abstract public class Role{
     // 0 Passenger, 1 Admin
     private int roleID;
 
+    public Role(){
+
+    }
+
     @Id
     @Column(name = "ROLE_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)

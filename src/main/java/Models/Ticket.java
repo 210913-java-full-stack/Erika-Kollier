@@ -1,12 +1,15 @@
 package Models;
 
+import Prototypes.IDGenerator;
+
 import javax.persistence.*;
+import java.util.UUID;
 
 @Entity
 @Table(name = "TICKETS")
-public class Ticket{
+public class Ticket extends IDGenerator {
     // Variables
-    private int ticketID;
+    private UUID ticketID;
     private String description;
 
     /**
@@ -16,13 +19,18 @@ public class Ticket{
 
     }
 
+    public Ticket(String description) {
+        this.ticketID = generateID();
+        this.description = description;
+    }
+
     @Id
     @Column(name = "TICKET_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public int getTicketID() {
+    public UUID getTicketID() {
         return ticketID;
     }
-    public void setTicketID(int ticketID) {
+    public void setTicketID(UUID ticketID) {
         this.ticketID = ticketID;
     }
 
@@ -32,5 +40,9 @@ public class Ticket{
     }
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String toString(){
+        return getTicketID() + ": " + getDescription();
     }
 }

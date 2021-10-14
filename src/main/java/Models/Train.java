@@ -1,44 +1,60 @@
 package Models;
 
-import org.hibernate.SessionFactory;
+import Prototypes.BehindTheScenes;
+import Prototypes.IDGenerator;
 
 import javax.persistence.*;
-import javax.security.auth.login.AppConfigurationEntry;
-import javax.security.auth.login.Configuration;
+import java.beans.ConstructorProperties;
 import java.util.*;
 
 @Entity
-@Table(name = "TRAINS")
-public class Train{
+@Table(name = "TRAINS", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "TICKET_ID"),
+        @UniqueConstraint(columnNames = "TRAIN_ID")})
+public class Train extends IDGenerator {
     // Variables
-    private int trainID, ticketID, passengers;
+    private UUID trainID, ticketID;
+    private int passengers;
     private String arrivalStation, departureStation;
     private Date arrivalInfo, departureInfo;
     private boolean isAvailable;
 
+    @ConstructorProperties({"TRAIN_ID"})
     /**
      * Non-Parameterized Constructor
      */
     public Train(){
+        this.trainID = generateID();
+    }
 
+    public Train(UUID ticketID, int passengers, String arrivalStation, String departureStation, Date arrivalInfo, Date departureInfo, boolean isAvailable, Ticket ticket) {
+        this.trainID = generateID();
+        this.ticketID = ticketID;
+        this.passengers = passengers;
+        this.arrivalStation = arrivalStation;
+        this.departureStation = departureStation;
+        this.arrivalInfo = arrivalInfo;
+        this.departureInfo = departureInfo;
+        this.isAvailable = isAvailable;
+        this.ticket = ticket;
     }
 
     @Id
     @Column(name = "TRAIN_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public int getTrainId() {
+    public UUID getTrainId() {
         return trainID;
     }
-    public void setTrainId(int id) {
+    public void setTrainId(UUID id) {
         this.trainID = id;
     }
 
     @Column(name = "TICKET_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public int getTicketId() {
+    public UUID getTicketId() {
         return ticketID;
     }
-    public void setTicketId(int id) {
+    public void setTicketId(UUID id) {
         this.ticketID = id;
     }
 
@@ -89,6 +105,10 @@ public class Train{
     public void setAvailable(boolean available) {
         isAvailable = available;
     }
+
+    @OneToOne(cascade=CascadeType.ALL)
+    @JoinColumn(name="TICKET_ID")
+    private Ticket ticket;
 
     public String toString(){
         return "Train ID: " + trainID +

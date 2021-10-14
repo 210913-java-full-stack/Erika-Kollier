@@ -1,68 +1,60 @@
 package Models;
 
+import Prototypes.IDGenerator;
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.*;
+import java.util.UUID;
 
 @Entity
 @Table(name = "USERS")
-public class User {
+public class User extends IDGenerator {
     // Variables
-    private String username, password, role;
-    private int userID, ticketID, roleID;
+    private String firstName, lastName;
+    private UUID userID;
 
     /**
      * Non-Parameterized Constructor
      */
     public User(){
+
+    }
+
+    public User(String firstName, String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
     }
 
     @Id
     @Column(name = "USER_ID")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public int getUserID() {
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+    public UUID getUserID() {
         return userID;
     }
-    public void setUserID(int userID) {
+    public void setUserID(UUID userID) {
         this.userID = userID;
     }
 
-    @Column(name = "TICKET_ID")
-    public int getTicketID() {
-        return ticketID;
+    @Column(name = "FIRST_NAME")
+    public String getFirstName() {
+        return firstName;
     }
-    public void setTicketID(int ticketID) {
-        this.ticketID = ticketID;
-    }
-
-    @Column(name = "USERNAME")
-    public String getUsername() {
-        return username;
-    }
-    public void setUsername(String username) {
-        this.username = username;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    @Column(name = "PASSWORD")
-    public String getPassword() {
-        return password;
+    @Column(name = "LAST_NAME")
+    public String getLastName() {
+        return lastName;
     }
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    @Column(name = "USER_ROLE")
-    public String getRole(){ return role; }
-    public void setRole(String role){ this.role = role; }
-
-    @Column(name = "ROLE_ID")
-    public int getRoleID() {
-        return roleID;
-    }
-    public void setRoleID(int roleID) {
-        this.roleID = roleID;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
+    @Override
     public String toString(){
-        return "User ID: " + userID + " (" + role +  ") " + "\n" +
-                "Username: " + username + ", " + "Password: " + password;
+        return "User ID: " + userID + "First Name: " + firstName +
+                "Last Name: " + lastName;
     }
 }

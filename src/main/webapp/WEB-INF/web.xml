@@ -11,6 +11,22 @@
         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
         version="2.5">
 
+    <!-- Listener -->
+    <listener>
+        <listener-class>Services.DependencyLoaderListener</listener-class>
+    </listener>
+
+    <!-- CORS Filter -->
+    <filter>
+        <filter-name>CORSFilter</filter-name>
+        <filter-class>Servlets.CORSFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>CORSFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
     <!--This tells tomcat where to find the servlet and what name to register it as. We can use
             the name of the servlet later to reference this instance.
             -->
@@ -25,17 +41,35 @@
     </servlet-mapping>
 
     <!-- User Servlets -->
-    <!-- Get All -->
+    <!-- Get All Users -->
+    <servlet>
+        <servlet-name>usersServlet</servlet-name>
+        <servlet-class>Servlets.UserServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>usersServlet</servlet-name>
+        <url-pattern>/users</url-pattern>
+    </servlet-mapping>
+
+    <!-- Get by Username -->
     <servlet>
         <servlet-name>userServlet</servlet-name>
         <servlet-class>Servlets.UserServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>userServlet</servlet-name>
-        <url-pattern>/users</url-pattern>
+        <url-pattern>/users/?param=*</url-pattern>
     </servlet-mapping>
 
     <!-- Get By ID -->
+    <servlet>
+        <servlet-name>userIDServlet</servlet-name>
+        <servlet-class>Servlets.UserIDServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>userIDServlet</servlet-name>
+        <url-pattern>/users/?id=*</url-pattern>
+    </servlet-mapping>
 
     <!-- Train Servlet here -->
     <servlet>
@@ -44,11 +78,6 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>trainServlet</servlet-name>
-        <url-pattern>/trains</url-pattern>
+        <url-pattern>/trains/*</url-pattern>
     </servlet-mapping>
-
-
-    <listener>
-        <listener-class>Services.DependencyLoaderListener</listener-class>
-    </listener>
 </web-app>
