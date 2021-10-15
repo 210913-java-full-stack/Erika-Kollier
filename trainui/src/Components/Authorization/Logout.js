@@ -19,7 +19,7 @@ const Logout = (props) => {
             href="#"
             variant="contained"
             style={btnStyle}
-            size="md"
+            size="medium"
             color="secondary"
             fullWidth
             onClick={logoutUser}
