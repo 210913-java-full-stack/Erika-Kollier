@@ -1,66 +1,40 @@
 package Repositories;
 
-import Logging.*;
-import Models.UserInfo;
-import Prototypes.BehindTheScenes;
-import Prototypes.IRepo;
+import Logging.FileLogger;
+import Models.Users.UserInfo;
+import BehindTheScenes.RepoHelper;
 import org.hibernate.HibernateException;
 
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.logging.*;
 
-public class UserInfoRepo extends BehindTheScenes<UserInfo> implements IRepo<UserInfo> {
+import static BehindTheScenes.GlobalPersistence.*;
+
+public class UserInfoRepo extends RepoHelper<UserInfo> {
     // Variables
     private UserInfo userInfo = null;
     private List<UserInfo> userInfos;
 
-    // Error Logger
-    Logger logger = Logger.getLogger(UserInfoRepo.class.getName());
-
     public UserInfoRepo(){
         userInfos = new ArrayList<>();
-
-        try {
-            LogManager.getLogManager().readConfiguration(new FileInputStream("logger.properties"));
-        } catch (SecurityException | IOException e1) {
-            e1.printStackTrace();
-        }
-        logger.setLevel(Level.FINE);
-        logger.addHandler(new ConsoleHandler());
-        //adding custom handler
-        logger.addHandler(new LoggingHandler());
-        try {
-            //FileHandler file name with max size and number of log files limit
-            Handler fileHandler = new FileHandler("src/main/logs/logger.log", 2000, 5);
-            fileHandler.setFormatter(new LoggingFormatter());
-
-            //setting custom filter for FileHandler
-            fileHandler.setFilter(new LoggingFilter());
-
-            logger.addHandler(fileHandler);
-
-        } catch (SecurityException | IOException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
     public List<UserInfo> getAll() {
         try {
-            session = sessionFactory.openSession();
-            tx = session.beginTransaction();
-            userInfos = session.createQuery( "FROM UserInfo ").list();
+            tx = getSession().beginTransaction();
+            userInfos = getSession().createQuery( "FROM UserInfo ").list();
+
+            for (UserInfo userInfo : userInfos){
+                System.out.println(userInfo.toString());
+            }
+
             tx.commit();
         } catch (HibernateException e){
             if (tx != null)
                 tx.rollback();
-            logger.log(Level.WARNING, "UserInfoRepo has encountered a problem: " + e);
-        } finally {
-            session.close();
+            FileLogger.getFileLogger().writeExceptionToFile(e);
         }
 
         return userInfos;
@@ -69,10 +43,9 @@ public class UserInfoRepo extends BehindTheScenes<UserInfo> implements IRepo<Use
     @Override
     public UserInfo getByUUID(UUID ID) {
         try {
-            session = sessionFactory.openSession();
-            tx = session.beginTransaction();
+            tx = getSession().beginTransaction();
 
-            typedQuery = session.createQuery("FROM UserInfo WHERE userID = :userID", UserInfo.class);
+            typedQuery = getSession().createQuery("FROM UserInfo WHERE userID = :userID", UserInfo.class);
             typedQuery.setParameter("userID", ID);
 
             userInfos = typedQuery.getResultList();
@@ -85,9 +58,7 @@ public class UserInfoRepo extends BehindTheScenes<UserInfo> implements IRepo<Use
         } catch (HibernateException e) {
             if (tx != null)
                 tx.rollback();
-            logger.warning("UserInfoRepo has encountered a problem: " + e);
-        } finally {
-            session.close();
+            FileLogger.getFileLogger().writeExceptionToFile(e);
         }
 
         return userInfo;
@@ -96,28 +67,24 @@ public class UserInfoRepo extends BehindTheScenes<UserInfo> implements IRepo<Use
     @Override
     public void save(UserInfo userInfo) {
         try {
-            session = sessionFactory.openSession();
-            tx = session.beginTransaction();
+            tx = getSession().beginTransaction();
 
-            session.save(userInfo);
+            getSession().save(userInfo);
 
             tx.commit();
         } catch (HibernateException e){
             if (tx != null)
                 tx.rollback();
-            logger.warning("UserInfoRepo has encountered a problem: " + e);
-        } finally {
-            session.close();
+            FileLogger.getFileLogger().writeExceptionToFile(e);
         }
     }
 
     @Override
     public void deleteByUUID(UUID ID) {
         try {
-            session = sessionFactory.openSession();
-            tx = session.beginTransaction();
+            tx = getSession().beginTransaction();
 
-            query = session.createQuery( "DELETE UserInfo WHERE userID = :userID");
+            query = getSession().createQuery( "DELETE UserInfo WHERE userID = :userID");
             query.setParameter("userID", ID);
             query.executeUpdate();
 
@@ -125,19 +92,7 @@ public class UserInfoRepo extends BehindTheScenes<UserInfo> implements IRepo<Use
         } catch (HibernateException e){
             if (tx != null)
                 tx.rollback();
-            logger.warning("UserRepo has encountered a problem: " + e);
-        } finally {
-            session.close();
+            FileLogger.getFileLogger().writeExceptionToFile(e);
         }
-    }
-
-    @Override
-    public void deleteByID(int ID) {
-
-    }
-
-    @Override
-    public UserInfo getByID(int ID) {
-        return null;
     }
 }

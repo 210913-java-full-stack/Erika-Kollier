@@ -1,13 +1,12 @@
 package Models;
 
 import javax.persistence.*;
-import java.util.UUID;
 
 @Entity
 @Table(name = "TICKETS")
 public class Ticket{
     // Variables
-    private UUID ticketID;
+    private int ticketID;
     private String description;
 
     /**
@@ -24,10 +23,10 @@ public class Ticket{
     @Id
     @Column(name = "TICKET_ID", unique = true)
     @GeneratedValue(strategy = GenerationType.AUTO)
-    public UUID getTicketID() {
+    public int getTicketID() {
         return ticketID;
     }
-    public void setTicketID(UUID ticketID) {
+    public void setTicketID(int ticketID) {
         this.ticketID = ticketID;
     }
 
@@ -39,14 +38,9 @@ public class Ticket{
         this.description = description;
     }
 
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "ticket")
-    private UserInfo userInfo;
-    public void setUser(UserInfo userInfo) {
-        this.userInfo = userInfo;
-    }
-    public UserInfo getUser() {
-        return userInfo;
-    }
+    // FIXME Foreign Constraints
+    //TICKET_ID WILL BE A FK ON USERINFO
+    //TICKET_ID WILL BE A FK ON TRAINS
 
     @Override
     public String toString(){
