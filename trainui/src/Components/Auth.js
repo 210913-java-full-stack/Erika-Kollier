@@ -52,14 +52,24 @@ const Auth = (props) => {
 
     //fetch using axios
 
-    axios
-      .post(baseUrl, data)
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    fetch(baseUrl,{
+      method: 'POST',
+      headers: {
+        'Conent-Type':'application/json',
+      },
+      data: JSON.stringify(data)
+    })
+    .then(r => r.json())
+    .then(rObj => props.updateToken(rObj.sessionToken, rObj.user.id));
+
+  //   axios
+  //     .post(baseUrl, data)
+  //     .then((res) => {
+  //       console.log(res);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
   };
 
   const signupForm = () => {
