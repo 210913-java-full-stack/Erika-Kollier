@@ -29,5 +29,6 @@
         <mapping class="Models.Ticket"/>
         <mapping class="Models.Junction"/>
         <mapping class="Models.Role"/>
+        <mapping class="Models.UserInfo"/>
     </session-factory>
 </hibernate-configuration>

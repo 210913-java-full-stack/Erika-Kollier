@@ -1,12 +1,13 @@
 package Prototypes;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 public interface IRepo <T> {
     List<T> getAll();
-    T getByID(UUID ID);
+    T getByUUID(UUID ID);
+    T getByID(int ID);
     void save(T t);
-    void deleteByID(UUID ID);
+    void deleteByUUID(UUID ID);
+    void deleteByID(int ID);
 }

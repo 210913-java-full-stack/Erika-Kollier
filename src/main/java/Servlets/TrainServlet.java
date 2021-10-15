@@ -1,15 +1,14 @@
 package Servlets;
 
-import Services.PersistenceService;
+import Services.TrainPersistenceService;
+import Services.UserPersistenceService;
 import org.json.JSONObject;
 
-import javax.persistence.Parameter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.UUID;
 
 public class TrainServlet extends HttpServlet {
     @Override
@@ -23,7 +22,7 @@ public class TrainServlet extends HttpServlet {
         if (param != null) {
             switch (param) {
                 case "all":
-                    jOBj.put("Trains", PersistenceService.getAllTrains());
+                    jOBj.put("Trains", TrainPersistenceService.getAllTrains());
                     resp.getWriter().print(jOBj);
                 /*default:
                     jOBj.put("Train " + req.getParameter("param"), PersistenceService.getTrainByID(UUID.fromString(param));

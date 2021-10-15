@@ -1,6 +1,6 @@
 package Servlets;
 
-import Services.PersistenceService;
+import Services.UserPersistenceService;
 import org.json.JSONObject;
 
 import javax.servlet.ServletException;
@@ -20,7 +20,7 @@ public class UserIDServlet extends HttpServlet {
         JSONObject jOBj = new JSONObject();
 
         if (id != null){
-            jOBj.put("Requested User", PersistenceService.getUserByID(UUID.fromString(id)));
+            jOBj.put("Requested User", UserPersistenceService.getUserByID(UUID.fromString(id)));
             resp.getWriter().print(jOBj);
         }
     }

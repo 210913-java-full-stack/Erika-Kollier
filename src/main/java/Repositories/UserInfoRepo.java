@@ -1,26 +1,29 @@
 package Repositories;
 
 import Logging.*;
-import Models.Ticket;
-import Prototypes.*;
+import Models.UserInfo;
+import Prototypes.BehindTheScenes;
+import Prototypes.IRepo;
 import org.hibernate.HibernateException;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.logging.*;
 
-
-public class TicketRepo extends BehindTheScenes<Ticket> implements IRepo<Ticket> {
+public class UserInfoRepo extends BehindTheScenes<UserInfo> implements IRepo<UserInfo> {
     // Variables
-    private Ticket ticket;
-    private List<Ticket> tickets;
+    private UserInfo userInfo = null;
+    private List<UserInfo> userInfos;
 
     // Error Logger
-    private static Logger logger = Logger.getLogger(TicketRepo.class.getName());
+    Logger logger = Logger.getLogger(UserInfoRepo.class.getName());
 
-    public TicketRepo(){
+    public UserInfoRepo(){
+        userInfos = new ArrayList<>();
+
         try {
             LogManager.getLogManager().readConfiguration(new FileInputStream("logger.properties"));
         } catch (SecurityException | IOException e1) {
@@ -46,64 +49,83 @@ public class TicketRepo extends BehindTheScenes<Ticket> implements IRepo<Ticket>
     }
 
     @Override
-    public List<Ticket> getAll() {
+    public List<UserInfo> getAll() {
         try {
             session = sessionFactory.openSession();
             tx = session.beginTransaction();
-            tickets = session.createQuery("FROM Ticket").list();
+            userInfos = session.createQuery( "FROM UserInfo ").list();
+            tx.commit();
+        } catch (HibernateException e){
+            if (tx != null)
+                tx.rollback();
+            logger.log(Level.WARNING, "UserInfoRepo has encountered a problem: " + e);
+        } finally {
+            session.close();
+        }
 
-            for (Ticket value : tickets) {
-                ticket = value;
+        return userInfos;
+    }
+
+    @Override
+    public UserInfo getByUUID(UUID ID) {
+        try {
+            session = sessionFactory.openSession();
+            tx = session.beginTransaction();
+
+            typedQuery = session.createQuery("FROM UserInfo WHERE userID = :userID", UserInfo.class);
+            typedQuery.setParameter("userID", ID);
+
+            userInfos = typedQuery.getResultList();
+
+            for (UserInfo value : userInfos) {
+                userInfo = value;
             }
 
             tx.commit();
         } catch (HibernateException e) {
             if (tx != null)
                 tx.rollback();
-            logger.log(Level.WARNING, "TicketRepo has encountered a problem: " + e);
+            logger.warning("UserInfoRepo has encountered a problem: " + e);
         } finally {
             session.close();
         }
 
-        return tickets;
+        return userInfo;
     }
 
     @Override
-    public Ticket getByID(int ID) {
+    public void save(UserInfo userInfo) {
         try {
             session = sessionFactory.openSession();
             tx = session.beginTransaction();
 
-            typedQuery = session.createQuery( "FROM Ticket WHERE ticketID = :ticketID", Ticket.class);
-            typedQuery.setParameter("ticketID", ID);
-
-            tickets = typedQuery.getResultList();
+            session.save(userInfo);
 
             tx.commit();
         } catch (HibernateException e){
             if (tx != null)
                 tx.rollback();
-            logger.warning("TicketRepo has encountered a problem: " + e);
+            logger.warning("UserInfoRepo has encountered a problem: " + e);
         } finally {
             session.close();
         }
-
-        return ticket;
     }
 
     @Override
-    public void save(Ticket ticket) {
+    public void deleteByUUID(UUID ID) {
         try {
             session = sessionFactory.openSession();
             tx = session.beginTransaction();
 
-            session.save(ticket);
+            query = session.createQuery( "DELETE UserInfo WHERE userID = :userID");
+            query.setParameter("userID", ID);
+            query.executeUpdate();
 
             tx.commit();
         } catch (HibernateException e){
             if (tx != null)
                 tx.rollback();
-            logger.warning("TicketRepo has encountered a problem: " + e);
+            logger.warning("UserRepo has encountered a problem: " + e);
         } finally {
             session.close();
         }
@@ -111,33 +133,11 @@ public class TicketRepo extends BehindTheScenes<Ticket> implements IRepo<Ticket>
 
     @Override
     public void deleteByID(int ID) {
-        try {
-            session = sessionFactory.openSession();
-            tx = session.beginTransaction();
 
-            query = session.createQuery( "DELETE Ticket WHERE ticketID = :ticketID");
-            query.setParameter("ticketID", ID);
-            query.executeUpdate();
-
-            tx.commit();
-        } catch (HibernateException e){
-            if (tx != null)
-                tx.rollback();
-            logger.warning("TicketRepo has encountered a problem: " + e);
-        } finally {
-            session.close();
-        }
     }
 
     @Override
-    public Ticket getByUUID(UUID ID) {
+    public UserInfo getByID(int ID) {
         return null;
     }
-
-    @Override
-    public void deleteByUUID(UUID ID) {
-
-    }
-
-    // TO GET DESCRIPTION JOIN ON TRAIN TABLE AND GET THE INFORMATION FROM THERE
 }

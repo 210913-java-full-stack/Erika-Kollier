@@ -41,17 +41,77 @@ public class JunctionRepo extends BehindTheScenes implements IRepo<Junction> {
     }
 
     @Override
-    public Junction getByID(UUID ID) {
-        return null;
+    public Junction getByID(int ID) {
+        try {
+            session = sessionFactory.openSession();
+            tx = session.beginTransaction();
+
+            typedQuery = session.createQuery("FROM Junction WHERE junctionID = :junctionID", Junction.class);
+            typedQuery.setParameter("junctionID", ID);
+
+            junctions = typedQuery.getResultList();
+
+            for (Junction value : junctions) {
+                junction = value;
+            }
+
+            tx.commit();
+        } catch (HibernateException e) {
+            if (tx != null)
+                tx.rollback();
+            logger.warning("JunctionRepo has encountered a problem: " + e);
+        } finally {
+            session.close();
+        }
+
+        return junction;
     }
 
     @Override
     public void save(Junction junction) {
+        try {
+            session = sessionFactory.openSession();
+            tx = session.beginTransaction();
 
+            session.save(junction);
+
+            tx.commit();
+        } catch (HibernateException e){
+            if (tx != null)
+                tx.rollback();
+            logger.warning("JunctionRepo has encountered a problem: " + e);
+        } finally {
+            session.close();
+        }
     }
 
     @Override
-    public void deleteByID(UUID ID) {
+    public void deleteByID(int ID) {
+        try {
+            session = sessionFactory.openSession();
+            tx = session.beginTransaction();
+
+            query = session.createQuery( "DELETE Junction WHERE junctionID = :junctionID");
+            query.setParameter("junctionID", ID);
+            query.executeUpdate();
+
+            tx.commit();
+        } catch (HibernateException e){
+            if (tx != null)
+                tx.rollback();
+            logger.warning("JunctionRepo has encountered a problem: " + e);
+        } finally {
+            session.close();
+        }
+    }
+
+    @Override
+    public Junction getByUUID(UUID ID) {
+        return null;
+    }
+
+    @Override
+    public void deleteByUUID(UUID ID) {
 
     }
 }

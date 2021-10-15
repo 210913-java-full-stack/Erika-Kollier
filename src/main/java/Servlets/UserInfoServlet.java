@@ -10,8 +10,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Enumeration;
+import java.util.UUID;
 
-public class UserServlet extends HttpServlet {
+public class UserInfoServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setStatus(202);
@@ -24,11 +25,11 @@ public class UserServlet extends HttpServlet {
 
             switch (req.getParameter(param)) {
                 case "all":
-                    jOBj.put("Users", UserPersistenceService.getAllUsers());
+                    jOBj.put("User Info", UserPersistenceService.getAllUserInfo());
                     resp.getWriter().print(jOBj);
                     break;
                 default:
-                    jOBj.put("Requested User", UserPersistenceService.getUserByFirstName(param));
+                    jOBj.put("Requested User", UserPersistenceService.getUserInfoByUUID(UUID.fromString(param)));
                     resp.getWriter().print(jOBj);
                     break;
             }

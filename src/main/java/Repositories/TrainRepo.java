@@ -63,19 +63,6 @@ public class TrainRepo extends BehindTheScenes implements IRepo<Train> {
         passengers.add(u);
     }
 
-    /**
-     * Generate a ticket
-     * @return
-     */
-    public Train generateTicket(){
-        return (new Train());
-    }
-
-    //region Getters and Setters
-    public boolean isAvailable() {
-        return isAvailable;
-    }
-
     public void setAvailable(boolean available) {
         isAvailable = available;
     }
@@ -118,8 +105,9 @@ public class TrainRepo extends BehindTheScenes implements IRepo<Train> {
         return trains;
     }
 
+
     @Override
-    public Train getByID(UUID ID) {
+    public Train getByID(int ID) {
         try {
             sessionFactory.openSession();
             tx = session.beginTransaction();
@@ -143,13 +131,50 @@ public class TrainRepo extends BehindTheScenes implements IRepo<Train> {
     }
 
     @Override
+    public void deleteByID(int ID) {
+        try {
+            sessionFactory.openSession();
+            tx = session.beginTransaction();
+
+            typedQuery = session.createQuery("DELETE Train WHERE trainID = :trainID");
+            typedQuery.setParameter("trainID", ID);
+            typedQuery.executeUpdate();
+
+            tx.commit();
+        } catch (HibernateException e) {
+            if (tx != null)
+                tx.rollback();
+            logger.warning("TrainRepo has encountered a problem: " + e);
+        } finally {
+            session.close();
+        }
+    }
+
+    @Override
     public void save(Train train) {
+        try {
+            session = sessionFactory.openSession();
+            tx = session.beginTransaction();
+
+            session.save(train);
+
+            tx.commit();
+        } catch (HibernateException e){
+            if (tx != null)
+                tx.rollback();
+            logger.warning("TrainRepo has encountered a problem: " + e);
+        } finally {
+            session.close();
+        }
+    }
+
+    @Override
+    public void deleteByUUID(UUID ID) {
 
     }
 
     @Override
-    public void deleteByID(UUID ID) {
-
+    public Train getByUUID(UUID ID) {
+        return null;
     }
-    //endregion
 }

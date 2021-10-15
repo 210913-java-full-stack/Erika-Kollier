@@ -41,6 +41,16 @@
     </servlet-mapping>
 
     <!-- User Servlets -->
+    <!-- Get All UserInfo -->
+    <servlet>
+        <servlet-name>userInfoServlet</servlet-name>
+        <servlet-class>Servlets.UserInfoServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>userInfoServlet</servlet-name>
+        <url-pattern>/userinfo/</url-pattern>
+    </servlet-mapping>
+    
     <!-- Get All Users -->
     <servlet>
         <servlet-name>usersServlet</servlet-name>
@@ -48,7 +58,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>usersServlet</servlet-name>
-        <url-pattern>/users</url-pattern>
+        <url-pattern>/users/</url-pattern>
     </servlet-mapping>
 
     <!-- Get by Username -->
@@ -58,7 +68,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>userServlet</servlet-name>
-        <url-pattern>/users/?param=*</url-pattern>
+        <url-pattern>/users/param</url-pattern>
     </servlet-mapping>
 
     <!-- Get By ID -->
@@ -68,7 +78,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>userIDServlet</servlet-name>
-        <url-pattern>/users/?id=*</url-pattern>
+        <url-pattern>/users/id</url-pattern>
     </servlet-mapping>
 
     <!-- Train Servlet here -->

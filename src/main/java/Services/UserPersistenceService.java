@@ -1,18 +1,16 @@
 package Services;
 
-import Models.*;
-import Repositories.TrainRepo;
+import Models.User;
+import Models.UserInfo;
+import Repositories.UserInfoRepo;
 import Repositories.UserRepo;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class PersistenceService {
-    private static Object data;
-    private static int requestCount;
+public class UserPersistenceService extends ServiceRequestCount{
     private static UserRepo ur = new UserRepo();
-    private static TrainRepo tr = new TrainRepo();
+    private static UserInfoRepo uir = new UserInfoRepo();
 
     static {
 
@@ -30,16 +28,16 @@ public class PersistenceService {
 
     public static User getUserByID(UUID ID){
         requestCount++;
-        return ur.getByID(ID);
+        return ur.getByUUID(ID);
     }
 
-    public static List<Train> getAllTrains(){
+    public static List<UserInfo> getAllUserInfo(){
         requestCount++;
-        return tr.getAll();
+        return uir.getAll();
     }
 
-    public static Train getTrainByID(UUID ID){
+    public static UserInfo getUserInfoByUUID(UUID ID){
         requestCount++;
-        return tr.getByID(ID);
+        return uir.getByUUID(ID);
     }
 }

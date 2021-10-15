@@ -1,61 +1,50 @@
 package Models;
 
-import Prototypes.BehindTheScenes;
-import Prototypes.IDGenerator;
-
 import javax.persistence.*;
-import java.beans.ConstructorProperties;
 import java.util.*;
 
 @Entity
-@Table(name = "TRAINS", uniqueConstraints = {
-        @UniqueConstraint(columnNames = "TICKET_ID"),
-        @UniqueConstraint(columnNames = "TRAIN_ID")})
-public class Train extends IDGenerator {
+@Table(name = "TRAINS")
+public class Train {
     // Variables
-    private UUID trainID, ticketID;
+    private UUID trainID;
     private int passengers;
     private String arrivalStation, departureStation;
     private Date arrivalInfo, departureInfo;
     private boolean isAvailable;
 
-    @ConstructorProperties({"TRAIN_ID"})
     /**
      * Non-Parameterized Constructor
      */
     public Train(){
-        this.trainID = generateID();
     }
 
-    public Train(UUID ticketID, int passengers, String arrivalStation, String departureStation, Date arrivalInfo, Date departureInfo, boolean isAvailable, Ticket ticket) {
-        this.trainID = generateID();
-        this.ticketID = ticketID;
+    /**
+     * Constructor for Train object
+     * @param passengers Number of passengers boarding the train
+     * @param arrivalStation Station's Arrival City and State
+     * @param departureStation Station's Departure City and State
+     * @param arrivalInfo Date and Time of the train's arrival information
+     * @param departureInfo Date and Time of the train's departure information
+     * @param isAvailable Available passenger spots left for this train reservation
+     */
+    public Train(int passengers, String arrivalStation, String departureStation, Date arrivalInfo, Date departureInfo, boolean isAvailable) {
         this.passengers = passengers;
         this.arrivalStation = arrivalStation;
         this.departureStation = departureStation;
         this.arrivalInfo = arrivalInfo;
         this.departureInfo = departureInfo;
         this.isAvailable = isAvailable;
-        this.ticket = ticket;
     }
 
     @Id
-    @Column(name = "TRAIN_ID")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "TRAIN_ID", unique = true)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public UUID getTrainId() {
         return trainID;
     }
     public void setTrainId(UUID id) {
         this.trainID = id;
-    }
-
-    @Column(name = "TICKET_ID")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public UUID getTicketId() {
-        return ticketID;
-    }
-    public void setTicketId(UUID id) {
-        this.ticketID = id;
     }
 
     @Column(name = "PASSENGERS")
@@ -106,16 +95,12 @@ public class Train extends IDGenerator {
         isAvailable = available;
     }
 
-    @OneToOne(cascade=CascadeType.ALL)
-    @JoinColumn(name="TICKET_ID")
-    private Ticket ticket;
-
+    @Override
     public String toString(){
-        return "Train ID: " + trainID +
-                " Ticket ID: " + ticketID +
-                " Passengers: " + passengers +
-                " Arrival Info: " + arrivalStation + " " + arrivalInfo +
-                " Departure Info: " + departureStation + " " + arrivalInfo +
-                " Availability: " + isAvailable;
+        return "Train ID: " + getTrainId() + "," +
+                " Passengers: " + getPassengers() + "," +
+                " Arrival Info: " + getArrivalStation() + "," + getArrivalInfo() +
+                " Departure Info: " + getDepartureStation() + "," + getDepartureInfo() +
+                " Availability: " + isAvailable();
     }
 }

@@ -1,14 +1,11 @@
 package Models;
 
-import Prototypes.IDGenerator;
-import org.hibernate.annotations.GenericGenerator;
-
 import javax.persistence.*;
 import java.util.UUID;
 
 @Entity
 @Table(name = "USERS")
-public class User extends IDGenerator {
+public class User {
     // Variables
     private String firstName, lastName;
     private UUID userID;
@@ -20,6 +17,11 @@ public class User extends IDGenerator {
 
     }
 
+    /**
+     * Parameterized Constructor
+     * @param firstName First name of the user
+     * @param lastName Last name of the user
+     */
     public User(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -27,8 +29,7 @@ public class User extends IDGenerator {
 
     @Id
     @Column(name = "USER_ID")
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public UUID getUserID() {
         return userID;
     }
@@ -51,6 +52,16 @@ public class User extends IDGenerator {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
+
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "user")
+    @Transient private UserInfo userInfo;
+    public void setUser(UserInfo userInfo) {
+        this.userInfo = userInfo;
+    }
+    public UserInfo getUser() {
+        return userInfo;
+    }
+
 
     @Override
     public String toString(){
