@@ -12,7 +12,7 @@
         <property name="hibernate.connection.driver_class">org.mariadb.jdbc.Driver</property>
         <property name="hibernate.connection.url">jdbc:mariadb://practice.cnybvnomlu5g.us-east-2.rds.amazonaws.com:3306/Project1?useSSL=false</property>
         <property name="hibernate.connection.username">admin</property>
-        <property name="hibernate.connection.password">qiDQk36%KWMm</property>
+        <property name="hibernate.connection.password">50m00cVZHNBg</property>
 
         <!-- Connection Pool Size (built-in) -->
         <property name="hibernate.connection.pool.size">1</property>
