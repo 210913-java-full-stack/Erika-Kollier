@@ -1,16 +1,10 @@
 package Utils;
 
-import BehindTheScenes.GlobalPersistence;
-import Logging.FileLogger;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.cfg.AnnotationConfiguration;
-import org.hibernate.cfg.Configuration;
+import Global.GlobalPersistence;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
+import javax.servlet.annotation.WebListener;
 
 /**
  * This class is tied to the startup and shutdown of tomcat. Just implement
@@ -18,19 +12,16 @@ import java.util.Properties;
  *      methods. Make sure you inform tomcat of this class by including it
  *      in your deployment descriptor (web.xml) under the listener tag.
  */
+@WebListener
 public class DependencyLoaderListener implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-        //GlobalPersistence.init();
-
-        Configuration config = new Configuration().configure();
-        config.addAnnotatedClass(GlobalPersistence.class);
-        GlobalPersistence.setSessionFactory(config.buildSessionFactory());
-        GlobalPersistence.setSession(GlobalPersistence.getSessionFactory().openSession());
+        GlobalPersistence.init();
     }
 
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
+        System.out.println("Requests this session: " + ServiceRequestCount.getRequestCount());
         GlobalPersistence.close();
     }
 }

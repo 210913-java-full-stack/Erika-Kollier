@@ -2,5 +2,13 @@ package Utils;
 
 public abstract class ServiceRequestCount {
     // The request count for this session
-    public static int requestCount = 0;
+    private static int requestCount = 0;
+
+    public static void increment(){
+        requestCount++;
+    }
+
+    public static int getRequestCount(){
+        return requestCount;
+    }
 }
