@@ -1,24 +1,22 @@
 package Models;
 
 import javax.persistence.*;
+import java.util.List;
 
-@Entity
 @Table(name = "ROLES")
-abstract public class Role{
-    // Variable
-    // 0 Passenger, 1 Admin
-    private int roleID;
-    private String userRole;
-
+@Entity(name = "ROLE")
+public class Role{
     public Role(){
     }
 
     public Role(int roleID) {
     }
 
+    // 0 Passenger, 1 Admin
     @Id
     @Column(name = "ROLE_ID")
     @GeneratedValue(strategy = GenerationType.AUTO)
+    private int roleID;
     public int getRoleID() {
         return roleID;
     }
@@ -27,6 +25,7 @@ abstract public class Role{
     }
 
     @Column(name = "USER_ROLE")
+    private String userRole;
     public String getUserRole() {
         switch (getRoleID()){
             case 0:
@@ -41,5 +40,7 @@ abstract public class Role{
     }
 
     // FIXME Foreign Constraints
-    //ROLE_ID WILL BE A FK ON USERINFO
+    // ROLE_ID WILL BE A FK ON USERINFO
+    @OneToMany (cascade = CascadeType.ALL)
+    private List<UserInfo> userInfo;
 }

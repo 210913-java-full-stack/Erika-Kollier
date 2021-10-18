@@ -7,10 +7,6 @@ import java.util.List;
 @Table(name = "TRAINS")
 @Entity(name = "TRAIN")
 public class Train {
-    // Variables
-    private int trainID, ticketID, passengers;
-    private boolean isAvailable;
-
     /**
      * Non-Parameterized Constructor
      */
@@ -30,6 +26,7 @@ public class Train {
     @Id
     @Column(name = "TRAIN_ID", unique = true, nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int trainID;
     public int getTrainId() {
         return trainID;
     }
@@ -38,6 +35,7 @@ public class Train {
     }
 
     @Column(name = "PASSENGERS")
+    private int passengers;
     public int getPassengers() {
         return passengers;
     }
@@ -46,6 +44,7 @@ public class Train {
     }
 
     @Column(name = "TICKET_ID", unique = true)
+    private int ticketID;
     public int getTicketID() {
         return ticketID;
     }
@@ -54,6 +53,7 @@ public class Train {
     }
 
     @Column(name = "AVAILABLE")
+    private boolean isAvailable;
     public boolean isAvailable() {
         return isAvailable;
     }
@@ -61,20 +61,26 @@ public class Train {
         isAvailable = available;
     }
 
-    // FIXME Foreign Constraints
     // JUNCTION TABLE CREATION
-    @ManyToMany(mappedBy = "trainList")
+    @ManyToMany
     @JoinTable(name="JUNCTION", joinColumns = {@JoinColumn(name = "TRAIN_ID")}, inverseJoinColumns = {@JoinColumn(name = "USER_ID")})
     private List<User> userList = new LinkedList<>();
 
-    // WILL HAVE A FOREIGN KEY FROM STATION AND TICKET, both keys will be their IDs
+    // One train can have multiple tickets pointing to it
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "TRAIN_TICKET_FK", nullable = false)
+    private List<Ticket> tickets;
+
+    // Many trains to one station
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "TRAIN_STATION_FK", nullable = false)
+    private Station station;
 
     @Override
     public String toString(){
         return "Train ID: " + getTrainId() + "," +
                 " Passengers: " + getPassengers() + "," +
-                //" Arrival Info: " + getArrivalInfo() + "," + Join Schedule on Station and pull ArrivalInfo
-                //" Departure Info: " + getDepartureInfo() + "," + Join Schedule on Station and pull DepartureInfo
+                " Station and Trip Info: " + station.toString() + "," +
                 " Availability: " + isAvailable();
     }
 }

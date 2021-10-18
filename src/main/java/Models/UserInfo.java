@@ -1,26 +1,19 @@
 package Models;
 
-import org.hibernate.annotations.GenericGenerator;
-
 import javax.persistence.*;
+import java.util.List;
 import java.util.UUID;
 
-@Entity
-@Table(name = "USERINFO")
+@Table(name = "USER_INFOS")
+@Entity(name = "USER_INFO")
 public class UserInfo{
-    // Variables
-    UUID userID;
-    int ticketID;
-    String username, password, userRole;
-    int roleID;
-
     public UserInfo() {
+
     }
 
     @Id
-    @GeneratedValue(generator = "uuid2")
-    @GenericGenerator(name = "uuid2", strategy = "uuid2")
     @Column(name = "USER_ID", columnDefinition = "BINARY(16)", unique = true)
+    private UUID userID;
     public UUID getUserID() {
         return userID;
     }
@@ -29,6 +22,7 @@ public class UserInfo{
     }
 
     @Column(name = "USERNAME", unique = true, nullable = false)
+    private String username;
     public String getUsername() {
         return username;
     }
@@ -37,6 +31,7 @@ public class UserInfo{
     }
 
     @Column(name = "TICKET_ID", unique = true, nullable = false)
+    private int ticketID;
     public int getTicketID() {
         return ticketID;
     }
@@ -45,6 +40,7 @@ public class UserInfo{
     }
 
     @Column(name = "PASSWORD", nullable = false)
+    private String password;
     public String getPassword() {
         return password;
     }
@@ -52,38 +48,20 @@ public class UserInfo{
         this.password = password;
     }
 
-    @Column(name = "USER_ROLE", nullable = false)
-    public String getUserRole(){ return userRole; }
-    public void setUserRole(String userRole){
-        switch (getUserRole()){
-            case "Admin":
-            case "admin":
-                setRoleID(1);
-                break;
-            case "Passenger":
-            case "passenger":
-                setRoleID(0);
-                break;
-        }
-
-        this.userRole = userRole;
-    }
-
-    @Column(name = "ROLE_ID", nullable = false)
-    public int getRoleID() {
-        return roleID;
-    }
-    public void setRoleID(int roleID) {
-        this.roleID = roleID;
-    }
-
     // FIXME Foreign Constraints
     // WILL BE CONNECTED TO TICKETS, USERS, ROLES
+    @OneToMany(mappedBy = "userInfo")
+    private List<Ticket> tickets;
+
+    @OneToOne(mappedBy = "userInfo")
+    private User user;
+
+    @ManyToOne
+    private Role role;
 
     @Override
     public String toString(){
         return "User ID: " + getUserID() + "Username: " + getUsername() +
-                "User Role: " + getUserRole() + "(" + getRoleID() + ")";
-
+                "User Role: " + role.getUserRole() + "(" + role.getRoleID() + ")";
     }
 }

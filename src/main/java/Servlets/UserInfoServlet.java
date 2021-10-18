@@ -9,8 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(name = "UserServlet", value = "/user")
-public class UserServlet extends HttpServlet {
+@WebServlet(name = "UserInfoServlet", value = "/userInfo")
+public class UserInfoServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setStatus(202);
@@ -23,11 +23,11 @@ public class UserServlet extends HttpServlet {
 
             switch (request.getParameter(param)) {
                 case "all":
-                    //jOBj.put("Users", UserService.getAllUsers());
+                    //jOBj.put("User Info", UserInfoService.getAllUserInfo());
                     response.getWriter().print(jOBj);
                     break;
                 default:
-                    //jOBj.put("Requested User", UserService.getUserByFirstName(param));
+                    //jOBj.put("Requested User", UserInfoService.getUserInfoByUUID(UUID.fromString(param)));
                     response.getWriter().print(jOBj);
                     break;
             }
@@ -37,5 +37,15 @@ public class UserServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+    }
+
+    @Override
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+    }
+
+    @Override
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        // For single updates
     }
 }

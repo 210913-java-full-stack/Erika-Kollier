@@ -3,8 +3,8 @@ package Models;
 import javax.persistence.*;
 import java.util.Date;
 
-@Entity
 @Table(name = "SCHEDULES")
+@Entity(name = "SCHEDULE")
 public class Schedule {
     // Variables
     private Date arrivalTime, departureTime;
@@ -36,6 +36,7 @@ public class Schedule {
         this.arrivalTime = arrivalTime;
     }
 
-    // LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
-    // Will be tied to the Stations table
+    // Many schedules, one station
+    @ManyToOne(cascade = CascadeType.ALL)
+    private Station station;
 }

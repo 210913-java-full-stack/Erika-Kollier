@@ -2,13 +2,9 @@ package Models;
 
 import javax.persistence.*;
 
-@Entity
 @Table(name = "TICKETS")
-public class Ticket{
-    // Variables
-    private int ticketID;
-    private String description;
-
+@Entity(name = "TICKET")
+public class Ticket {
     /**
      * Non-Parameterized Constructor
      */
@@ -23,6 +19,7 @@ public class Ticket{
     @Id
     @Column(name = "TICKET_ID", unique = true)
     @GeneratedValue(strategy = GenerationType.AUTO)
+    private int ticketID;
     public int getTicketID() {
         return ticketID;
     }
@@ -31,6 +28,7 @@ public class Ticket{
     }
 
     @Column(name = "DESCRIPTION")
+    private String description;
     public String getDescription() {
         return description;
     }
@@ -38,9 +36,14 @@ public class Ticket{
         this.description = description;
     }
 
-    // FIXME Foreign Constraints
-    //TICKET_ID WILL BE A FK ON USERINFO
-    //TICKET_ID WILL BE A FK ON TRAINS
+    // FK for UserInfo
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "USER_TICKET", nullable = false)
+    private UserInfo userInfo;
+
+    // FK for Train
+    @ManyToOne(cascade = CascadeType.ALL)
+    private Train train;
 
     @Override
     public String toString(){

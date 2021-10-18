@@ -1,17 +1,16 @@
 package Models;
 
 import javax.persistence.*;
+import java.util.LinkedList;
+import java.util.List;
 
-@Entity
 @Table(name = "STATIONS")
+@Entity(name = "STATION")
 public class Station {
-    // Variables
-    private String name, state, city;
-    private int stationID;
-
     @Id
     @Column(name = "STATION_ID", unique = true, nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int stationID;
     public int getStationID() {
         return stationID;
     }
@@ -20,6 +19,7 @@ public class Station {
     }
 
     @Column(name = "NAME")
+    private String name;
     public String getName() {
         return name;
     }
@@ -28,6 +28,7 @@ public class Station {
     }
 
     @Column(name = "CITY")
+    private String city;
     public String getCity() {
         return city;
     }
@@ -36,6 +37,7 @@ public class Station {
     }
 
     @Column(name = "STATE")
+    private String state;
     public String getState() {
         return state;
     }
@@ -44,6 +46,24 @@ public class Station {
     }
 
     // Station will be tied to Train
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Train> trains;
 
-    // Has SCHEDULE_ID_FK that references the SCHEDULE_ID of the Schedule table
+    // Many schedules, one station
+    @OneToMany
+    private List<Schedule> schedules;
+
+    @Override
+    public String toString(){
+        LinkedList<String> schedulesInfo = new LinkedList<>();
+
+        for (Schedule s : schedules){
+           schedulesInfo.add(s.getScheduleID() + ": " + s.getDepartureTime().toString() + ", " + s.getArrivalTime().toString());
+        }
+
+        return "Name: " + getName() +
+                " City: " + getCity() +
+                " State: " + getState() + "\n" + schedulesInfo.toString();
+
+    }
 }

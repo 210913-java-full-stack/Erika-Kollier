@@ -9,27 +9,24 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(name = "UserServlet", value = "/user")
-public class UserServlet extends HttpServlet {
+@WebServlet(name = "TrainServlet", value = "/train")
+public class TrainServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setStatus(202);
         response.setContentType("application/json");
-        String param;
         JSONObject jOBj = new JSONObject();
 
-        while (request.getParameterNames().hasMoreElements()){
-            param = request.getParameterNames().nextElement();
+        String param = request.getParameter("param");
 
-            switch (request.getParameter(param)) {
+        if (param != null) {
+            switch (param) {
                 case "all":
-                    //jOBj.put("Users", UserService.getAllUsers());
+                    //jOBj.put("Trains", TrainService.getAllTrains());
                     response.getWriter().print(jOBj);
-                    break;
                 default:
-                    //jOBj.put("Requested User", UserService.getUserByFirstName(param));
+                    //jOBj.put("Train " + req.getParameter("param"), PersistenceService.getTrainByID(UUID.fromString(param));
                     response.getWriter().print(jOBj);
-                    break;
             }
         }
     }

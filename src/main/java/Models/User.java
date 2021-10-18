@@ -3,14 +3,11 @@ package Models;
 import javax.persistence.*;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.UUID;
 
 @Table(name = "USERS")
 @Entity(name = "USER")
 public class User {
-    // Variables
-    private String firstName, lastName;
-    private int userID;
-
     /**
      * Non-Parameterized Constructor
      */
@@ -29,16 +26,17 @@ public class User {
     }
 
     @Id
-    @Column(name = "USER_ID")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public int getUserID() {
+    @Column(name = "USER_ID", columnDefinition = "BINARY(16)", unique = true)
+    private UUID userID;
+    public UUID getUserID() {
         return userID;
     }
-    public void setUserID(int userID) {
+    public void setUserID(UUID userID) {
         this.userID = userID;
     }
 
     @Column(name = "FIRST_NAME")
+    private String firstName;
     public String getFirstName() {
         return firstName;
     }
@@ -47,6 +45,7 @@ public class User {
     }
 
     @Column(name = "LAST_NAME")
+    private String lastName;
     public String getLastName() {
         return lastName;
     }
@@ -55,11 +54,12 @@ public class User {
     }
 
     // FIXME Foreign Constraints
-    // USED IN JUNCTION TABLE CREATION
-    @ManyToMany(mappedBy = "userList")
+    @ManyToMany
     private List<Train> trainList = new LinkedList<>();
 
-    //USER_ID WILL BE A FK ON USERINFO
+    // USER_ID is a FK on USERINFO
+    @OneToOne(cascade = CascadeType.ALL)
+    private UserInfo userInfo;
 
     @Override
     public String toString(){

@@ -6,6 +6,8 @@ import Utils.ServiceRequestCount;
 import java.util.List;
 import java.util.UUID;
 
+import static Global.GlobalPersistence.getSession;
+
 public class UserService {
 
     static {
@@ -25,5 +27,10 @@ public class UserService {
     public static User getUserByID(UUID ID){
         ServiceRequestCount.increment();
         return null;
+    }
+
+    public static void save(User user){
+        // save that guy
+        getSession().save(user);
     }
 }
