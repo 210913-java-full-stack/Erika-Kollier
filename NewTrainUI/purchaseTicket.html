@@ -38,13 +38,13 @@
 
   <script>
 
-    const form = document.getElementById("Ticketform");
+    const form = document.getElementById("purchaseTicketForm");
     
     //button type has to be submit or call onclick event directly on button
     form.addEventListener("submit", function(e) {
       e.preventDefault();
       console.log(ticket.value);
-      submitForm(ticket.value);
+      submitForm(tickets.value, currentCity.value, destCity.value, departure.value, arrival.value );
     })
 
     async function submitForm(ticketValue) {

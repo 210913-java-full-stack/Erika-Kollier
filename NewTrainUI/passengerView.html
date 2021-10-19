@@ -11,8 +11,9 @@
       integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
       crossorigin="anonymous"
     />
+    <script src="passenger.js"></script>
 
-    <title>View Trains</title>
+    <title>PassengerView</title>
   </head>
   <body>
     <!--NAVBAR-->
@@ -33,16 +34,11 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarText">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
+            <!-- <li class="nav-item">
               <a class="nav-link active" aria-current="page" href="index.html"
                 >Home</a
               >
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" aria-current="page" href=""
-                >View Train Routes</a
-              >
-            </li>
+            </li> -->
             <li class="nav-item dropdown">
               <a
                 class="nav-link dropdown-toggle"
@@ -168,10 +164,11 @@
                 ></button>
               </div>
               <div class="modal-body">
+                <form class = "form" id = "purchaseTicketForm">
                 <label for="city" class="currentCity">From</label>
                 <input
                   type="text"
-                  id="city"
+                  id="currentCity"
                   name="city"
                   class="form-control"
                   placeholder="Current Location"
@@ -192,15 +189,15 @@
                 />
                 <div class = "input-grp">
                   <label>Tickets</label>
-                  <input type = "number" class="form-control" value="1"/>
+                  <input type = "number" id = "tickets" name ="tickets" class="form-control" value=""/>
                 </div>
                 <div class = "input-grp">
                 <label>Departure</label>
-                <input type = "date" class="form-control select-date"/>
+                <input type = "date" id="departure" name ="departure" class="form-control select-date"/>
               </div>
               <div class = "input-grp">
               <label>Arrival</label>
-              <input type = "date" class="form-control select-date"/>
+              <input type = "date" id ="arrival" name ="arrival" class="form-control select-date"/>
             </div>
           
               <div class="modal-footer">
@@ -211,10 +208,11 @@
                 >
                   Close
                 </button>
-                <button type="button" class="btn btn-primary">
+                <button type="submit"class="btn btn-primary">
                   Purchase
                 </button>
               </div>
+              </form>
             </div>
           </div>
         </div>
@@ -272,7 +270,6 @@
         <thead>
           <tr>
             <th scope="col">Train ID</th>
-            <th scope="col">Passengers</th>
             <th scope="col">Arrival Date</th>
             <th scope="col">Arrival Info</th>
             <th scope="col">Departure Date</th>
@@ -286,7 +283,6 @@
             <th scope="row">1</th>
             <td>Mark</td>
             <td>Otto</td>
-            <td>@mdo</td>
             <td>Mark</td>
             <td>Otto</td>
             <td>@mdo</td>
@@ -298,7 +294,6 @@
             <td>@fat</td>
             <td>Mark</td>
             <td>Otto</td>
-            <td>@mdo</td>
           </tr>
           <tr>
             <th scope="row">3</th>
@@ -306,7 +301,6 @@
             <td>@twitter</td>
             <td>Mark</td>
             <td>Otto</td>
-            <td>@mdo</td>
             <td>@mdo</td>
           </tr>
         </tbody>
