@@ -12,7 +12,7 @@ public class UserInfo{
     }
 
     @Id
-    @Column(name = "USER_ID", columnDefinition = "BINARY(16)", unique = true)
+    @Column(name = "USER_ID", columnDefinition = "BINARY(36)", unique = true)
     private UUID userID;
     public UUID getUserID() {
         return userID;
@@ -30,7 +30,7 @@ public class UserInfo{
         this.username = username;
     }
 
-    @Column(name = "TICKET_ID", unique = true, nullable = false)
+    @Column(name = "TICKET_ID", unique = true)
     private int ticketID;
     public int getTicketID() {
         return ticketID;
@@ -61,7 +61,7 @@ public class UserInfo{
 
     @Override
     public String toString(){
-        return "User ID: " + getUserID() + "Username: " + getUsername() +
-                "User Role: " + role.getUserRole() + "(" + role.getRoleID() + ")";
+        return "User ID: " + getUserID() + ", Username: " + getUsername() +
+                ", User Role: " + role.getUserRole() + "(" + role.getRoleID() + ")";
     }
 }

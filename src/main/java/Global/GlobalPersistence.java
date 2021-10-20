@@ -13,6 +13,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.cfg.Configuration;
 
 public abstract class GlobalPersistence {
     // Hibernate Variables
@@ -21,6 +22,9 @@ public abstract class GlobalPersistence {
     static private Session session;
 
     public static void init(){
+        // if remote
+        // Configuration config = new Configuration().configure();
+        // config.setProperty()
         registry = new StandardServiceRegistryBuilder().configure("hibernate.cfg.xml").build();
         sessionFactory = new MetadataSources( registry ).buildMetadata().buildSessionFactory();
         session = sessionFactory.openSession();

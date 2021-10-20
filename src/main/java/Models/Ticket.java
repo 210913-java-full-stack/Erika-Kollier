@@ -18,7 +18,7 @@ public class Ticket {
 
     @Id
     @Column(name = "TICKET_ID", unique = true)
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int ticketID;
     public int getTicketID() {
         return ticketID;
@@ -38,11 +38,12 @@ public class Ticket {
 
     // FK for UserInfo
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "USER_TICKET", nullable = false)
+    @JoinColumn(name = "USERID_TICKET_FK", nullable = false)
     private UserInfo userInfo;
 
     // FK for Train
     @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "TRAIN_ID_FK")
     private Train train;
 
     @Override

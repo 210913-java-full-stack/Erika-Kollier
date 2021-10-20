@@ -16,12 +16,14 @@ import javax.servlet.annotation.WebListener;
 public class DependencyLoaderListener implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent sce) {
+        System.out.println("Initializing Listener...");
         GlobalPersistence.init();
     }
 
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
-        System.out.println("Requests this session: " + ServiceRequestCount.getRequestCount());
+        System.out.println("Closing Listener...");
+        ServiceRequests.writeSummary();
         GlobalPersistence.close();
     }
 }

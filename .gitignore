@@ -77,10 +77,6 @@ fabric.properties
 # Android studio 3.1+ serialized cache file
 .idea/caches/build_file_checksums.ser
 
-#sensitive connection info
-*.properties
-*.txt
-
 #everything node related
 node_modules/
 jspm_packages/
@@ -114,5 +110,14 @@ lerna-debug.log
 .project
 .classpath
 
+#sensitive info
+/src/main/resources/
+/.jpb
+*.properties
+*.txt
+
 # Hibernate
 hibernate.cfg.xml
+
+# Logs
+*.log

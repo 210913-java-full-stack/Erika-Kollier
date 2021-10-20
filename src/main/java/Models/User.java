@@ -26,7 +26,7 @@ public class User {
     }
 
     @Id
-    @Column(name = "USER_ID", columnDefinition = "BINARY(16)", unique = true)
+    @Column(name = "USER_ID", columnDefinition = "BINARY(36)", unique = true)
     private UUID userID;
     public UUID getUserID() {
         return userID;
@@ -65,5 +65,9 @@ public class User {
     public String toString(){
         return "User ID: " + userID + "First Name: " + firstName +
                 "Last Name: " + lastName;
+    }
+
+    public String getFullName(){
+        return firstName + " " + lastName;
     }
 }
