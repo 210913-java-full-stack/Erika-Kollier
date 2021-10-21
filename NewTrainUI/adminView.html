@@ -33,11 +33,6 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarText">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <!-- <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="index.html"
-                >Home</a
-              >
-            </li> -->
             <li class="nav-item dropdown">
               <a
               class="nav-link dropdown-toggle"
@@ -259,21 +254,21 @@
                 ></button>
               </div>
               <div class="modal-body">
-                <label for="city" class="currentCity">From</label>
+                <label for="state">From</label>
                 <input
                   type="text"
-                  id="city"
-                  name="city"
+                  id="theState"
+                  name="theState"
                   class="form-control"
-                  placeholder="Current Location"
+                  placeholder="State"
                   value=""
                   required
                   autofocus
                 />
-                <label for="city" class="destCity">To</label>
+                <label for="city">To</label>
                 <input
                   type="text"
-                  id="destCity"
+                  id="theCity"
                   name="city"
                   class="form-control"
                   placeholder="Enter City"
@@ -281,28 +276,19 @@
                   required
                   autofocus
                 />
+
                 <div class = "input-grp">
-                  <label>Train_ID</label>
-                  <input type = "number" class="form-control" value="1"/>
+                  <label for = "station">Station Name</label>
+                  <input type = "text" id = "stationName" class="form-control" value=""/>
                 </div>
 
                 <div class = "input-grp">
-                  <label>Arrival Info</label>
-                  <input type = "text" class="form-control" value=""/>
-                </div>
-
-                <div class = "input-grp">
-                  <label>Departure Info</label>
-                  <input type = "text" class="form-control" value=""/>
-                </div>
-
-                <div class = "input-grp">
-                <label>Departure</label>
-                <input type = "date" class="form-control select-date" value = ""/>
+                <label>Departure Date</label>
+                <input type = "date" id = "departureDate" class="form-control select-date" value = ""/>
               </div>
               <div class = "input-grp">
-              <label>Arrival</label>
-              <input type = "date" class="form-control select-date" value = ""/>
+              <label>Arrival Date</label>
+              <input type = "date" id = "arrivalDate" class="form-control select-date" value = ""/>
             </div>
           
               <div class="modal-footer">
@@ -313,7 +299,7 @@
                 >
                   Close
                 </button>
-                <button type="button" class="btn btn-primary">
+                <button type="button" class="btn btn-primary" onclick="createTrip()">
                   Schedule
                 </button>
               </div>
@@ -375,9 +361,9 @@
           <tr>
             <th scope="col">Train ID</th>
             <th scope="col">Passengers</th>
-            <th scope="col">Arrival Date</th>
+            <th scope="col">Station Name</th>
             <th scope="col">Arrival Info</th>
-            <th scope="col">Departure Date</th>
+            <th scope="col">Station Location</th>
             <th scope="col">Departure Info</th>
             <th scope="col">Availability</th>
           </tr>

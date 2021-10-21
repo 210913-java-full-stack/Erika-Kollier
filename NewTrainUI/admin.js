@@ -1,27 +1,25 @@
+var tripURL = 'http://localhost:8080/Erika-Kollier/train';
+
 
 /**
  * Logout Function
  */
-function userLogout() {
-    localStorage.clear();
-    console.log("clicked");
+ function userLogout() {
+  localStorage.clear();
+  console.log("clicked");
+  window.location.href = "index.html";
   }
   
 /**  Add more logic? and create a logout button add eventlistener
     When mapping through tickets for passenger add a cancel ticket button and a check in button
     getTrainList function fetchs the list of all the train routes
     Use a for loop ti essentially may through the array and populate the table
-  localStorage.setItem("Token", Object.values(token).toString());
-  localStorage.clear();
-  console.log("clicked");
-  window.location.href = "index.html";
-
     */
 
 /**
  * Get method to receive list of train schedule & passengers
  */
-(async function getTrainList() {
+ (async function getTrainList() {
   let trainUrl = 'http://localhost:8080/Erika-Kollier/train';
 
   let response = await fetch(trainUrl, {
@@ -31,16 +29,14 @@ function userLogout() {
     }
   })
 
-  let json = await response.json();
-  await populateTable(json);
-})();
+    let json = await response.json();
+    await populateTable(json);
+  })();
 
 function populateTable(json) {
   let table = document.getElementById("TrainRouteTable");
   let rows = Object.values(json).pop().length;
   let values = Object.values(json).pop();
-  console.log(rows);
-  console.log(values);
 
   try {
     for (let i = 0; i < rows; i++) {
@@ -54,16 +50,39 @@ function populateTable(json) {
     console.log(e);
   }
 }
-  let response = await fetch("http://lcoalhost:8080/Erika-Kollier/trainList");
-  let json = await response.json();
 
-  let table = document.getElementById("TrainRouteTable");
+function createTrip() {
+  console.log(document.getElementById("theState").value);
+  let theState = document.getElementById("theState").value;
 
-  for (let element of json) {
-    let tr = table.insertRow(-1);
-    for (let key in element) {
-      let cell = tr.insertCell(-1);
-      cell.innerHTML = element[key];
+  let theCity = document.getElementById("theCity").value;
+
+  let stationName = document.getElementById("stationName").value;
+
+  let departureDate = document.getElementById("departureDate").value;
+
+  let arrivalDate = document.getElementById("arrivalDate").value;
+
+  let tripInfo = {
+      theState: theState,
+      theCity: theCity, 
+      stationName: stationName, 
+      departureDate: departureDate, 
+      arrivalDate: arrivalDate
     }
-  }
-})();
+  
+  console.log(`tripInfo => ${tripInfo.theState} ${tripInfo.theCity} ${tripInfo.stationName} ${tripInfo.departureDate} 
+  ${tripInfo.arrivalDate}`)
+
+  // Sends using fetch
+  fetch(tripURL, 
+    {method: "POST",
+    headers: { "Content-Type": "application/json; charset=utf-8"},
+    body: JSON.stringify(tripInfo)
+  })
+  .then((response) => {
+  console.log(response.json());
+  }).catch((error) => {
+    console.log(error);
+  })
+}

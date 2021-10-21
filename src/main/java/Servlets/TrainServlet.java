@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.stream.Collectors;
 
 @WebServlet(name = "TrainServlet", value = {"/train", "/train?id"})
 public class TrainServlet extends HttpServlet {
@@ -59,6 +60,18 @@ public class TrainServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // When admin sends new Trip Info, create new entities on DB
+        JSONObject jObj = new JSONObject();
+        String content = request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
 
+        jObj.put("Status", "Information Received and Stored...");
+        response.setStatus(202);
+        response.setContentType("application/json");
+        response.getWriter().write(jObj.toString());
+
+        // Create Train
+        // Create Schedule
+        // Create Station
+        // Create Ticket
     }
 }
