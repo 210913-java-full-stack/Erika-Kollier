@@ -21,7 +21,7 @@ function userLogout() {
 /**
  * Get method to receive list of train schedule & passengers
  */
-(async function getTrainList() {
+ (async function getTrainList() {
   let trainUrl = 'http://localhost:8080/Erika-Kollier/train';
 
   let response = await fetch(trainUrl, {
@@ -54,16 +54,3 @@ function populateTable(json) {
     console.log(e);
   }
 }
-  let response = await fetch("http://lcoalhost:8080/Erika-Kollier/trainList");
-  let json = await response.json();
-
-  let table = document.getElementById("TrainRouteTable");
-
-  for (let element of json) {
-    let tr = table.insertRow(-1);
-    for (let key in element) {
-      let cell = tr.insertCell(-1);
-      cell.innerHTML = element[key];
-    }
-  }
-})();
