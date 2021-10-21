@@ -15,56 +15,63 @@
 /**
  * Get method to receive list of train schedule & passengers
  */
-  (async function getTrainList() {
-    let response = await fetch(
-      "http://lcoalhost:8080/Erika-Kollier/trainList"
-    );
-    let json = await response.json();
+  // (async function getTrainList() {
+  //   let response = await fetch(
+  //     "http://lcoalhost:8080/Erika-Kollier/trainList"
+  //   );
+  //   let json = await response.json();
 
-    let table = document.getElementById("TrainRouteTable");
+  //   let table = document.getElementById("TrainRouteTable");
 
-    for (let element of json) {
-      let tr = table.insertRow(-1);
-      for (let key in element) {
-        let cell = tr.insertCell(-1);
-        cell.innerHTML = element[key];
-      }
-    }
-  })();
+  //   for (let element of json) {
+  //     let tr = table.insertRow(-1);
+  //     for (let key in element) {
+  //       let cell = tr.insertCell(-1);
+  //       cell.innerHTML = element[key];
+  //     }
+  //   }
+  // })();
 
   /**
    * Ticket Purchase will use onClick listener to call ticketPurchase on button when form is submitted
    */
 
-  function ticketPurchase() {
+  //  function ticketPurchase() {
 
-    let url = "http://localhost:8080/Erika-Kollier/ticketPurchase";
+  //   let url = "http://localhost:8080/Erika-Kollier/ticketPurchase";
     
-    const form = document.getElementById("purchaseTicketForm");
+  //   const form = document.getElementById("purchaseTicketForm");
     
-    //button type has to be submit or call onclick event directly on button
-    form.addEventListener("submit", function(e) {
-      e.preventDefault();
-      console.log(ticket.value);
-      submitForm(tickets.value, currentCity.value, destCity.value, departure.value, arrival.value );
-    })
+  //   //button type has to be submit or call onclick event directly on button
+  //   form.addEventListener("submit", function(e) {
+  //     e.preventDefault();
+  //     console.log(ticket.value, currentCity.value, destCity.value, departure.value, arrival.value);
+  //     submitForm(tickets.value, currentCity.value, destCity.value, departure.value, arrival.value);
+     
+  //   })
 
-    async function submitForm(ticketValue) {
-      let formObject = {
-        ticket: ticketValue,
-        complete: false
-      }
+  //   async function submitForm(ticketValue, currentCityValue, destCityValue, departureValue, arrivalValue) {
+  //     let formObject = {
+  //       ticket: ticketValue,
+  //       currentCity: currentCityValue, 
+  //       destCity: destCityValue,
+  //       departure: departureValue, 
+  //       arrival: arrivalValue
+  //     }
 
-      console.log(formObject);
+  //     console.log(formObject);
 
-      let response = await fetch(url, {
-        method: 'POST',
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(formObject)
-      })();
-    }
-  }
-
+  //     let response = fetch(url, {
+  //       method: 'POST',
+  //       headers:{
+  //            "Content-Type": "application/json;charset=utf-8",
+  //           },
+  //       body: JSON.stringify(formObject)
+  //     })
+  //     let result = await response.json();
+  //     console.log(result);
+  //   }
+  // }
  
 
   

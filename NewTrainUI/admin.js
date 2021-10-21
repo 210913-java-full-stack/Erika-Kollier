@@ -12,7 +12,7 @@ function userLogout() {
 /**  Add more logic? and create a logout button add eventlistener
     When mapping through tickets for passenger add a cancel ticket button and a check in button
     getTrainList function fetchs the list of all the train routes
-    Use a for loop ti essentially may through the array and populate the table
+    Use a for loop to essentially may through the array and populate the table
     */
 
 /**
