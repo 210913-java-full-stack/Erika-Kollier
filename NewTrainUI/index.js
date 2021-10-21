@@ -35,10 +35,55 @@ function userLogin() {
 }
 
 
-    //Determine UserRoles either an if statement or a switch statement
 
-    /*if(username === userUsername && password === userPassword){
-        window.location.href = "adminView.html"
-    } else {
-        window.location.href = "passengerView.html"
-    }*/
+//Determine UserRoles either an if statement or a switch statement
+/**
+* User Roles when logging in
+*/
+  if (username.value === "KMART" && password.value === "password") {
+    window.location.href = "adminView.html";
+  } else {
+    window.location.href = "passengerView.html";
+  }
+}
+  
+
+function userRegister() {
+  let userFirstname = document.getElementById("firstname").value;
+  let userLastname = document.getElementById("lastname").value;
+  let userUsername = document.getElementById("username").value;
+  let userPassword = document.getElementById("password").value;
+  console.log(userFirstname, userLastname, userUsername, userPassword);
+
+  let userData = {
+    users: {
+      firstname: userFirstname,
+      lastname: userLastname,
+      username: userUsername,
+      password: userPassword,
+    },
+  };
+  console.log(
+    `newUserInfo = ${userData.users.firstname} ${userData.users.lastname} ${userData.users.username} ${userData.users.password}`
+  );
+
+  let signinUrl = "http://localhost:8080/Erika-Kollier/register";
+
+  fetch(signinUrl, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json;charset=utf-8",
+    },
+    body: JSON.stringify(userData),
+  })
+    .then((response) => response.json())
+    .then((token) => {
+      console.log(Object.values(token));
+      console.log(userData);
+      localStorage.setItem("Token", Object.values(token).toString());
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  window.location.href = "passengerView.html";
+}
