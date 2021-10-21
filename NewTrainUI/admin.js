@@ -1,6 +1,4 @@
 
-
-
 /**
  * Logout Function
  */
@@ -13,6 +11,11 @@ function userLogout() {
     When mapping through tickets for passenger add a cancel ticket button and a check in button
     getTrainList function fetchs the list of all the train routes
     Use a for loop ti essentially may through the array and populate the table
+  localStorage.setItem("Token", Object.values(token).toString());
+  localStorage.clear();
+  console.log("clicked");
+  window.location.href = "index.html";
+
     */
 
 /**
@@ -50,8 +53,4 @@ function populateTable(json) {
   } catch (e) {
     console.log(e);
   }
-<<<<<<< Updated upstream
 }
-=======
-}
->>>>>>> Stashed changes
