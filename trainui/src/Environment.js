@@ -1,1 +1,0 @@
-export let API_URL = "https://localhost:8080/Erika-Kollier";
