@@ -12,6 +12,7 @@
       crossorigin="anonymous"
     />
     <script src="passenger.js"></script>
+    <script src="ticketPurchase.js"></script>
 
     <title>PassengerView</title>
   </head>
@@ -165,7 +166,7 @@
               </div>
               <div class="modal-body">
                 <form class = "form" id = "purchaseTicketForm">
-                <label for="city" class="currentCity">From</label>
+                <label for="currentCity" class="currentCity">From</label>
                 <input
                   type="text"
                   id="currentCity"
@@ -176,7 +177,7 @@
                   required
                   autofocus
                 />
-                <label for="city" class="destCity">To</label>
+                <label for="destCity" class="destCity">To</label>
                 <input
                   type="text"
                   id="destCity"
@@ -208,7 +209,7 @@
                 >
                   Close
                 </button>
-                <button type="submit"class="btn btn-primary">
+                <button type="button" class="btn btn-primary" onclick="ticketPurchase()">
                   Purchase
                 </button>
               </div>
@@ -306,39 +307,6 @@
         </tbody>
       </table>
     </div>
-
-    <!--Add more logic? and create a logout button add eventlistener-->
-    <!--When mapping through tickets for passenger add a cancel ticket button and a check in button-->
-
-    <!--getTrainList function fetchs the list of all the train routes
-              Use a for loop ti essentially may through the array and populate
-              the table
-          -->
-
-    <script>
-      function userLogout() {
-        localStorage.clear();
-        console.log("clicked");
-      }
-
-
-      (async function getTrainList() {
-        let response = await fetch(
-          "http://lcoalhost:8080/Erika-Kollier/trainList"
-        );
-        let json = await response.json();
-
-        let table = document.getElementById("TrainRouteTable");
-
-        for (let element of json) {
-          let tr = table.insertRow(-1);
-          for (let key in element) {
-            let cell = tr.insertCell(-1);
-            cell.innerHTML = element[key];
-          }
-        }
-      })();
-    </script>
 
     <script
       src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"

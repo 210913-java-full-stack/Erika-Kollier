@@ -2,8 +2,10 @@
  * Logout Function
  */
  function userLogout() {
-    localStorage.clear();
-    console.log("clicked");
+  localStorage.setItem("Token", Object.values(token).toString());
+  localStorage.clear();
+  console.log("clicked");
+  window.location.href = "index.html";
   }
   
 /**  Add more logic? and create a logout button add eventlistener
@@ -39,15 +41,14 @@
   //  function ticketPurchase() {
 
   //   let url = "http://localhost:8080/Erika-Kollier/ticketPurchase";
-
   //   const form = document.getElementById("purchaseTicketForm");
+
 
   //   //button type has to be submit or call onclick event directly on button
   //   form.addEventListener("submit", function(e) {
   //     e.preventDefault();
   //     console.log(ticket.value, currentCity.value, destCity.value, departure.value, arrival.value);
   //     submitForm(tickets.value, currentCity.value, destCity.value, departure.value, arrival.value);
-
   //   })
 
   //   async function submitForm(ticketValue, currentCityValue, destCityValue, departureValue, arrivalValue) {
@@ -72,4 +73,3 @@
   //     console.log(result);
   //   }
   // }
-  
