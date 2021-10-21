@@ -1,30 +1,32 @@
 package Models;
 
-import org.hibernate.SessionFactory;
-
 import javax.persistence.*;
-import javax.security.auth.login.AppConfigurationEntry;
-import javax.security.auth.login.Configuration;
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
 
-@Entity
 @Table(name = "TRAINS")
-public class Train{
-    // Variables
-    private int trainID, ticketID, passengers;
-    private String arrivalStation, departureStation;
-    private Date arrivalInfo, departureInfo;
-
+@Entity(name = "TRAIN")
+public class Train {
     /**
      * Non-Parameterized Constructor
      */
     public Train(){
+    }
 
+    /**
+     * Constructor for Train object
+     * @param passengers Number of passengers boarding the train
+     * @param isAvailable Available passenger spots left for this train reservation
+     */
+    public Train(int passengers, boolean isAvailable) {
+        this.passengers = passengers;
+        this.isAvailable = isAvailable;
     }
 
     @Id
-    @Column(name = "TRAIN_ID")
+    @Column(name = "TRAIN_ID", unique = true, nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int trainID;
     public int getTrainId() {
         return trainID;
     }
@@ -32,24 +34,8 @@ public class Train{
         this.trainID = id;
     }
 
-    @Column(name = "TICKET_ID")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public int getTicketId() {
-        return ticketID;
-    }
-    public void setTicketId(int id) {
-        this.ticketID = id;
-    }
-
-    @Column(name = "ARRIVAL_STATION")
-    public String getArrivalStation() {
-        return arrivalStation;
-    }
-    public void setArrivalStation(String arrivalStation) {
-        this.arrivalStation = arrivalStation;
-    }
-
     @Column(name = "PASSENGERS")
+    private int passengers;
     public int getPassengers() {
         return passengers;
     }
@@ -57,27 +43,44 @@ public class Train{
         this.passengers = passengersOnTrip;
     }
 
-    @Column(name = "DEPARTURE_STATION")
-    public String getDepartureStation() {
-        return departureStation;
+    @Column(name = "TICKET_ID", unique = true)
+    private int ticketID;
+    public int getTicketID() {
+        return ticketID;
     }
-    public void setDepartureStation(String departureStation) {
-        this.departureStation = departureStation;
-    }
-
-    @Column(name = "ARRIVAL_INFO")
-    public Date getArrivalInfo() {
-        return arrivalInfo;
-    }
-    public void setArrivalInfo(Date arrivalInfo) {
-        this.arrivalInfo = arrivalInfo;
+    public void setTicketID(int ticketID) {
+        this.ticketID = ticketID;
     }
 
-    @Column(name = "DEPARTURE_INFO")
-    public Date getDepartureInfo() {
-        return departureInfo;
+    @Column(name = "AVAILABLE")
+    private boolean isAvailable;
+    public boolean isAvailable() {
+        return isAvailable;
     }
-    public void setDepartureInfo(Date departureInfo) {
-        this.departureInfo = departureInfo;
+    public void setAvailable(boolean available) {
+        isAvailable = available;
+    }
+
+    // JUNCTION TABLE CREATION
+    @ManyToMany
+    @JoinTable(name="JUNCTION", joinColumns = {@JoinColumn(name = "TRAIN_ID")}, inverseJoinColumns = {@JoinColumn(name = "USER_ID")})
+    private List<User> userList = new LinkedList<>();
+
+    // One train can have multiple tickets pointing to it
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "TRAIN_TICKET_FK", nullable = false)
+    private List<Ticket> tickets;
+
+    // Many trains to one station
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "TRAIN_STATION_FK", nullable = false)
+    private Station station;
+
+    @Override
+    public String toString(){
+        return "Train ID: " + getTrainId() + "," +
+                " Passengers: " + getPassengers() + "," +
+                " Station and Trip Info: " + station.toString() + "," +
+                " Availability: " + isAvailable();
     }
 }

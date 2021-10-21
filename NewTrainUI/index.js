@@ -1,4 +1,3 @@
-/**
  * @author Erika Johnson & Kollier Martin
  * @description
  * When User logs in or registers payload should return with a token
@@ -42,7 +41,6 @@ function userLogin() {
   /**
    * User Roles when logging in
    */
-
   if (username.value === "KMART" && password.value === "password") {
     window.location.href = "adminView.html";
   } else {

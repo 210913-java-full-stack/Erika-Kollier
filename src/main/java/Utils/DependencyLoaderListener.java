@@ -1,10 +1,10 @@
-package Services;
+package Utils;
 
-import Utils.ConnectionManagerCat;
+import Global.GlobalPersistence;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
-import java.sql.Connection;
+import javax.servlet.annotation.WebListener;
 
 /**
  * This class is tied to the startup and shutdown of tomcat. Just implement
@@ -12,16 +12,19 @@ import java.sql.Connection;
  *      methods. Make sure you inform tomcat of this class by including it
  *      in your deployment descriptor (web.xml) under the listener tag.
  */
+@WebListener
 public class DependencyLoaderListener implements ServletContextListener {
-    //Connection conn;
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-        /*this.conn = ConnectionManagerCat.getConnection();*/
+        System.out.println("Initializing Listener...");
+        GlobalPersistence.init();
     }
 
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
-
+        System.out.println("Closing Listener...");
+        ServiceRequests.writeSummary();
+        GlobalPersistence.close();
     }
 }
 

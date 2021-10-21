@@ -11,8 +11,8 @@
       integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
       crossorigin="anonymous"
     />
-    
-    <title>ViewTrainRoutes</title>
+    <script src="index.js"></script>
+    <title>Train Routes</title>
   </head>
   <body>
 
@@ -29,15 +29,15 @@
     </style>
 
     <div>
-      <h1 class=text-center mt-5>Train Routes</h1>
+      <h1 class=text-center>Train Routes</h1>
       <table class="table">
         <thead>
           <tr>
             <th scope="col">Train ID</th>
-            <th scope="col">Passengers</th>
-            <th scope="col">Arrival Date</th>
+            <th scope="col">Total Passengers</th>
+            <th scope="col">Station Name</th>
             <th scope="col">Arrival Info</th>
-            <th scope="col">Departure Date</th>
+            <th scope="col">Station Location</th>
             <th scope="col">Departure Info</th>
             <th scope="col">Availability</th>
           </tr>
@@ -45,73 +45,48 @@
         <tbody id = "TrainRouteTable">
 
         </tbody>
-        <tbody>
-          <tr>
-            <th scope="row">1</th>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>@mdo</td>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>@mdo</td>
-          </tr>
-          <tr>
-            <th scope="row">2</th>
-            <td>Jacob</td>
-            <td>Thornton</td>
-            <td>@fat</td>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>@mdo</td>
-          </tr>
-          <tr>
-            <th scope="row">3</th>
-            <td>Larry</td>
-            <td>@twitter</td>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>@mdo</td>
-            <td>@mdo</td>
-          </tr>
-        </tbody>
+
       </table>
     </div>
 
+    <script>
 
-        <!--Add more logic? and create a logout button add eventlistener-->
-        <script>
-          function userLogout() {
-            localStorage.clear();
-            console.log("clicked")
+      (async function getTrainList() {
+        let trainUrl = 'http://localhost:8080/Erika-Kollier/train';
+
+        let response = await fetch(trainUrl, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json;charset=utf-8",
           }
-          </script>
+        })
 
-          <!--getTrainList function fetchs the list of all the train routes
-              Use a for loop ti essentially may through the array and populate
-              the table
-          -->
+        let json = await response.json();
+        await populateTable(json);
+      })();
 
+      function populateTable(json) {
+        let table = document.getElementById("TrainRouteTable");
+        let rows = Object.values(json).pop().length;
+        let values = Object.values(json).pop();
+        console.log(rows);
+        console.log(values);
 
+        try {
+          for (let i = 0; i < rows; i++) {
+            let tr = table.insertRow(0);
+            for (let value of values.pop()) {
+              let cell = tr.insertCell(-1);
+              cell.innerHTML = value;
+            }
+          }
+        } catch (e) {
+          console.log(e);
+        }
+      }
 
-          <script>
-            (async function getTrainList() {
-              let response = await fetch ('http://lcoalhost:8080/Erika-Kollier/trainList')
-              let json = await response.json();
-
-              let table = document.getElementById("TrainRouteTable");
-
-              for(let element of json) {
-                let tr = table.insertRow(-1);
-                for(let key in element){
-                  let cell = tr.insertCell(-1);
-                  cell.innerHTML = element[key];
-                }
-              }
-            })();
-          </script>
-   
-
-
+    </script>
+      
     <!-- Option 2: Separate Popper and Bootstrap JS -->
     <script
       src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"

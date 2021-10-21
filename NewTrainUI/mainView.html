@@ -11,10 +11,8 @@
       integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
       crossorigin="anonymous"
     />
-    <script src="passenger.js"></script>
-    <script src="ticketPurchase.js"></script>
 
-    <title>PassengerView</title>
+    <title>View Trains</title>
   </head>
   <body>
     <!--NAVBAR-->
@@ -35,11 +33,16 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarText">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <!-- <li class="nav-item">
+            <li class="nav-item">
               <a class="nav-link active" aria-current="page" href="index.html"
                 >Home</a
               >
-            </li> -->
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href=""
+                >View Train Routes</a
+              >
+            </li>
             <li class="nav-item dropdown">
               <a
                 class="nav-link dropdown-toggle"
@@ -106,7 +109,7 @@
         }
 
       </style>
-      
+
       <div class="modal-dialog modal-dialog-scrollable">
         <div class="modal" id="modal1" tabindex="-1">
           <div class="modal-dialog">
@@ -152,68 +155,67 @@
 
       <!--Purchase Ticket Modal-->
       <div class="modal-dialog modal-dialog-scrollable">
-        <div class="modal" id="modal2" tabindex="-1">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title">Ticket Purchase</h5>
-                <button
-                  type="button"
-                  class="btn-close"
-                  data-bs-dismiss="modal"
-                  aria-label="Close"
-                ></button>
-              </div>
-              <div class="modal-body">
-                <form class = "form" id = "purchaseTicketForm">
-                <label for="currentCity" class="currentCity">From</label>
-                <input
-                  type="text"
-                  id="currentCity"
-                  name="city"
-                  class="form-control"
-                  placeholder="Current Location"
-                  value=""
-                  required
-                  autofocus
-                />
-                <label for="destCity" class="destCity">To</label>
-                <input
-                  type="text"
-                  id="destCity"
-                  name="city"
-                  class="form-control"
-                  placeholder="Enter City"
-                  value=""
-                  required
-                  autofocus
-                />
-                <div class = "input-grp">
-                  <label>Tickets</label>
-                  <input type = "number" id = "tickets" name ="tickets" class="form-control" value=""/>
+          <div class="modal" id="modal2" tabindex="-1">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">Ticket Purchase</h5>
+                  <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <div class="modal-body">
+                  <label for="city" class="currentCity">From</label>
+                  <input
+                    type="text"
+                    id="city"
+                    name="city"
+                    class="form-control"
+                    placeholder="Current Location"
+                    value=""
+                    required
+                    autofocus
+                  />
+                  <label for="city" class="destCity">To</label>
+                  <input
+                    type="text"
+                    id="destCity"
+                    name="city"
+                    class="form-control"
+                    placeholder="Enter City"
+                    value=""
+                    required
+                    autofocus
+                  />
+                  <div class = "input-grp">
+                    <label>Tickets</label>
+                    <input type = "number" class="form-control" value="1"/>
+                  </div>
+                  <div class = "input-grp">
+                  <label>Departure</label>
+                  <input type = "date" class="form-control select-date"/>
                 </div>
                 <div class = "input-grp">
-                <label>Departure</label>
-                <input type = "date" id="departure" name ="departure" class="form-control select-date"/>
+                <label>Arrival</label>
+                <input type = "date" class="form-control select-date"/>
               </div>
-              <div class = "input-grp">
-              <label>Arrival</label>
-              <input type = "date" id ="arrival" name ="arrival" class="form-control select-date"/>
-            </div>
-          
-              <div class="modal-footer">
-                <button
-                  type="button"
-                  class="btn btn-secondary"
-                  data-bs-dismiss="modal"
-                >
-                  Close
-                </button>
-                <button type="button" class="btn btn-primary" onclick="ticketPurchase()">
-                  Purchase
-                </button>
+
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal"
+                  >
+                    Close
+                  </button>
+                  <button type="button" class="btn btn-primary">
+                    Purchase
+                  </button>
+                </div>
               </div>
-              </form>
             </div>
           </div>
         </div>
@@ -266,11 +268,12 @@
     </style>
 
     <div>
-      <h1 class="text-center" mt-5>Train Routes</h1>
+      <h1 class="text-center">Train Routes</h1>
       <table class="table table-hover">
         <thead>
           <tr>
             <th scope="col">Train ID</th>
+            <th scope="col">Passengers</th>
             <th scope="col">Arrival Date</th>
             <th scope="col">Arrival Info</th>
             <th scope="col">Departure Date</th>
@@ -284,6 +287,7 @@
             <th scope="row">1</th>
             <td>Mark</td>
             <td>Otto</td>
+            <td>@mdo</td>
             <td>Mark</td>
             <td>Otto</td>
             <td>@mdo</td>
@@ -295,6 +299,7 @@
             <td>@fat</td>
             <td>Mark</td>
             <td>Otto</td>
+            <td>@mdo</td>
           </tr>
           <tr>
             <th scope="row">3</th>
@@ -303,10 +308,44 @@
             <td>Mark</td>
             <td>Otto</td>
             <td>@mdo</td>
+            <td>@mdo</td>
           </tr>
         </tbody>
       </table>
     </div>
+
+    <!--Add more logic? and create a logout button add eventlistener-->
+    <!--When mapping through tickets for passenger add a cancel ticket button and a check in button-->
+
+    <!--getTrainList function fetchs the list of all the train routes
+              Use a for loop ti essentially may through the array and populate
+              the table
+          -->
+
+    <script>
+      function userLogout() {
+        localStorage.clear();
+        console.log("clicked");
+      }
+
+
+      (async function getTrainList() {
+        let response = await fetch(
+          "http://lcoalhost:8080/Erika-Kollier/trainList"
+        );
+        let json = await response.json();
+
+        let table = document.getElementById("TrainRouteTable");
+
+        for (let element of json) {
+          let tr = table.insertRow(-1);
+          for (let key in element) {
+            let cell = tr.insertCell(-1);
+            cell.innerHTML = element[key];
+          }
+        }
+      })();
+    </script>
 
     <script
       src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"
