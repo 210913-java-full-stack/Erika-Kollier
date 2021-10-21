@@ -1,7 +1,6 @@
-
 /**
  * @author Erika Johnson & Kollier Martin
- * @description 
+ * @description
  * When User logs in or registers payload should return with a token
  * Token will be stored in the local storage
  * First create variables to pull information from the DOM to use within fetch. Those variables are within the form element. userData variable contains the userInfo object containing the data the user inputs.
@@ -40,15 +39,16 @@ function userLogin() {
       console.log(err);
     });
 
-    //Determine UserRoles either an if statment or a switch statment
+  /**
+   * User Roles when logging in
+   */
 
-// if(username === userUsername && password === userPassword){
-//   window.location.href = "adminView.html"
-// } else {
-//   window.location.href = "passengerView.html"
-// }
+  if (username.value === "KMART" && password.value === "password") {
+    window.location.href = "adminView.html";
+  } else {
+    window.location.href = "passengerView.html";
+  }
 }
-
 
 function userRegister() {
   let userFirstname = document.getElementById("firstname").value;
@@ -87,12 +87,5 @@ function userRegister() {
     .catch((err) => {
       console.log(err);
     });
-
-    //Determine UserRoles either an if statment or a switch statment
-
-// if(username === userUsername && password === userPassword){
-//   window.location.href = "adminView.html"
-// } else {
-//   window.location.href = "passengerView.html"
-// }
+  window.location.href = "passengerView.html";
 }

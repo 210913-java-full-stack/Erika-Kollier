@@ -35,6 +35,9 @@
 //     }
 //   }
 
+
+//Need to pass in token 
+
   function ticketPurchase() {
       let userFrom = document.getElementById("currentCity").value
       let userTo = document.getElementById("destCity").value
@@ -55,8 +58,7 @@
           },
           body: JSON.stringify(userTicketData)
       }).then((response) => {
-          let result = response.json();
-          console.log(response.result)
+     
       }).catch((error) => {
           console.log(error);
       })

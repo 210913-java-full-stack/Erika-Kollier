@@ -2,8 +2,10 @@
  * Logout Function
  */
  function userLogout() {
-    localStorage.clear();
-    console.log("clicked");
+  localStorage.setItem("Token", Object.values(token).toString());
+  localStorage.clear();
+  console.log("clicked");
+  window.location.href = "index.html";
   }
   
 /**  Add more logic? and create a logout button add eventlistener
