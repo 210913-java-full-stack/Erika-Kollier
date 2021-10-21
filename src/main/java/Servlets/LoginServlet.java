@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
 @WebServlet(name = "LoginServlet", value = {"/login", "/login?username", "/*&password"})
@@ -30,18 +29,14 @@ public class LoginServlet extends HttpServlet {
         JSONObject jObj = new JSONObject();
 
         String jwt = JWTUtil.createJWT(request);
-        RequestArgChecker.printRequestParam(request, response);
 
-        if (JWTUtil.parseJWT(jwt) && LoginService.validate(request.getParameter("username"), request.getParameter("password")))
-            request.login(request.getParameter("username"), request.getParameter("password"));
+       /* if (JWTUtil.parseJWT(jwt) && LoginService.validate(request.getParameter("username"), request.getParameter("password")))
+            request.login(request.getParameter("username"), request.getParameter("password"));*/
 
         // Parse token for validation
         if (JWTUtil.parseJWT(jwt)){
             // Accept input and add information to Object
-            InputStream requestBody = request.getInputStream();
-            Scanner s = new Scanner(requestBody).useDelimiter("\\A");
-            String body = s.hasNext() ? s.next() : "";
-            jObj.put("Tokenized User", body + jwt);
+            jObj.put("Requested Token", jwt);
             response.getWriter().write(jObj.toString());
         }
     }

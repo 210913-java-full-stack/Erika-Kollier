@@ -11,8 +11,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static Global.GlobalPersistence.*;
-import static Utils.ServiceRequests.*;
+import static Global.GlobalPersistence.getSession;
+import static Utils.ServiceRequests.addRequest;
 
 public class UserService {
     private static List<User> users;

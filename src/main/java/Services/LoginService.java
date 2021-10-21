@@ -6,11 +6,10 @@ import org.hibernate.HibernateException;
 import org.hibernate.Transaction;
 
 import javax.persistence.TypedQuery;
-
 import java.sql.Date;
 
-import static Global.GlobalPersistence.*;
-import static Utils.ServiceRequests.*;
+import static Global.GlobalPersistence.getSession;
+import static Utils.ServiceRequests.addRequest;
 
 public class LoginService {
     private static boolean isValid;

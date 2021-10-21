@@ -6,15 +6,12 @@ import org.hibernate.HibernateException;
 import org.hibernate.Transaction;
 
 import javax.persistence.Query;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static Global.GlobalPersistence.*;
-import static Utils.ServiceRequests.*;
+import static Global.GlobalPersistence.getSession;
+import static Utils.ServiceRequests.addRequest;
 
 public class TicketService {
     private static List<Ticket> tickets;
