@@ -18,7 +18,7 @@ function userLogout() {
 /**
  * Get method to receive list of train schedule & passengers
  */
-(async function getTrainList() {
+ (async function getTrainList() {
   let trainUrl = 'http://localhost:8080/Erika-Kollier/train';
 
   let response = await fetch(trainUrl, {
@@ -50,4 +50,8 @@ function populateTable(json) {
   } catch (e) {
     console.log(e);
   }
+<<<<<<< Updated upstream
 }
+=======
+}
+>>>>>>> Stashed changes
