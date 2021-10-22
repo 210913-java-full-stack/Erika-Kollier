@@ -12,6 +12,7 @@
       crossorigin="anonymous"
     />
     <script src="admin.js"></script>
+    <script src = "ticketPurchase.js"></script>
     <title>AdminView</title>
   </head>
   <body>
@@ -186,12 +187,12 @@
                 ></button>
               </div>
               <div class="modal-body">
-                <form id = "createTicket">
+                <form id = "purchaseTicketForm">
                 <label for="city" class="currentCity">From</label>
                 <input
                   type="text"
-                  id="city"
-                  name="city"
+                  id="currentCity"
+                  name="currentCity"
                   class="form-control"
                   placeholder="Current Location"
                   value=""
@@ -202,24 +203,24 @@
                 <input
                   type="text"
                   id="destCity"
-                  name="city"
+                  name="destCity"
                   class="form-control"
-                  placeholder="Enter City"
+                  placeholder="Destination"
                   value=""
                   required
                   autofocus
                 />
                 <div class = "input-grp">
-                  <label>Tickets</label>
-                  <input type = "number" class="form-control" value="1"/>
+                  <label for = "tickets">Tickets</label>
+                  <input type = "number" id ="tickets" name ="tickets" class="form-control" value="1"/>
                 </div>
                 <div class = "input-grp">
-                <label>Departure</label>
-                <input type = "date" class="form-control select-date"/>
+                <label for = "departure">Departure</label>
+                <input type = "date" id = "departure" name ="departure" class="form-control select-date"/>
               </div>
               <div class = "input-grp">
-              <label>Arrival</label>
-              <input type = "date" class="form-control select-date"/>
+              <label for = "arrival">Arrival</label>
+              <input type = "date" id = "arrival" name = "arrival" class="form-control select-date"/>
             </div>
           
               <div class="modal-footer">
@@ -230,7 +231,7 @@
                 >
                   Close
                 </button>
-                <button type="submit" class="btn btn-primary">
+                <button type="button" onclick="ticketPurchase()" class="btn btn-primary">
                   Purchase
                 </button>
               </div>
@@ -257,24 +258,24 @@
               </div>
               <div class="modal-body">
                 <form id = "createTrain">
-                <label for="theState">From</label>
+                <label for="theState">Departure City</label>
                 <input
                   type="text"
                   id="theState"
                   name="theState"
                   class="form-control"
-                  placeholder="State"
+                  placeholder="Enter City & State"
                   value=""
                   required
                   autofocus
                 />
-                <label for="theCity">To</label>
+                <label for="theCity">Arrival City</label>
                 <input
                   type="text"
                   id="theCity"
                   name="theCity"
                   class="form-control"
-                  placeholder="Enter City"
+                  placeholder="Enter City & State"
                   value=""
                   required
                   autofocus
@@ -286,11 +287,11 @@
                 </div>
 
                 <div class = "input-grp">
-                <label>Departure Date</label>
+                <label for ="departureDate">Departure Date</label>
                 <input type = "date" id = "departureDate" name = "departureDate" class="form-control select-date" value = ""/>
               </div>
               <div class = "input-grp">
-              <label>Arrival Date</label>
+              <label for = "arrivalDate">Arrival Date</label>
               <input type = "date" id = "arrivalDate" name = "arrivalDate" class="form-control select-date" value = ""/>
             </div>
           
@@ -403,15 +404,20 @@ async function submitForm(theStateValue, theCityValue, stationNameValue, departu
   let response = await fetch(tripURL, {
     method: "POST",
     headers: {
-      "Content-Type": "application/json",
-      "payload-type": "new-train"
+      "Content-Type": "application/json;charset=utf-8",
+      // "payload-type": "new-train"
     },
     body: JSON.stringify(tripInfo)
   })
   window.location.href ="adminView.html"
 }
     </script>
+    
+    <script>
 
+      
+
+    </script>
     <script
       src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"
       integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB"

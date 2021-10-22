@@ -31,7 +31,7 @@
 
     let json = await response.json();
     await populateTable(json);
-  })();
+  })
 
 function populateTable(json) {
   let table = document.getElementById("TrainRouteTable");
