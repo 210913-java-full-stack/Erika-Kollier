@@ -186,6 +186,7 @@
                 ></button>
               </div>
               <div class="modal-body">
+                <form id = "createTicket">
                 <label for="city" class="currentCity">From</label>
                 <input
                   type="text"
@@ -229,10 +230,11 @@
                 >
                   Close
                 </button>
-                <button type="button" class="btn btn-primary">
+                <button type="submit" class="btn btn-primary">
                   Purchase
                 </button>
               </div>
+            </form>
             </div>
           </div>
         </div>
@@ -254,7 +256,8 @@
                 ></button>
               </div>
               <div class="modal-body">
-                <label for="state">From</label>
+                <form id = "createTrain">
+                <label for="theState">From</label>
                 <input
                   type="text"
                   id="theState"
@@ -265,11 +268,11 @@
                   required
                   autofocus
                 />
-                <label for="city">To</label>
+                <label for="theCity">To</label>
                 <input
                   type="text"
                   id="theCity"
-                  name="city"
+                  name="theCity"
                   class="form-control"
                   placeholder="Enter City"
                   value=""
@@ -278,17 +281,17 @@
                 />
 
                 <div class = "input-grp">
-                  <label for = "station">Station Name</label>
-                  <input type = "text" id = "stationName" class="form-control" value=""/>
+                  <label for = "stationName">Station Name</label>
+                  <input type = "text" id = "stationName" name = "stationName" class="form-control" value=""/>
                 </div>
 
                 <div class = "input-grp">
                 <label>Departure Date</label>
-                <input type = "date" id = "departureDate" class="form-control select-date" value = ""/>
+                <input type = "date" id = "departureDate" name = "departureDate" class="form-control select-date" value = ""/>
               </div>
               <div class = "input-grp">
               <label>Arrival Date</label>
-              <input type = "date" id = "arrivalDate" class="form-control select-date" value = ""/>
+              <input type = "date" id = "arrivalDate" name = "arrivalDate" class="form-control select-date" value = ""/>
             </div>
           
               <div class="modal-footer">
@@ -299,10 +302,11 @@
                 >
                   Close
                 </button>
-                <button type="button" class="btn btn-primary" onclick="createTrip()">
+                <button type="submit=" class="btn btn-primary">
                   Schedule
                 </button>
               </div>
+            </form>
             </div>
           </div>
         </div>
@@ -372,6 +376,41 @@
       </table>
     </div>
 
+<!--Creating a Train Logic-->
+
+<script>
+ const form = document.getElementById("createTrain");
+
+form.addEventListener("submit", function(e) {
+  e.preventDefault();
+  submitForm(theState.value, theCity.value, stationName.value, departureDate.value, arrivalDate.value);
+  console.log(submitForm)
+})
+
+async function submitForm(theStateValue, theCityValue, stationNameValue, departureDateValue, arrivalDateValue) {
+  let tripInfo = {
+    theState: theStateValue,
+    theCity: theCityValue, 
+    stationName: stationNameValue, 
+    departureDate: departureDateValue, 
+    arrivalDate: arrivalDateValue
+  }
+
+  console.log("tripInfo: ", tripInfo)
+
+  let tripURL = 'http://localhost:8080/Erika-Kollier/train';
+
+  let response = await fetch(tripURL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "payload-type": "new-train"
+    },
+    body: JSON.stringify(tripInfo)
+  })
+  window.location.href ="adminView.html"
+}
+    </script>
 
     <script
       src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"

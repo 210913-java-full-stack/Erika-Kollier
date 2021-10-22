@@ -1,12 +1,12 @@
-var tripURL = 'http://localhost:8080/Erika-Kollier/train';
-
 
 /**
- * Logout Function
+ * @author Erika Johnson & Kollier Martin
+ * @description userLogout function logs out current user by
+ * clearing the token from the local Storage.
  */
  function userLogout() {
   localStorage.clear();
-  console.log("clicked");
+  console.log("Logged Out");
   window.location.href = "index.html";
   }
   
@@ -51,38 +51,42 @@ function populateTable(json) {
   }
 }
 
-function createTrip() {
-  console.log(document.getElementById("theState").value);
-  let theState = document.getElementById("theState").value;
+// function createTrip() {
+//   console.log(document.getElementById("theState").value);
+//   let theState = document.getElementById("theState").value;
 
-  let theCity = document.getElementById("theCity").value;
+//   let theCity = document.getElementById("theCity").value;
 
-  let stationName = document.getElementById("stationName").value;
+//   let stationName = document.getElementById("stationName").value;
 
-  let departureDate = document.getElementById("departureDate").value;
+//   let departureDate = document.getElementById("departureDate").value;
 
-  let arrivalDate = document.getElementById("arrivalDate").value;
+//   let arrivalDate = document.getElementById("arrivalDate").value;
 
-  let tripInfo = {
-      theState: theState,
-      theCity: theCity, 
-      stationName: stationName, 
-      departureDate: departureDate, 
-      arrivalDate: arrivalDate
-    }
+//   let tripInfo = {
+//       theState: theState,
+//       theCity: theCity, 
+//       stationName: stationName, 
+//       departureDate: departureDate, 
+//       arrivalDate: arrivalDate
+//     }
   
-  console.log(`tripInfo => ${tripInfo.theState} ${tripInfo.theCity} ${tripInfo.stationName} ${tripInfo.departureDate} 
-  ${tripInfo.arrivalDate}`)
+//   console.log(`tripInfo => ${tripInfo.theState} ${tripInfo.theCity} ${tripInfo.stationName} ${tripInfo.departureDate} 
+//   ${tripInfo.arrivalDate}`)
 
-  // Sends using fetch
-  fetch(tripURL, 
-    {method: "POST",
-    headers: { "Content-Type": "application/json; charset=utf-8"},
-    body: JSON.stringify(tripInfo)
-  })
-  .then((response) => {
-  console.log(response.json());
-  }).catch((error) => {
-    console.log(error);
-  })
-}
+//   let tripURL = 'http://localhost:8080/Erika-Kollier/train';
+
+//   // Sends using fetch
+//   fetch(tripURL, 
+//     {method: "POST",
+//     headers: { "Content-Type": "application/json; charset=utf-8"},
+//     body: JSON.stringify(tripInfo)
+//   })
+//   .then((response) => response.json())
+//   .then(function (response){
+//   console.log(response.json());
+//   })
+//   .catch((error) => {
+//     console.log(error);
+//   })
+// }

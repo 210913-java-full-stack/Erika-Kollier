@@ -1,10 +1,11 @@
 /**
- * Logout Function
+ * @author Erika Johnson & Kollier Martin
+ * @description userLogout function logs out current user by
+ * clearing the token from the local Storage.
  */
  function userLogout() {
-  localStorage.setItem("Token", Object.values(token).toString());
   localStorage.clear();
-  console.log("clicked");
+  console.log("Logged Out");
   window.location.href = "index.html";
   }
   
@@ -53,3 +54,40 @@
       console.log(result);
     }
   }
+
+  /**
+ * Get method to receive list of train schedule & passengers
+ */
+ (async function getTrainList() {
+  let trainUrl = 'http://localhost:8080/Erika-Kollier/train';
+
+  let response = await fetch(trainUrl, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json;charset=utf-8",
+    }
+  })
+
+    let json = await response.json();
+    await populateTable(json);
+  })();
+
+function populateTable(json) {
+  let table = document.getElementById("TrainRouteTable");
+  let rows = Object.values(json).pop().length;
+  let values = Object.values(json).pop();
+
+  try {
+    for (let i = 0; i < rows; i++) {
+      let tr = table.insertRow(0);
+      for (let value of values.pop()) {
+        let cell = tr.insertCell(-1);
+        cell.innerHTML = value;
+      }
+    }
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+  
