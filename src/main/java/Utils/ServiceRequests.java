@@ -23,7 +23,7 @@ public abstract class ServiceRequests {
         Date date = new Date(System.currentTimeMillis());
 
         try{
-            File file = new File("src/main/resources/logs/requestLog.log");
+            File file = new File("D:\\Programming Files\\Revature\\Erika-Kollier\\src\\main\\resources\\logs\\requestLog.log");
             FileWriter fileWriter = new FileWriter(file);
             BufferedWriter out = new BufferedWriter(fileWriter);
 

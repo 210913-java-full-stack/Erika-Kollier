@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static Global.GlobalPersistence.*;
-import static Utils.ServiceRequests.*;
+import static Global.GlobalPersistence.getSession;
+import static Utils.ServiceRequests.addRequest;
 
 public class TrainService {
     private static List<Train> trains;
@@ -34,7 +34,7 @@ public class TrainService {
             tx = getSession().beginTransaction();
 
             // This is a cop out. I want the Criteria select to match this
-            trains = getSession().createSQLQuery( "SELECT TRAIN_ID, T.TICKET_ID, AVAILABLE, PASSENGERS, NAME, CITY, STATE, ARRIVAL_TIME, DEPARTURE_TIME " +
+            trains = getSession().createSQLQuery( "SELECT TRAIN_ID, PASSENGERS, NAME, ARRIVAL_TIME, CONCAT(CITY, ', ', STATE) AS ARRIVAL_INFO, DEPARTURE_TIME, AVAILABLE " +
                     "FROM TRAINS " +
                     "JOIN STATIONS S on TRAINS.TRAIN_STATION_FK = S.STATION_ID " +
                     "JOIN STATIONS_SCHEDULES SS on S.STATION_ID = SS.STATION_STATION_ID " +
@@ -42,7 +42,7 @@ public class TrainService {
                     "JOIN TICKETS T on TRAINS.TRAIN_ID = T.TRAIN_TICKET_FK").list();
 
             tx.commit();
-        } catch (HibernateException e){
+        } catch (Exception e){
             if (tx != null)
                 tx.rollback();
             MyLogger.getFileLogger().severe(e.toString());
