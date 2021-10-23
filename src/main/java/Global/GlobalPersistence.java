@@ -8,6 +8,7 @@ package Global;
  * @author Kollier Martin
  */
 
+import Logging.MyLogger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
@@ -21,12 +22,13 @@ public abstract class GlobalPersistence {
     static private Session session;
 
     public static void init(){
-        // if remote
-        // Configuration config = new Configuration().configure();
-        // config.setProperty()
-        registry = new StandardServiceRegistryBuilder().configure("hibernate.cfg.xml").build();
-        sessionFactory = new MetadataSources( registry ).buildMetadata().buildSessionFactory();
-        session = sessionFactory.openSession();
+        try {
+            registry = new StandardServiceRegistryBuilder().configure("hibernate.cfg.xml").build();
+            sessionFactory = new MetadataSources(registry).buildMetadata().buildSessionFactory();
+            session = sessionFactory.openSession();
+        } catch (Exception e){
+            MyLogger.getFileLogger().info(e.toString());
+        }
     }
 
     public static void close(){

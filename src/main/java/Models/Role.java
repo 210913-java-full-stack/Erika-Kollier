@@ -1,5 +1,7 @@
 package Models;
 
+import org.hibernate.annotations.ColumnDefault;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -14,7 +16,7 @@ public class Role{
 
     // 0 Passenger, 1 Admin
     @Id
-    @Column(name = "ROLE_ID")
+    @Column(name = "ROLE_ID", columnDefinition = "int default 0")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int roleID;
     public int getRoleID() {
@@ -39,7 +41,6 @@ public class Role{
         this.userRole = userRole;
     }
 
-    // FIXME Foreign Constraints
     // ROLE_ID WILL BE A FK ON USERINFO
     @OneToMany (cascade = CascadeType.ALL)
     private List<UserInfo> userInfo;

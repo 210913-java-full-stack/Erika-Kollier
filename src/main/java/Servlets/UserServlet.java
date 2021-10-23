@@ -7,7 +7,9 @@ package Servlets;
  */
 
 import Logging.MyLogger;
+import Models.User;
 import Services.UserService;
+import Utils.JWTUtil;
 import Utils.RequestArgChecker;
 import org.json.JSONObject;
 
@@ -17,8 +19,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.stream.Collectors;
 
-@WebServlet(name = "UserServlet", value = {"/user", "/user?firstName", "/*&*"})
+@WebServlet(name = "UserServlet", value = {"/user", "/user?firstName"})
 public class UserServlet extends HttpServlet {
     /**
      * This get method returns a single User object, or all User objects based on arguments passed in the HTTP request
@@ -52,6 +55,16 @@ public class UserServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setStatus(202);
+        response.setContentType("application/json");
 
+        String content = request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
+        // Get that info, figure out how to parse it, create new User
+        System.out.println(content);
+
+       /* String jwt = JWTUtil.createJWT(request);
+        response.getWriter().write(jwt);*/
+
+        //UserService.createUser();
     }
 }

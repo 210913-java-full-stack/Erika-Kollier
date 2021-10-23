@@ -53,7 +53,6 @@ public class User {
         this.lastName = lastName;
     }
 
-    // FIXME Foreign Constraints
     @ManyToMany
     private List<Train> trainList = new LinkedList<>();
 

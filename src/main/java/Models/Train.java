@@ -68,7 +68,7 @@ public class Train {
 
     // One train can have multiple tickets pointing to it
     @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "TRAIN_TICKET_FK", nullable = false)
+    @JoinColumn(name = "TRAIN_TICKET_FK", nullable = true)
     private List<Ticket> tickets;
 
     // Many trains to one station

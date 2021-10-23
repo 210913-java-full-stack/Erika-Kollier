@@ -7,8 +7,18 @@ package Servlets;
  */
 
 import Logging.MyLogger;
+import Models.Train;
+import POSTModels.RouteInfo;
 import Services.TrainService;
 import Utils.RequestArgChecker;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jdk.nashorn.internal.objects.Global;
+import jdk.nashorn.internal.parser.JSONParser;
+import jdk.nashorn.internal.runtime.Context;
+import jdk.nashorn.internal.runtime.ECMAErrors;
+import jdk.nashorn.internal.runtime.ParserException;
+import jdk.nashorn.internal.runtime.ScriptObject;
 import org.json.JSONObject;
 
 import javax.servlet.ServletException;
@@ -17,6 +27,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.Scanner;
 import java.util.stream.Collectors;
 
 @WebServlet(name = "TrainServlet", value = {"/train", "/train?id"})
@@ -59,19 +72,35 @@ public class TrainServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) {
         // When admin sends new Trip Info, create new entities on DB
         JSONObject jObj = new JSONObject();
-        String content = request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
 
-        jObj.put("Status", "Information Received and Stored...");
-        response.setStatus(202);
-        response.setContentType("application/json");
-        response.getWriter().write(jObj.toString());
+        InputStream requestBody = null;
 
-        // Create Train
-        // Create Schedule
-        // Create Station
-        // Create Ticket
+        try {
+            requestBody = request.getInputStream();
+            Scanner sc = new Scanner(requestBody, StandardCharsets.UTF_8.name());
+            String jsonText = sc.useDelimiter("\\A").next();
+
+            ObjectMapper mapper = new ObjectMapper();
+            RouteInfo newRoute = mapper.readValue(jsonText, RouteInfo.class);
+            System.out.println("New Route: " + newRoute);
+            // Do newRoute thing here
+            /*TrainService.createRoute(newRoute.getDepartureCity(),
+                    newRoute.getArrivalCity(), newRoute.getStationName(),
+                    newRoute.getDepartureDate(), newRoute.getArrivalDate());*/
+
+            jObj.put("Status", "Information Received and Stored...");
+            response.setStatus(202);
+            response.setContentType("application/json");
+            response.getWriter().write(jObj.toString());
+        } catch (IOException e) {
+            MyLogger.getFileLogger().severe(e.toString());
+        }
+
+
+        // Create Route -> Train, Schedule, Station, Ticket
+        //TrainService.createRoute();
     }
 }
