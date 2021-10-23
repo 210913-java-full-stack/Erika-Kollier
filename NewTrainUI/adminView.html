@@ -119,12 +119,13 @@
         </div>
       </div>
 
-      <!--Check in Modal-->
+      <!--Check in Modal/Cancel Ticket-->
 
       <style>
-        .userView{
+
+          table#userTickets.table.table-hover{
           position: relative;
-          top: -110px;
+          top:-10px;
         }
 
       </style>
@@ -146,13 +147,19 @@
                 <table class="table table-hover" id="userTickets">
                   <thead>
                     <tr>
-                      <th class="userView" scope="col">Train ID</th>
-                      <th class="userView" scope="col">Ticket ID</th>
+                      <!-- <th class="userView" scope="col">Train ID</th>
+                      <th class="userView" scope="col">Ticket ID</th> -->
+                      <th class="userView" scope="col">Departure City</th>
+                      <th class="userView" scope="col">Arrival City</th>
+                      <th class="userView" scope="col">Total Tickets</th>
                       <th class="userView" scope="col">Arrival Date</th>
                       <th class="userView" scope="col">Departure Date</th>
                     </tr>
                   </thead>
-                  <tbody></tbody>
+                  <tr>
+                  <tbody id = "viewTickets">
+                    
+                  </tbody>
                 </table>
               </div>
               <div class="modal-footer">
@@ -163,9 +170,9 @@
                 >
                   Close
                 </button>
-                <button type="button" class="btn btn-primary">
+                <!-- <button type="button" class="btn btn-primary">
                   Submit
-                </button>
+                </button> -->
               </div>
             </div>
           </div>
@@ -216,11 +223,11 @@
                 </div>
                 <div class = "input-grp">
                 <label for = "departure">Departure</label>
-                <input type = "date" id = "departure" name ="departure" class="form-control select-date"/>
+                <input type = "datetime-local" id = "departure" name ="departure" class="form-control select-date"/>
               </div>
               <div class = "input-grp">
               <label for = "arrival">Arrival</label>
-              <input type = "date" id = "arrival" name = "arrival" class="form-control select-date"/>
+              <input type = "datetime-local" id = "arrival" name = "arrival" class="form-control select-date"/>
             </div>
           
               <div class="modal-footer">
@@ -231,7 +238,7 @@
                 >
                   Close
                 </button>
-                <button type="button" onclick="ticketPurchase()" class="btn btn-primary">
+                <button type="submit" onClick = "createATicket()"class="btn btn-primary">
                   Purchase
                 </button>
               </div>
@@ -258,22 +265,22 @@
               </div>
               <div class="modal-body">
                 <form id = "createTrain">
-                <label for="theState">Departure City</label>
+                <label for="departureCity">Departure City</label>
                 <input
                   type="text"
-                  id="theState"
-                  name="theState"
+                  id="departureCity"
+                  name="departureCity"
                   class="form-control"
                   placeholder="Enter City & State"
                   value=""
                   required
                   autofocus
                 />
-                <label for="theCity">Arrival City</label>
+                <label for="arrivalCity">Arrival City</label>
                 <input
                   type="text"
-                  id="theCity"
-                  name="theCity"
+                  id="arrivalCity"
+                  name="arrivalCity"
                   class="form-control"
                   placeholder="Enter City & State"
                   value=""
@@ -282,17 +289,22 @@
                 />
 
                 <div class = "input-grp">
-                  <label for = "stationName">Station Name</label>
-                  <input type = "text" id = "stationName" name = "stationName" class="form-control" value=""/>
+                  <label for = "stationName">Arrival Station</label>
+                  <input type = "text" id = "arrivalStation" name = "stationName" class="form-control" value=""/>
+                </div>
+
+                <div class = "input-grp">
+                  <label for = "stationName">Departure Station</label>
+                  <input type = "text" id = "departureStation" name = "stationName" class="form-control" value=""/>
                 </div>
 
                 <div class = "input-grp">
                 <label for ="departureDate">Departure Date</label>
-                <input type = "date" id = "departureDate" name = "departureDate" class="form-control select-date" value = ""/>
+                <input type = "datetime-local" id = "departureDate" name = "departureDate" class="form-control select-date" value = ""/>
               </div>
               <div class = "input-grp">
               <label for = "arrivalDate">Arrival Date</label>
-              <input type = "date" id = "arrivalDate" name = "arrivalDate" class="form-control select-date" value = ""/>
+              <input type = "datetime-local" id = "arrivalDate" name = "arrivalDate" class="form-control select-date" value = ""/>
             </div>
           
               <div class="modal-footer">
@@ -303,7 +315,7 @@
                 >
                   Close
                 </button>
-                <button type="submit=" class="btn btn-primary">
+                <button type="submit=" onClick = "createATrain()"class="btn btn-primary">
                   Schedule
                 </button>
               </div>
@@ -313,7 +325,7 @@
         </div>
       </div> 
 
-      <!--CancelTicket Modal-->
+      <!--Cancel Train Route Modal-->
        <div class="modal-dialog modal-dialog-scrollable">
         <div class="modal" id="modal3" tabindex="-1">
           <div class="modal-dialog">
@@ -361,15 +373,15 @@
 
     <div>
       <h1 class="text-center" mt-5>Train Routes</h1>
-      <table class="table table-hover">
+      <table class="table table-hover" id = "trainSchedule">
         <thead>
           <tr>
             <th scope="col">Train ID</th>
             <th scope="col">Total Passengers</th>
-            <th scope="col">Station Name</th>
-            <th scope="col">Arrival Date</th>
-            <th scope="col">Location Info</th>
-            <th scope="col">Departure Date</th>
+            <th scope="col">Arrival Location</th>
+            <th scope="col">Arrival Time</th>
+            <th scope="col">Departure Location</th>
+            <th scope="col">Departure Time</th>
             <th scope="col">Availability</th>
           </tr>
         </thead>
@@ -377,47 +389,72 @@
       </table>
     </div>
 
-<!--Creating a Train Logic-->
 
-<script>
- const form = document.getElementById("createTrain");
-
-form.addEventListener("submit", function(e) {
-  e.preventDefault();
-  submitForm(theState.value, theCity.value, stationName.value, departureDate.value, arrivalDate.value);
-  console.log(submitForm)
-})
-
-async function submitForm(theStateValue, theCityValue, stationNameValue, departureDateValue, arrivalDateValue) {
-  let tripInfo = {
-    theState: theStateValue,
-    theCity: theCityValue, 
-    stationName: stationNameValue, 
-    departureDate: departureDateValue, 
-    arrivalDate: arrivalDateValue
-  }
-
-  console.log("tripInfo: ", tripInfo)
-
-  let tripURL = 'http://localhost:8080/Erika-Kollier/train';
-
-  let response = await fetch(tripURL, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json;charset=utf-8",
-      // "payload-type": "new-train"
-    },
-    body: JSON.stringify(tripInfo)
-  })
-  window.location.href ="adminView.html"
-}
-    </script>
     
     <script>
+      /******** PURCHASE TICKET AND CheckIN & DELETE TICKET************/
+      //Add fetch logic for purchase ticket, delete, checkin
 
+            // const form = document.getElementById("purchaseTicketForm")
+            // const tbody = document.getElementById("viewTickets")
+            // const tableEl = document.getElementById("userTickets")
       
 
+            // function onAddTickets(e) {
+            //   e.preventDefault();
+            //   // alert("this works")
+            //   const currentCity = document.getElementById("currentCity").value;
+            //   const destination = document.getElementById("destCity").value;
+            //   const totalTickets = document.getElementById("tickets").value;
+            //   const departDate = document.getElementById("departure").value;
+            //   const arrivalDate= document.getElementById("arrival").value;
+            //   // alert(currentCity + " " + destination + " " + totalTickets + " "+ departDate + " " +arrivalDate)
+            //   alert("Ticket(s) Purchased")
+            //   tbody.innerHTML += `
+            //   <tr> 
+ 
+            //         <td>${currentCity}</td>
+            //         <td>${destination}</td>
+            //         <td>${totalTickets}</td>
+            //         <td>${departDate}</td>
+            //         <td>${arrivalDate}</td>
+            //         <td><button type = "button" class = "btn-warning">Cancel</button></td>
+            //         <td><button type = "button" class = "btn-primary">CheckIn</button></td>
+                    
+            //   </tr>
+              
+            //   `
+            // }
+            // // only want to respond to the delete button associated with the row on the table. 
+            // // closest finds the closest element (button)
+            // //classList property is read-only, however, you can modify it by using the, toggle add() and remove() methods.
+            // function onDeleteRow(e){
+            //   if(!e.target.classList.contains("btn-warning")) {
+            //     return;
+            //   }
+            //   alert("Your ticket will be canceled")
+            //   const btn = e.target;
+            //   btn.closest("tr").remove();
+            // }
+
+            // function onCheckinRow(e){
+            //   if(!e.target.classList.contains("btn-primary")) {
+            //     return;
+            //   }
+            //   alert("You have successfully checked in")
+            //   const btn = e.target;
+            //   btn.closest('tr').alert("checked in")
+
+            // }
+
+
+            // form.addEventListener('submit', onAddTickets)
+            // //delete row from table
+            // tableEl.addEventListener("click", onDeleteRow) 
+            // tableEl.addEventListener("click", onCheckinRow)
+
     </script>
+
     <script
       src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"
       integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB"

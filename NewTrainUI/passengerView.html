@@ -12,6 +12,7 @@
       crossorigin="anonymous"
     />
     <script src="passenger.js"></script>
+    <script src = "ticketPurchase.js"></script>
     <!-- <script src="ticketPurchase.js"></script> -->
 
     <title>PassengerView</title>
@@ -57,7 +58,7 @@
                     href="#"
                     data-bs-toggle="modal"
                     data-bs-target="#modal1"
-                    >Check In</a
+                    >Check In/Cancel Ticket</a
                   >
                 </li>
                 <li>
@@ -67,15 +68,6 @@
                     data-bs-toggle="modal"
                     data-bs-target="#modal2"
                     >Ticket Purchase</a
-                  >
-                </li>
-                <li>
-                  <a
-                    class="dropdown-item"
-                    href="#"
-                    data-bs-toggle="modal"
-                    data-bs-target="#modal3"
-                    >Cancel Ticket</a
                   >
                 </li>
               </ul>
@@ -92,161 +84,134 @@
         </div>
       </div>
 
-      <!--Check in Modal-->
+ <!--Check in Modal/Cancel Ticket-->
 
-      <style>
-        .userView{
-          position: relative;
-          top: -110px;
-        }
+ <style>
 
-      </style>
-      
-      <div class="modal-dialog modal-dialog-scrollable">
-        <div class="modal" id="modal1" tabindex="-1">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title">Check in</h5>
-                <button
-                  type="button"
-                  class="btn-close"
-                  data-bs-dismiss="modal"
-                  aria-label="Close"
-                ></button>
-              </div>
-              <div class="modal-body">
-                <table class="table table-hover" id="userTickets">
-                  <thead>
-                    <tr>
-                      <th class="userView" scope="col">Train ID</th>
-                      <th class="userView" scope="col">Ticket ID</th>
-                      <th class="userView" scope="col">Arrival Date</th>
-                      <th class="userView" scope="col">Departure Date</th>
-                    </tr>
-                  </thead>
-                  <tbody></tbody>
-                </table>
-              </div>
-              <div class="modal-footer">
-                <button
-                  type="button"
-                  class="btn btn-secondary"
-                  data-bs-dismiss="modal"
-                >
-                  Close
-                </button>
-                <button type="button" class="btn btn-primary">
-                  Submit
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
+  table#userTickets.table.table-hover{
+  position: relative;
+  top:-10px;
+}
+
+</style>
+
+<div class="modal-dialog modal-dialog-scrollable">
+<div class="modal" id="modal1" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Check in/Cancel Ticket</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
       </div>
-
-      <!--Purchase Ticket Modal-->
-      <div class="modal-dialog modal-dialog-scrollable">
-        <div class="modal" id="modal2" tabindex="-1">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title">Ticket Purchase</h5>
-                <button
-                  type="button"
-                  class="btn-close"
-                  data-bs-dismiss="modal"
-                  aria-label="Close"
-                ></button>
-              </div>
-              <div class="modal-body">
-                <form class = "form" id = "purchaseTicketForm">
-                <label for="currentCity" class="currentCity">From</label>
-                <input
-                  type="text"
-                  id="currentCity"
-                  name="city"
-                  class="form-control"
-                  placeholder="Current Location"
-                  value=""
-                  required
-                  autofocus
-                />
-                <label for="destCity" class="destCity">To</label>
-                <input
-                  type="text"
-                  id="destCity"
-                  name="city"
-                  class="form-control"
-                  placeholder="Destination"
-                  value=""
-                  required
-                  autofocus
-                />
-                <div class = "input-grp">
-                  <label>Tickets</label>
-                  <input type = "number" id = "tickets" name ="tickets" class="form-control" value=""/>
-                </div>
-                <div class = "input-grp">
-                <label>Departure</label>
-                <input type = "date" id="departure" name ="departure" class="form-control select-date"/>
-              </div>
-              <div class = "input-grp">
-              <label>Arrival</label>
-              <input type = "date" id ="arrival" name ="arrival" class="form-control select-date"/>
-            </div>
-          
-              <div class="modal-footer">
-                <button
-                  type="button"
-                  class="btn btn-secondary"
-                  data-bs-dismiss="modal"
-                >
-                  Close
-                </button>
-                <button type="submit" class="btn btn-primary" onclick="ticketPurchase()">
-                  Purchase
-                </button>
-              </div>
-              </form>
-            </div>
-          </div>
-        </div>
+      <div class="modal-body">
+        <table class="table table-hover" id="userTickets">
+          <thead>
+            <tr>
+              <!-- <th class="userView" scope="col">Train ID</th>
+              <th class="userView" scope="col">Ticket ID</th> -->
+              <th class="userView" scope="col">Departure City</th>
+              <th class="userView" scope="col">Arrival City</th>
+              <th class="userView" scope="col">Total Tickets</th>
+              <th class="userView" scope="col">Arrival Date</th>
+              <th class="userView" scope="col">Departure Date</th>
+            </tr>
+          </thead>
+          <tr>
+          <tbody id = "viewTickets">
+            
+          </tbody>
+        </table>
       </div>
-
-      <!--CancelTicket Modal-->
-      <div class="modal-dialog modal-dialog-scrollable">
-        <div class="modal" id="modal3" tabindex="-1">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title">Ticket Cancellation</h5>
-                <button
-                  type="button"
-                  class="btn-close"
-                  data-bs-dismiss="modal"
-                  aria-label="Close"
-                ></button>
-              </div>
-              <div class="modal-body">
-                <p>Modal body text goes here.</p>
-              </div>
-              <div class="modal-footer">
-                <button
-                  type="button"
-                  class="btn btn-secondary"
-                  data-bs-dismiss="modal"
-                >
-                  Close
-                </button>
-                <button type="button" class="btn btn-primary">
-                  Save changes
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-bs-dismiss="modal"
+        >
+          Close
+        </button>
+        <!-- <button type="button" class="btn btn-primary">
+          Submit
+        </button> -->
       </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!--Purchase Ticket Modal-->
+<div class="modal-dialog modal-dialog-scrollable">
+<div class="modal" id="modal2" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Ticket Purchase</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form id = "purchaseTicketForm">
+        <label for="city" class="currentCity">From</label>
+        <input
+          type="text"
+          id="currentCity"
+          name="currentCity"
+          class="form-control"
+          placeholder="Current Location"
+          value=""
+          required
+          autofocus
+        />
+        <label for="city" class="destCity">To</label>
+        <input
+          type="text"
+          id="destCity"
+          name="destCity"
+          class="form-control"
+          placeholder="Destination"
+          value=""
+          required
+          autofocus
+        />
+        <div class = "input-grp">
+          <label for = "tickets">Tickets</label>
+          <input type = "number" id ="tickets" name ="tickets" class="form-control" value="1"/>
+        </div>
+        <div class = "input-grp">
+        <label for = "departure">Departure</label>
+        <input type = "datetime-local" id = "departure" name ="departure" class="form-control select-date"/>
+      </div>
+      <div class = "input-grp">
+      <label for = "arrival">Arrival</label>
+      <input type = "datetime-local" id = "arrival" name = "arrival" class="form-control select-date"/>
+    </div>
+  
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-bs-dismiss="modal"
+        >
+          Close
+        </button>
+        <button type="submit" class="btn btn-primary">
+          Purchase
+        </button>
+      </div>
+    </form>
+    </div>
+  </div>
+</div>
+</div>
     </nav>
 <!------------------------------View List of Train Info------------------------------------------->
     <style>
@@ -267,10 +232,10 @@
           <tr>
             <th scope="col">Train ID</th>
             <th scope="col">Total Passengers</th>
-            <th scope="col">Station Name</th>
-            <th scope="col">Arrival Info</th>
-            <th scope="col">Station Location</th>
-            <th scope="col">Departure Info</th>
+            <th scope="col">Arrival Location</th>
+            <th scope="col">Arrival Time</th>
+            <th scope="col">Departure Location</th>
+            <th scope="col">Departure Time</th>
             <th scope="col">Availability</th>
           </tr>
         </thead>
@@ -280,6 +245,70 @@
         </tbody>
       </table>
     </div>
+
+    <script>
+      /******** PURCHASE TICKET AND CheckIN & DELETE TICKET************/
+      //Add fetch logic for purchase ticket, delete, checkin
+
+            const form = document.getElementById("purchaseTicketForm")
+            const tbody = document.getElementById("viewTickets")
+            const tableEl = document.getElementById("userTickets")
+      
+
+            function onAddTickets(e) {
+              e.preventDefault();
+              // alert("this works")
+              const currentCity = document.getElementById("currentCity").value;
+              const destination = document.getElementById("destCity").value;
+              const totalTickets = document.getElementById("tickets").value;
+              const departDate = document.getElementById("departure").value;
+              const arrivalDate= document.getElementById("arrival").value;
+              // alert(currentCity + " " + destination + " " + totalTickets + " "+ departDate + " " +arrivalDate)
+              alert("Ticket(s) Purchased")
+              tbody.innerHTML += `
+              <tr> 
+ 
+                    <td>${currentCity}</td>
+                    <td>${destination}</td>
+                    <td>${totalTickets}</td>
+                    <td>${departDate}</td>
+                    <td>${arrivalDate}</td>
+                    <td><button type = "button" class = "btn-warning">Cancel</button></td>
+                    <td><button type = "button" class = "btn-primary">CheckIn</button></td>
+                    
+              </tr>
+              
+              `
+            }
+            // only want to respond to the delete button associated with the row on the table. 
+            // closest finds the closest element (button)
+            //classList property is read-only, however, you can modify it by using the, toggle add() and remove() methods.
+            function onDeleteRow(e){
+              if(!e.target.classList.contains("btn-warning")) {
+                return;
+              }
+              alert("Your ticket will be canceled")
+              const btn = e.target;
+              btn.closest("tr").remove();
+            }
+
+            function onCheckinRow(e){
+              if(!e.target.classList.contains("btn-primary")) {
+                return;
+              }
+              alert("You have successfully checked in")
+              const btn = e.target;
+              btn.closest('tr').alert("checked in")
+
+            }
+
+
+            form.addEventListener('submit', onAddTickets)
+            //delete row from table
+            tableEl.addEventListener("click", onDeleteRow) 
+            tableEl.addEventListener("click", onCheckinRow)
+
+    </script>
 
     <script
       src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"

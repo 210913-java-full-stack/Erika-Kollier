@@ -10,15 +10,90 @@
   window.location.href = "index.html";
   }
   
-/**  Add more logic? and create a logout button add eventlistener
-    When mapping through tickets for passenger add a cancel ticket button and a check in button
-    getTrainList function fetchs the list of all the train routes
-    Use a for loop ti essentially may through the array and populate the table
+    //can wrap in function and then call it using the onclick button?
+
+function createATrain() {
+
+ const form = document.getElementById("createTrain");
+ const tbody = document.getElementById("TrainRouteTable")
+ const trainTable = document.getElementById("trainSchedule")
+
+ function submitForm(e) {
+   e.preventDefault();
+   let departureCity = document.getElementById("departureCity").value;
+   let arrivalCity = document.getElementById("arrivalCity").value;
+   let departureStation = document.getElementById("departureStation").value;
+   let arrivalStation = document.getElementById("arrivalStation").value;
+   let departureDate = document.getElementById("departureDate").value
+   let arrivalDate = document.getElementById("arrivalDate").value;
+   alert(departureCity + " " + arrivalCity + " " + stationName + " " +
+   " " + departureDate + " " + arrivalDate)
+   tbody.innerHTML += `
+        <tr>
+
+              <td>${trainId}</td>
+              <td>${totalPass}</td>
+              <td>${departureCity}</td>
+              <td>${arrivalCity}</td>
+              <td>${arrivalDate}</td>
+              <td>${stationName}</td>
+              <td>${departureDate}</td>
+              
+              <td><button type = "button" class = "btn-success">Cancel</button></td>
+              
+        </tr> 
+    
+   `
+ }
+
+ function deleteRow(e){
+  if(!e.target.classList.contains("btn-success")) {
+    return;
+  }
+  alert("Train Route Canceled")
+  const btn = e.target;
+  btn.closest("tr").remove();
+}
+   form.addEventListener("submit", submitForm)
+   trainTable.addEventListener("click", deleteRow) 
+ 
+}
+//  form.addEventListener("submit", function(e) {
+//    e.preventDefault();
+//    submitForm(theState.value, theCity.value, stationName.value, departureDate.value, arrivalDate.value);
+//    console.log(submitForm)
+//  })
+ 
+//  async function submitForm(theStateValue, theCityValue, stationNameValue, departureDateValue, arrivalDateValue) {
+//    let tripInfo = {
+//      theState: theStateValue,
+//      theCity: theCityValue, 
+//      stationName: stationNameValue, 
+//      departureDate: departureDateValue, 
+//      arrivalDate: arrivalDateValue
+//    }
+ 
+//    console.log("tripInfo: ", tripInfo)
+ 
+//    let tripURL = 'http://localhost:8080/Erika-Kollier/train';
+ 
+//    let response = await fetch(tripURL, {
+//      method: "POST",
+//      headers: {
+//        "Content-Type": "application/json;charset=utf-8",
+//      },
+//      body: JSON.stringify(tripInfo)
+//    })
+//    window.location.href ="adminView.html"
+//  }
+
+
+/** getTrainList function fetchs the list of all the train routes
+    Use a for loop to essentially map through the array and populate the table
     */
 
-/**
- * Get method to receive list of train schedule & passengers
- */
+
+/***LIST OF PASSENGER INFO AND TRAIN INFO, DISPLAYED WITHIN A TABLE */
  (async function getTrainList() {
   let trainUrl = 'http://localhost:8080/Erika-Kollier/train';
 
@@ -31,7 +106,7 @@
 
     let json = await response.json();
     await populateTable(json);
-  })
+  })();
 
 function populateTable(json) {
   let table = document.getElementById("TrainRouteTable");
@@ -51,42 +126,67 @@ function populateTable(json) {
   }
 }
 
-// function createTrip() {
-//   console.log(document.getElementById("theState").value);
-//   let theState = document.getElementById("theState").value;
+/***CREATE A TICKET, VIEW TICKET FOR CHECKIN OR CANCEL */
 
-//   let theCity = document.getElementById("theCity").value;
 
-//   let stationName = document.getElementById("stationName").value;
+function createATicket() {
 
-//   let departureDate = document.getElementById("departureDate").value;
+const form = document.getElementById("purchaseTicketForm")
+const tbody = document.getElementById("viewTickets")
+const tableEl = document.getElementById("userTickets")
 
-//   let arrivalDate = document.getElementById("arrivalDate").value;
 
-//   let tripInfo = {
-//       theState: theState,
-//       theCity: theCity, 
-//       stationName: stationName, 
-//       departureDate: departureDate, 
-//       arrivalDate: arrivalDate
-//     }
+function onAddTickets(e) {
+  e.preventDefault();
+  // alert("this works")
+  const currentCity = document.getElementById("currentCity").value;
+  const destination = document.getElementById("destCity").value;
+  const totalTickets = document.getElementById("tickets").value;
+  const departDate = document.getElementById("departure").value;
+  const arrivalDate= document.getElementById("arrival").value;
+  // alert(currentCity + " " + destination + " " + totalTickets + " "+ departDate + " " +arrivalDate)
+  alert("Ticket(s) Purchased")
+  tbody.innerHTML += `
+  <tr> 
+
+        <td>${currentCity}</td>
+        <td>${destination}</td>
+        <td>${totalTickets}</td>
+        <td>${departDate}</td>
+        <td>${arrivalDate}</td>
+        <td><button type = "button" class = "btn-warning">Cancel</button></td>
+        <td><button type = "button" class = "btn-primary">CheckIn</button></td>
+        
+  </tr>
   
-//   console.log(`tripInfo => ${tripInfo.theState} ${tripInfo.theCity} ${tripInfo.stationName} ${tripInfo.departureDate} 
-//   ${tripInfo.arrivalDate}`)
+  `
+}
+// only want to respond to the delete button associated with the row on the table. 
+// closest finds the closest element (button)
+//classList property is read-only, however, you can modify it by using the, toggle add() and remove() methods.
+function onDeleteRow(e){
+  if(!e.target.classList.contains("btn-warning")) {
+    return;
+  }
+  alert("Your ticket will be canceled")
+  const btn = e.target;
+  btn.closest("tr").remove();
+}
 
-//   let tripURL = 'http://localhost:8080/Erika-Kollier/train';
+function onCheckinRow(e){
+  if(!e.target.classList.contains("btn-primary")) {
+    return;
+  }
+  alert("You have successfully checked in")
+  const btn = e.target;
+  btn.closest('tr').alert("checked in")
 
-//   // Sends using fetch
-//   fetch(tripURL, 
-//     {method: "POST",
-//     headers: { "Content-Type": "application/json; charset=utf-8"},
-//     body: JSON.stringify(tripInfo)
-//   })
-//   .then((response) => response.json())
-//   .then(function (response){
-//   console.log(response.json());
-//   })
-//   .catch((error) => {
-//     console.log(error);
-//   })
-// }
+}
+
+
+form.addEventListener('submit', onAddTickets)
+//delete row from table
+tableEl.addEventListener("click", onDeleteRow) 
+tableEl.addEventListener("click", onCheckinRow)
+
+}

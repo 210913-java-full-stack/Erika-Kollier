@@ -1,5 +1,4 @@
 function ticketPurchase() {
-  
 
   const form = document.getElementById("purchaseTicketForm");
 
@@ -45,43 +44,35 @@ function ticketPurchase() {
   window.location.href = "adminView.html";
 }
 
+//Need to pass in Token maybe?
+/******Display user tickets*******/
 
-//Need to pass in token?
+(async function getMyTicketList() {
+  let displayTicket = 'http://localhost:8080/Erika-Kollier/ticketDisplay'
 
-// function ticketPurchase() {
-//   let userFrom = document.getElementById("currentCity").value;
-//   let userTo = document.getElementById("destCity").value;
-//   let userTicket = document.getElementById("tickets").value;
-//   let userDeparture = document.getElementById("departure").value;
-//   let userArrival = document.getElementById("arrival").value;
+  let response = await fetch(displayTicket, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json:charset=utf-8,"
+    }
+  })
 
-//   let userTicketData = {
-//     tickets: {
-//       currentCity: userFrom,
-//       destCity: userTo,
-//       tickets: userTicket,
-//       departure: userDeparture,
-//       arrival: userArrival,
-//     },
-//   };
+  let json = await response.json()
+  await populateTicketTable(json)
+})();
 
-//   console.log(
-//     `ticketInfo => ${userTicketData.tickets.currentCity} ${userTicketData.tickets.destCity} ${userTicketData.tickets.tickets} ${userTicketData.tickets.departure} ${userTicketData.tickets.arrival}`
-//   );
-//   let url = "http://localhost:8080/Erika-Kollier/ticketPurchase";
+function populateTicketTable(json) {
+  let table = document.getElementById("ticketDisplay")
+  let rows = Object.values(json).pop().length;
+  let values = Object.values(json).pop();
 
-//   let response = fetch(url, {
-//     method: "POST",
-//     headers: {
-//       "Content-Type": "application/json;charset=utf-8",
-//     },
-//     body: JSON.stringify(userTicketData),
-//   })
-//     .then((response) => response.json())
-//     .then(function (reponse) {
-//       console.log(reponse.json());
-//     })
-//     .catch((error) => {
-//       console.log(error);
-//     });
-// }
+  for(let i = 0; i < rows; i++){
+    let tr = table.insertRow(0)
+    for(let value of values.pop()) {
+      let cell = tr.insertCell(-1)
+      cell.innerHTML = value;
+    }
+  }
+}
+
+
