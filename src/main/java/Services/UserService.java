@@ -10,6 +10,7 @@ import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import static Global.GlobalPersistence.getSession;
 import static Utils.ServiceRequests.addRequest;
@@ -77,6 +78,30 @@ public class UserService {
     }
 
     /**
+     * This method registers a User to the database using given credentials
+     * @param firstName First Name
+     * @param lastName Last Name
+     * @param username Username
+     * @param password Password
+     */
+    public static void register(String firstName, String lastName, String username, String password){
+        UUID generatedID = UUID.randomUUID();
+        user = new User();
+        userInfo = new UserInfo();
+
+        user.setUserID(generatedID);
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+
+        userInfo.setUserID(generatedID);
+        userInfo.setUsername(username);
+        userInfo.setPassword(password);
+
+        save(userInfo);
+        save(user);
+    }
+
+    /**
      * This method saves a User object to the Database
      * @param user User object
      */
@@ -87,6 +112,26 @@ public class UserService {
             tx = getSession().beginTransaction();
 
             getSession().save(user);
+
+            tx.commit();
+        } catch (HibernateException e) {
+            if (tx != null)
+                tx.rollback();
+            MyLogger.getFileLogger().severe(e.toString());
+        }
+    }
+
+    /**
+     * This method saves a UserInfo object to the Database
+     * @param userInfo UserInfo object containing User's personal info
+     */
+    public static void save(UserInfo userInfo){
+        addRequest("POST: saved data relating to new user " + userInfo.getUsername() + ".", new Date(System.currentTimeMillis()));
+
+        try {
+            tx = getSession().beginTransaction();
+
+            getSession().save(userInfo);
 
             tx.commit();
         } catch (HibernateException e) {

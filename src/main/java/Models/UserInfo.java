@@ -48,7 +48,6 @@ public class UserInfo{
         this.password = password;
     }
 
-    // FIXME Foreign Constraints
     // WILL BE CONNECTED TO TICKETS, USERS, ROLES
     @OneToMany(mappedBy = "userInfo")
     private List<Ticket> tickets;

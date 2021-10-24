@@ -23,8 +23,8 @@ function createATrain() {
 
  function submitForm(e) {
    e.preventDefault();
-   let departureCity = document.getElementById("departureCity").value;
-   let arrivalCity = document.getElementById("arrivalCity").value;
+   let trainID = document.getElementById("trainID").value; //departureCity
+   let totalPassengers = document.getElementById("totalPassengers").value;
    let departureStation = document.getElementById("departureStation").value;
    let arrivalStation = document.getElementById("arrivalStation").value;
    let departureDate = document.getElementById("departureDate").value
@@ -32,24 +32,29 @@ function createATrain() {
    const token = localStorage.getItem("Token");
 
 
-
-   
-   tbody.innerHTML += `
+     tbody.innerHTML += `
         <tr>
-
-             
-              <td>${departureCity}</td>
-              <td>${arrivalCity}</td>
+              <td>${trainID}</td>
+              <td>${0}</td>
+              <td>${arrivalStation}</td>
               <td>${arrivalDate}</td>
               <td>${departureStation}</td>
-              <td>${arrivalStation}</td>
               <td>${departureDate}</td>
-              
-              <td><button type = "button" class = "btn-success">Cancel</button></td>
-              
+              <td>true</td>
+            
+              <td><button type = "button" class = "deleteButton" style="background-color:#0d6efd; color:white;position: static;">Cancel</button></td>
         </tr> 
-    
    `
+   if(!e.target.classList.contains("btn-success")) {
+    let buttons = document.getElementsByClassName('Imma Button');
+
+    for (let i = 0; i < buttons.length; i++) {
+        let button = buttons[i];
+        let tr = tbody.getElementsByTagName('tr');
+        let trData = tr.item(i);
+        trData.appendChild(button);
+    }
+}
 
     let baseUrl = "http://localhost:8080/Erika-Kollier/createTrain";
 
@@ -75,7 +80,6 @@ function createATrain() {
  }
 
  function deleteRow(e){
-
   const deleteUrl = "http://localhost:3000/Erika-Kollier/train"
   const token = localStorage.getItem("Token");
 
@@ -88,8 +92,7 @@ function createATrain() {
   }).then(response => {
     console.log(response)
   })
-
-  if(!e.target.classList.contains("btn-success")) {
+  if(!e.target.classList.contains("deleteButton")) {
     return;
   }
   alert("Train Route Canceled")
@@ -99,7 +102,8 @@ function createATrain() {
    form.addEventListener("submit", submitForm)
    trainTable.addEventListener("click", deleteRow) 
  
-}
+  }
+
 
 //May have to pass in token for getting train routes and want to display just your scheduled routes
 //may also need another get request to display your train routes when refreshing
@@ -130,9 +134,25 @@ function populateTable(json) {
   try {
     for (let i = 0; i < rows; i++) {
       let tr = table.insertRow(0);
+        var btn = document.createElement('input');
+        btn.type = "button";
+        btn.value = "Cancel";
+        btn.className = "Imma Button";
+        btn.style = "background-color:#0d6efd; " +
+            "color:white; " +
+            "position: relative; " +
+            "padding: 1px 6px; " +
+            "align: center; " +
+            "left: 8px; " +
+            "display: inline-block; " +
+            "text-align: center; " +
+            "align-items: flex-start; " +
+            "top: 5px; ";
+
       for (let value of values.pop()) {
         let cell = tr.insertCell(-1);
-        cell.innerHTML = value;
+          cell.innerHTML = value;
+          tr.append(btn);
       }
     }
   } catch (error) {
@@ -232,14 +252,14 @@ function onCheckinRow(e){
   const btn = e.target;
   btn.closest('tr').alert("checked in")
 
-}
+  }
 
 form.addEventListener('submit', onAddTickets)
 //delete row from table
 tableEl.addEventListener("click", onDeleteRow) 
 tableEl.addEventListener("click", onCheckinRow)
-
 }
+
 
 (async function getTicketList() {
   let ticketUrl = 'http://localhost:8080/Erika-Kollier/myTickets';
@@ -274,4 +294,5 @@ function populateTable(json) {
   } catch (error) {
     console.log("Error:", error);
   }
-}
+ }
+

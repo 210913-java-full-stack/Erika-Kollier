@@ -242,25 +242,25 @@
               </div>
               <div class="modal-body">
                 <form id = "createTrain">
-                <label for="departureCity">Departure City</label>
+                <label for="trainID">Train ID</label>
                 <input
-                  type="text"
-                  id="departureCity"
-                  name="departureCity"
+                  type="number"
+                  id="trainID"
+                  name="trainID"
                   class="form-control"
-                  placeholder="Enter City & State"
+                  placeholder="Enter Train ID"
                   value=""
                   required
                   autofocus
                   autocomplete="off" 
                 />
-                <label for="arrivalCity">Arrival City</label>
+                <label for="totalPassengers">Total Passengers</label>
                 <input
-                  type="text"
-                  id="arrivalCity"
-                  name="arrivalCity"
+                  type="number"
+                  id="totalPassengers"
+                  name="totalPassengers"
                   class="form-control"
-                  placeholder="Enter City & State"
+                  placeholder="Enter # of Passengers"
                   value=""
                   required
                   autofocus
@@ -269,13 +269,13 @@
                 />
 
                 <div class = "input-grp">
-                  <label for = "stationName">Arrival Station</label>
-                  <input type = "text" id = "arrivalStation" name = "stationName" class="form-control" autocomplete="off"  value=""/>
+                  <label for = "departureStation">Arrival Station</label>
+                  <input type = "text" id = "arrivalStation" name = "stationName" class="form-control" value=""/>
                 </div>
 
                 <div class = "input-grp">
-                  <label for = "stationName">Departure Station</label>
-                  <input type = "text" id = "departureStation" name = "stationName" class="form-control" autocomplete="off" value=""/>
+                  <label for = "departureStation">Departure Station</label>
+                  <input type = "text" id = "departureStation" name = "stationName" class="form-control" value=""/>
                 </div>
 
                 <div class = "input-grp">
@@ -329,6 +329,7 @@
             <th scope="col">Departure Location</th>
             <th scope="col">Departure Time</th>
             <th scope="col">Availability</th>
+            <th scope="col">Cancel Trip</th>
           </tr>
         </thead>
         <tbody id="TrainRouteTable"></tbody>

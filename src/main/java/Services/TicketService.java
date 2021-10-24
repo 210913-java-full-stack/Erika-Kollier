@@ -104,11 +104,33 @@ public class TicketService {
 
             getSession().save(ticket);
 
+
+
             tx.commit();
         } catch (HibernateException e) {
             if (tx != null)
                 tx.rollback();
             MyLogger.getFileLogger().severe(e.toString());
+        }
+    }
+
+    /**
+     * This method creates a Ticket object then saves it to the Database
+     * @param ticketValue The amount of tickets to be purchased
+     * @param currentCityValue City they want to depart from
+     * @param destCityValue City they wish to arrive to
+     * @param departureValue Departure date
+     * @param arrivalValue Arrival date
+     */
+    public static void create(int ticketValue, String currentCityValue, String destCityValue, String departureValue, String arrivalValue) {
+        for (int i = 0; i < ticketValue; i++){
+            ticket = new Ticket();
+
+            // String departureCity, String arrivalCity, String departureStation, String arrivalStation, String departureDate, String arrivalDate
+            // ticket.setDescription();
+
+            // Assign ticket to User
+            save(ticket);
         }
     }
 }

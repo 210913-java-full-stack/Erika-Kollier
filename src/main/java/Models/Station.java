@@ -53,6 +53,9 @@ public class Station {
     @OneToMany
     private List<Schedule> schedules;
 
+    @ManyToMany
+    private List<Trip> trip;
+
     @Override
     public String toString(){
         LinkedList<String> schedulesInfo = new LinkedList<>();
