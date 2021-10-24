@@ -36,39 +36,16 @@
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item dropdown">
               <a
-              class="nav-link dropdown-toggle"
+              class="nav-link"
               href="#"
-              id="navbarDropdownMenuLink"
+              id="navbarLink"
               role="button"
-              data-bs-toggle="dropdown"
+              data-bs-toggle="modal"
+              data-bs-target="#modal4"
               aria-expanded="false"
             >
                 View Train Routes
             </a>
-            <ul
-            class="dropdown-menu"
-            aria-labelledby="navbarDropdownMenuLink"
-          >
-          <li>
-            <a
-              class="dropdown-item"
-              href="#"
-              data-bs-toggle="modal"
-              data-bs-target="#modal4"
-              >Schedule a Train Route</a
-            >
-          </li>
-          <li>
-            <a
-              class="dropdown-item"
-              href="#"
-              data-bs-toggle="modal"
-              data-bs-target="#modal5"
-              >Cancel a Train Route</a
-            >
-          </li>
-          </ul>
-              
             </li>
             <li class="nav-item dropdown">
               <a
@@ -275,6 +252,7 @@
                   value=""
                   required
                   autofocus
+                  autocomplete="off" 
                 />
                 <label for="arrivalCity">Arrival City</label>
                 <input
@@ -286,16 +264,18 @@
                   value=""
                   required
                   autofocus
+                  autocomplete="off" 
+                  
                 />
 
                 <div class = "input-grp">
                   <label for = "stationName">Arrival Station</label>
-                  <input type = "text" id = "arrivalStation" name = "stationName" class="form-control" value=""/>
+                  <input type = "text" id = "arrivalStation" name = "stationName" class="form-control" autocomplete="off"  value=""/>
                 </div>
 
                 <div class = "input-grp">
                   <label for = "stationName">Departure Station</label>
-                  <input type = "text" id = "departureStation" name = "stationName" class="form-control" value=""/>
+                  <input type = "text" id = "departureStation" name = "stationName" class="form-control" autocomplete="off" value=""/>
                 </div>
 
                 <div class = "input-grp">
@@ -320,40 +300,6 @@
                 </button>
               </div>
             </form>
-            </div>
-          </div>
-        </div>
-      </div> 
-
-      <!--Cancel Train Route Modal-->
-       <div class="modal-dialog modal-dialog-scrollable">
-        <div class="modal" id="modal3" tabindex="-1">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title">Cancel a Train Route</h5>
-                <button
-                  type="button"
-                  class="btn-close"
-                  data-bs-dismiss="modal"
-                  aria-label="Close"
-                ></button>
-              </div>
-              <div class="modal-body">
-                <p>Modal body text goes here.</p>
-              </div>
-              <div class="modal-footer">
-                <button
-                  type="button"
-                  class="btn btn-secondary"
-                  data-bs-dismiss="modal"
-                >
-                  Close
-                </button>
-                <button type="button" class="btn btn-primary">
-                  Save changes
-                </button>
-              </div>
             </div>
           </div>
         </div>
@@ -388,72 +334,6 @@
         <tbody id="TrainRouteTable"></tbody>
       </table>
     </div>
-
-
-    
-    <script>
-      /******** PURCHASE TICKET AND CheckIN & DELETE TICKET************/
-      //Add fetch logic for purchase ticket, delete, checkin
-
-            // const form = document.getElementById("purchaseTicketForm")
-            // const tbody = document.getElementById("viewTickets")
-            // const tableEl = document.getElementById("userTickets")
-      
-
-            // function onAddTickets(e) {
-            //   e.preventDefault();
-            //   // alert("this works")
-            //   const currentCity = document.getElementById("currentCity").value;
-            //   const destination = document.getElementById("destCity").value;
-            //   const totalTickets = document.getElementById("tickets").value;
-            //   const departDate = document.getElementById("departure").value;
-            //   const arrivalDate= document.getElementById("arrival").value;
-            //   // alert(currentCity + " " + destination + " " + totalTickets + " "+ departDate + " " +arrivalDate)
-            //   alert("Ticket(s) Purchased")
-            //   tbody.innerHTML += `
-            //   <tr> 
- 
-            //         <td>${currentCity}</td>
-            //         <td>${destination}</td>
-            //         <td>${totalTickets}</td>
-            //         <td>${departDate}</td>
-            //         <td>${arrivalDate}</td>
-            //         <td><button type = "button" class = "btn-warning">Cancel</button></td>
-            //         <td><button type = "button" class = "btn-primary">CheckIn</button></td>
-                    
-            //   </tr>
-              
-            //   `
-            // }
-            // // only want to respond to the delete button associated with the row on the table. 
-            // // closest finds the closest element (button)
-            // //classList property is read-only, however, you can modify it by using the, toggle add() and remove() methods.
-            // function onDeleteRow(e){
-            //   if(!e.target.classList.contains("btn-warning")) {
-            //     return;
-            //   }
-            //   alert("Your ticket will be canceled")
-            //   const btn = e.target;
-            //   btn.closest("tr").remove();
-            // }
-
-            // function onCheckinRow(e){
-            //   if(!e.target.classList.contains("btn-primary")) {
-            //     return;
-            //   }
-            //   alert("You have successfully checked in")
-            //   const btn = e.target;
-            //   btn.closest('tr').alert("checked in")
-
-            // }
-
-
-            // form.addEventListener('submit', onAddTickets)
-            // //delete row from table
-            // tableEl.addEventListener("click", onDeleteRow) 
-            // tableEl.addEventListener("click", onCheckinRow)
-
-    </script>
 
     <script
       src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"
