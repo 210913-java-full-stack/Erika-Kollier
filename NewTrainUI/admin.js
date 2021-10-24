@@ -20,34 +20,39 @@ function createATrain() {
 
  function submitForm(e) {
    e.preventDefault();
-   let departureCity = document.getElementById("departureCity").value;
-   let arrivalCity = document.getElementById("arrivalCity").value;
+   let trainID = document.getElementById("trainID").value; //departureCity
+   let totalPassengers = document.getElementById("totalPassengers").value;
    let departureStation = document.getElementById("departureStation").value;
    let arrivalStation = document.getElementById("arrivalStation").value;
    let departureDate = document.getElementById("departureDate").value
    let arrivalDate = document.getElementById("arrivalDate").value;
-   alert(departureCity + " " + arrivalCity + " " + stationName + " " +
-   " " + departureDate + " " + arrivalDate)
-   tbody.innerHTML += `
-        <tr>
 
-              <td>${trainId}</td>
-              <td>${totalPass}</td>
-              <td>${departureCity}</td>
-              <td>${arrivalCity}</td>
+     tbody.innerHTML += `
+        <tr>
+              <td>${trainID}</td>
+              <td>${0}</td>
+              <td>${arrivalStation}</td>
               <td>${arrivalDate}</td>
-              <td>${stationName}</td>
+              <td>${departureStation}</td>
               <td>${departureDate}</td>
-              
-              <td><button type = "button" class = "btn-success">Cancel</button></td>
-              
+              <td>true</td>
+            
+              <td><button type = "button" class = "deleteButton" style="background-color:#0d6efd; color:white;position: static;">Cancel</button></td>
         </tr> 
-    
    `
+
+     let buttons = document.getElementsByClassName('Imma Button');
+
+     for (let i = 0; i < buttons.length; i++) {
+         let button = buttons[i];
+         let tr = tbody.getElementsByTagName('tr');
+         let trData = tr.item(i);
+         trData.appendChild(button);
+     }
  }
 
  function deleteRow(e){
-  if(!e.target.classList.contains("btn-success")) {
+  if(!e.target.classList.contains("deleteButton")) {
     return;
   }
   alert("Train Route Canceled")
@@ -116,9 +121,25 @@ function populateTable(json) {
   try {
     for (let i = 0; i < rows; i++) {
       let tr = table.insertRow(0);
+        var btn = document.createElement('input');
+        btn.type = "button";
+        btn.value = "Cancel";
+        btn.className = "Imma Button";
+        btn.style = "background-color:#0d6efd; " +
+            "color:white; " +
+            "position: relative; " +
+            "padding: 1px 6px; " +
+            "align: center; " +
+            "left: 8px; " +
+            "display: inline-block; " +
+            "text-align: center; " +
+            "align-items: flex-start; " +
+            "top: 5px; ";
+
       for (let value of values.pop()) {
         let cell = tr.insertCell(-1);
-        cell.innerHTML = value;
+          cell.innerHTML = value;
+          tr.append(btn);
       }
     }
   } catch (e) {
