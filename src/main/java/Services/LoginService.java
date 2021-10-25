@@ -22,7 +22,7 @@ public class LoginService {
     }
 
     public static boolean validate(String username, String password){
-        addRequest("GET or POST? : ", new Date(System.currentTimeMillis())); // Get or Post or both
+        addRequest("Validating user information from POST: ", new Date(System.currentTimeMillis())); // Get or Post or both
         isValid = false;
 
         try {
@@ -41,7 +41,7 @@ public class LoginService {
         } catch (HibernateException e){
             if (tx != null)
                 tx.rollback();
-            MyLogger.getFileLogger().severe(e.toString());
+            MyLogger.getMyLogger().writeLog(e.toString(), 3);
         }
 
         return isValid;

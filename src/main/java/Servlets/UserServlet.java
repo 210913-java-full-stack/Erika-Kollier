@@ -7,9 +7,7 @@ package Servlets;
  */
 
 import Logging.MyLogger;
-import Models.User;
 import Services.UserService;
-import Utils.JWTUtil;
 import Utils.RequestArgChecker;
 import org.json.JSONObject;
 
@@ -41,7 +39,7 @@ public class UserServlet extends HttpServlet {
         try {
             paramInfo = RequestArgChecker.handleRequest(request, response);
         } catch (Exception e) {
-            MyLogger.getFileLogger().info(e.toString());
+            MyLogger.getMyLogger().writeLog(e.toString(), 3);
         }
 
         if ("firstName".equals(paramInfo[0])) {
@@ -55,16 +53,6 @@ public class UserServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setStatus(202);
-        response.setContentType("application/json");
 
-        String content = request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
-        // Get that info, figure out how to parse it, create new User
-        System.out.println(content);
-
-       /* String jwt = JWTUtil.createJWT(request);
-        response.getWriter().write(jwt);*/
-
-        //UserService.createUser();
     }
 }

@@ -27,7 +27,7 @@ public abstract class GlobalPersistence {
             sessionFactory = new MetadataSources(registry).buildMetadata().buildSessionFactory();
             session = sessionFactory.openSession();
         } catch (Exception e){
-            MyLogger.getFileLogger().info(e.toString());
+            MyLogger.getMyLogger().writeLog(e.toString(), 4);
         }
     }
 

@@ -2,13 +2,11 @@ package Servlets;
 
 import Logging.MyLogger;
 import POSTModels.RegisterInfo;
-import POSTModels.RouteInfo;
-import Services.TrainService;
+import Utils.JWTUtil;
 import Services.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONObject;
 
-import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
@@ -45,12 +43,12 @@ public class RegisterServlet extends HttpServlet {
                     newUser.getLastname(), newUser.getUsername(),
                     newUser.getPassword());
 
-            jObj.put("Status", "Information Received and Stored...");
+            jObj.put("Token", JWTUtil.createJWT(request));
             response.setStatus(202);
             response.setContentType("application/json");
             response.getWriter().write(jObj.toString());
         } catch (IOException e) {
-            MyLogger.getFileLogger().severe(e.toString());
+            MyLogger.getMyLogger().writeLog(e.toString(), 3);
         }
     }
 }

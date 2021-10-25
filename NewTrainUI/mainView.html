@@ -269,6 +269,7 @@
           </div>
         </div>
       </div>
+      </div>
     </nav>
 <!------------------------------View List of Train Info------------------------------------------->
     <style>
@@ -325,20 +326,20 @@
               e.preventDefault();
               // alert("this works")
               const currentCity = document.getElementById("currentCity").value;
-              const destination = document.getElementById("destCity").value;
-              const totalTickets = document.getElementById("tickets").value;
-              const departDate = document.getElementById("departure").value;
-              const arrivalDate= document.getElementById("arrival").value;
-              // alert(currentCity + " " + destination + " " + totalTickets + " "+ departDate + " " +arrivalDate)
+              const destCity = document.getElementById("destCity").value;
+              const tickets = document.getElementById("tickets").value;
+              const departure = document.getElementById("departure").value;
+              const arrival= document.getElementById("arrival").value;
+              // alert(currentCity + " " + destCity + " " + tickets + " "+ departure + " " +arrival)
               alert("Ticket(s) Purchased")
               tbody.innerHTML += `
               <tr> 
  
                     <td>${currentCity}</td>
-                    <td>${destination}</td>
-                    <td>${totalTickets}</td>
-                    <td>${departDate}</td>
-                    <td>${arrivalDate}</td>
+                    <td>${destCity}</td>
+                    <td>${tickets}</td>
+                    <td>${departure}</td>
+                    <td>${arrival}</td>
                     <td><button type = "button" class = "btn-warning">Cancel</button></td>
                     <td><button type = "button" class = "btn-primary">CheckIn</button></td>
                     

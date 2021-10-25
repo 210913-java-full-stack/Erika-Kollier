@@ -10,15 +10,9 @@ import Logging.MyLogger;
 import Models.Train;
 import POSTModels.RouteInfo;
 import Services.TrainService;
+import Utils.JWTUtil;
 import Utils.RequestArgChecker;
-import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jdk.nashorn.internal.objects.Global;
-import jdk.nashorn.internal.parser.JSONParser;
-import jdk.nashorn.internal.runtime.Context;
-import jdk.nashorn.internal.runtime.ECMAErrors;
-import jdk.nashorn.internal.runtime.ParserException;
-import jdk.nashorn.internal.runtime.ScriptObject;
 import org.json.JSONObject;
 
 import javax.servlet.ServletException;
@@ -30,10 +24,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
-import java.util.stream.Collectors;
 
-@WebServlet(name = "TrainServlet", value = {"/train", "/train?id"})
+@WebServlet(name = "TrainServlet", value = {"/train", "/train?"})
 public class TrainServlet extends HttpServlet {
+    private String[] paramInfo = {"", ""};
+
     /**
      * This get method returns a single Train's Information, or all Train's Information based on arguments passed in the HTTP request
      * String array 'paramInfo' contains: paramInfo[0] = parameter, paramInfo[1] = value
@@ -48,19 +43,18 @@ public class TrainServlet extends HttpServlet {
         response.setContentType("application/json");
         JSONObject jOBj = new JSONObject();
         int id = 0;
-        String[] paramInfo = {"", ""};
 
         try {
             paramInfo = RequestArgChecker.handleRequest(request, response);
         } catch (Exception e) {
-            MyLogger.getFileLogger().info(e.toString());
+            MyLogger.getMyLogger().writeLog(e.toString(), 3);
         }
 
         if ("id".equals(paramInfo[0])) {
             try {
                 id = (Integer.parseInt(paramInfo[1]));
             } catch (NumberFormatException e) {
-                MyLogger.getFileLogger().severe(e.toString());
+                MyLogger.getMyLogger().writeLog(e.toString(), 3);
             }
 
             jOBj.put("Requested Train's Information", TrainService.getTrainByID(id));
@@ -73,34 +67,58 @@ public class TrainServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) {
-        // When admin sends new Trip Info, create new entities on DB
         JSONObject jObj = new JSONObject();
-
         InputStream requestBody = null;
 
         try {
-            requestBody = request.getInputStream();
-            Scanner sc = new Scanner(requestBody, StandardCharsets.UTF_8.name());
-            String jsonText = sc.useDelimiter("\\A").next();
+            paramInfo = RequestArgChecker.handleRequest(request, response);
 
-            ObjectMapper mapper = new ObjectMapper();
-            RouteInfo newRoute = mapper.readValue(jsonText, RouteInfo.class);
-            System.out.println("New Route: " + newRoute);
-            // Do newRoute thing here
-            /*TrainService.createRoute(newRoute.getDepartureCity(),
-                    newRoute.getArrivalCity(), newRoute.getStationName(),
-                    newRoute.getDepartureDate(), newRoute.getArrivalDate());*/
+            if ("create".equals(paramInfo[0])) {
+                try {
+                    String token = request.getHeader("Authorization");
 
-            jObj.put("Status", "Information Received and Stored...");
-            response.setStatus(202);
-            response.setContentType("application/json");
-            response.getWriter().write(jObj.toString());
-        } catch (IOException e) {
-            MyLogger.getFileLogger().severe(e.toString());
+                    if(JWTUtil.parseJWT(token)) {
+                        requestBody = request.getInputStream();
+                        Scanner sc = new Scanner(requestBody, StandardCharsets.UTF_8.name());
+                        String jsonText = sc.useDelimiter("\\A").next();
+
+                        ObjectMapper mapper = new ObjectMapper();
+                        RouteInfo newRoute = mapper.readValue(jsonText, RouteInfo.class);
+
+                        // Do newRoute thing here
+                        TrainService.createRoute(newRoute.getTrainID(), newRoute.getDepartureStation(),
+                                newRoute.getArrivalStation(), newRoute.getDepartureDate(),
+                                newRoute.getArrivalDate());
+
+                        jObj.put("Status", "Information Received and Stored...");
+                        response.setStatus(202);
+                        response.setContentType("application/json");
+                    } else {
+                        response.setStatus(401);
+                        response.setContentType("application/json");
+                        jObj.put("Status", "Unauthorized Access");
+                    }
+
+                    response.getWriter().write(jObj.toString());
+                } catch (Exception e) {
+                    MyLogger.getMyLogger().writeLog(e.toString(), 3);
+                }
+            } else if ("delete".equals(paramInfo[0])){
+                try {
+                    Train train = TrainService.getTrainByID(Integer.parseInt(request.getHeader("ID")));
+                    System.out.println(train.toString());
+                    TrainService.delete(train);
+
+                    jObj.put("Status", "Train has been deleted...");
+                    response.setStatus(202);
+                    response.setContentType("application/json");
+                    response.getWriter().write(jObj.toString());
+                } catch (Exception e) {
+                    MyLogger.getMyLogger().writeLog(e.toString(), 3);
+                }
+            }
+        } catch (Exception e) {
+            MyLogger.getMyLogger().writeLog(e.toString(), 3);
         }
-
-
-        // Create Route -> Train, Schedule, Station, Ticket
-        //TrainService.createRoute();
     }
 }

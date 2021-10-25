@@ -47,7 +47,7 @@ function ticketPurchase() {
 //Need to pass in Token maybe?
 /******Display user tickets*******/
 
-(async function getMyTicketList() {
+/*(async function getMyTicketList() {
   let displayTicket = 'http://localhost:8080/Erika-Kollier/ticketDisplay'
 
   let response = await fetch(displayTicket, {
@@ -73,6 +73,6 @@ function populateTicketTable(json) {
       cell.innerHTML = value;
     }
   }
-}
+}*/
 
 

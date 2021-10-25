@@ -7,18 +7,22 @@ package Servlets;
  */
 
 import Logging.MyLogger;
+import POSTModels.NewTicket;
 import Services.TicketService;
 import Utils.RequestArgChecker;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONObject;
 
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.Scanner;
 
-@WebServlet(name = "TicketServlet", value = {"/ticket", "/ticket?id", "/ticketPurchase"})
+@WebServlet(name = "TicketServlet", value = {"/ticket", "/ticket?new"})
 public class TicketServlet extends HttpServlet {
     /**
      * This get method returns a single Ticket object, or all Ticket objects based on arguments passed in the HTTP request
@@ -41,7 +45,7 @@ public class TicketServlet extends HttpServlet {
                 try {
                     id = (Integer.parseInt(paramInfo[1]));
                 } catch (NumberFormatException e) {
-                    MyLogger.getFileLogger().severe(e.toString());
+                    MyLogger.getMyLogger().writeLog(e.toString(), 3);
                 }
 
                 jOBj.put("Requested Ticket", TicketService.getByID(id));
@@ -51,13 +55,44 @@ public class TicketServlet extends HttpServlet {
 
             response.getWriter().print(jOBj);
         } catch (Exception e){
-            MyLogger.getFileLogger().info(e.toString());
+            MyLogger.getMyLogger().writeLog(e.toString(), 3);
         }
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response){
-        // Create ticket and assign it to User
+        String[] paramInfo;
+        InputStream requestBody = null;
 
+        response.setStatus(202);
+
+        // Create ticket and assign it to User
+        try {
+            paramInfo = RequestArgChecker.handleRequest(request, response);
+
+            if ("new".equals(paramInfo[0])) {
+                try {
+                    requestBody = request.getInputStream();
+                    Scanner sc = new Scanner(requestBody, StandardCharsets.UTF_8.name());
+                    String jsonText = sc.useDelimiter("\\A").next();
+
+                    ObjectMapper mapper = new ObjectMapper();
+                    NewTicket newTicket = mapper.readValue(jsonText, NewTicket.class);
+
+                    TicketService.create(newTicket.getTickets(), newTicket.getDestCity(),
+                            newTicket.getCurrentCity(), newTicket.getDeparture(), newTicket.getArrival());
+
+                    response.getWriter().write("Route creation complete.");
+                } catch (IOException e) {
+                    MyLogger.getMyLogger().writeLog(e.toString(), 3);
+                }
+            } else if ("purchase".equals(paramInfo[0])) {
+
+            } else {
+
+            }
+        } catch (Exception e){
+            MyLogger.getMyLogger().writeLog(e.toString(), 3);
+        }
     }
 }

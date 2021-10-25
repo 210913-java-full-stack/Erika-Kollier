@@ -48,13 +48,32 @@ public class Station {
     // Station will be tied to Train
     @OneToMany(cascade = CascadeType.ALL)
     private List<Train> trains;
+    public List<Train> getTrains() {
+        return trains;
+    }
+    public void setTrains(List<Train> trains) {
+        this.trains = trains;
+    }
 
     // Many schedules, one station
     @OneToMany
     private List<Schedule> schedules;
 
+    public List<Schedule> getSchedules() {
+        return schedules;
+    }
+    public void setSchedules(List<Schedule> schedules) {
+        this.schedules = schedules;
+    }
+
     @ManyToMany
     private List<Trip> trip;
+    public List<Trip> getTrip() {
+        return trip;
+    }
+    public void setTrip(List<Trip> trip) {
+        this.trip = trip;
+    }
 
     @Override
     public String toString(){

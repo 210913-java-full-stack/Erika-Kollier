@@ -13,14 +13,13 @@
 function userLogin() {
   let userUsername = document.getElementById("username").value;
   let userPassword = document.getElementById("password").value;
-  console.log(userUsername, userPassword);
 
-  let userData = { users: { username: userUsername, password: userPassword } };
-  console.log(
-    `userInfo = ${userData.users.username} ${userData.users.password}`
-  );
+  let userData = {
+    username: userUsername,
+    password: userPassword
+  };
 
-  let loginUrl = "http://localhost:8080/Erika-Kollier/login";
+  let loginUrl = "http://localhost:8080/Erika-Kollier/login?username=" + userData.username + "&password=" + userData.password;
 
   fetch(loginUrl, {
     method: "POST",
@@ -29,21 +28,27 @@ function userLogin() {
     },
     body: JSON.stringify(userData),
   })
-    .then((response) => response.json())
-    .then(function (response){
-      let token = Object.value(response).toString();
-      localStorage.setItem("Token", token);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+      .then((response) => response.json())
+      .then(function (response) {
+        let responseValues = Object.values(response);
+        let roleID = responseValues.pop();
+        let userExists = responseValues.pop();
+        let token = responseValues.pop();
 
-  if (username.value === "KMART" && password.value === "password") {
-    window.location.href = "adminView.html";
-    } else {
-      window.location.href = "passengerView.html";
-    }
-  }
+        localStorage.setItem("Token", token);
+
+          if (userExists && roleID === 1) {
+              window.location.href = "adminView.html";
+          } else if (userExists && roleID === 0) {
+              window.location.href = "passengerView.html";
+          } else {
+              alert("Login information is incorrect!");
+          }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+}
 
 function userRegister() {
   let userFirstname = document.getElementById("firstname").value;
@@ -53,16 +58,11 @@ function userRegister() {
   console.log(userFirstname, userLastname, userUsername, userPassword);
 
   let userData = {
-    users: {
       firstname: userFirstname,
       lastname: userLastname,
       username: userUsername,
       password: userPassword,
-    },
   };
-  console.log(
-    `newUserInfo = ${userData.users.firstname} ${userData.users.lastname} ${userData.users.username} ${userData.users.password}`
-  );
 
   let signinUrl = "http://localhost:8080/Erika-Kollier/register";
 

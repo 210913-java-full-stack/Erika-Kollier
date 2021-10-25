@@ -36,7 +36,7 @@ public abstract class ServiceRequests {
 
             System.out.println("Request Summary has been written to designated to file.");
         } catch (IOException e) {
-            MyLogger.getFileLogger().info(e.toString());
+            MyLogger.getMyLogger().writeLog(e.toString(), 3);
         }
     }
 

@@ -40,7 +40,7 @@ public class TicketService {
         } catch (HibernateException e){
             if (tx != null)
                 tx.rollback();
-            MyLogger.getFileLogger().severe(e.toString());
+            MyLogger.getMyLogger().writeLog(e.toString(), 3);
         }
 
         return tickets;
@@ -65,7 +65,7 @@ public class TicketService {
         } catch (HibernateException e){
             if (tx != null)
                 tx.rollback();
-            MyLogger.getFileLogger().severe(e.toString());
+            MyLogger.getMyLogger().writeLog(e.toString(), 3);
         }
 
         return tickets;
@@ -88,7 +88,7 @@ public class TicketService {
         } catch (HibernateException e){
             if (tx != null)
                 tx.rollback();
-            MyLogger.getFileLogger().severe(e.toString());
+            MyLogger.getMyLogger().writeLog(e.toString(), 3);
         }
     }
 
@@ -104,13 +104,11 @@ public class TicketService {
 
             getSession().save(ticket);
 
-
-
             tx.commit();
         } catch (HibernateException e) {
             if (tx != null)
                 tx.rollback();
-            MyLogger.getFileLogger().severe(e.toString());
+            MyLogger.getMyLogger().writeLog(e.toString(), 3);
         }
     }
 
@@ -122,14 +120,13 @@ public class TicketService {
      * @param departureValue Departure date
      * @param arrivalValue Arrival date
      */
-    public static void create(int ticketValue, String currentCityValue, String destCityValue, String departureValue, String arrivalValue) {
+    public static void create(int ticketValue, String currentCityValue, String destCityValue, Date departureValue, Date arrivalValue) {
         for (int i = 0; i < ticketValue; i++){
             ticket = new Ticket();
 
-            // String departureCity, String arrivalCity, String departureStation, String arrivalStation, String departureDate, String arrivalDate
-            // ticket.setDescription();
+            ticket.setDescription(currentCityValue + " Station: ", departureValue.toString(),
+                    destCityValue + " Station: ", arrivalValue.toString());
 
-            // Assign ticket to User
             save(ticket);
         }
     }

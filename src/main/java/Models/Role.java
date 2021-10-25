@@ -29,11 +29,13 @@ public class Role{
     @Column(name = "USER_ROLE")
     private String userRole;
     public String getUserRole() {
-        switch (getRoleID()){
+        switch (roleID){
             case 0:
-                setUserRole("Passenger");
+                userRole = ("Passenger");
+                break;
             case 1:
-                setUserRole("Admin");
+                userRole = ("Admin");
+                break;
         }
         return userRole;
     }
@@ -44,4 +46,12 @@ public class Role{
     // ROLE_ID WILL BE A FK ON USERINFO
     @OneToMany (cascade = CascadeType.ALL)
     private List<UserInfo> userInfo;
+
+    public List<UserInfo> getUserInfo() {
+        return userInfo;
+    }
+
+    public void setUserInfo(List<UserInfo> userInfo) {
+        this.userInfo = userInfo;
+    }
 }

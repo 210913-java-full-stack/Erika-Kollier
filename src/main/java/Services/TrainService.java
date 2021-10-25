@@ -6,25 +6,21 @@ import org.hibernate.HibernateException;
 import org.hibernate.Transaction;
 
 import javax.persistence.Query;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
+
+import DBPopulation.Generators;
 
 import static Global.GlobalPersistence.getSession;
 import static Utils.ServiceRequests.addRequest;
 
 public class TrainService {
     private static List<Train> trains;
-    private static Trip trip;
-    private static Ticket ticket;
     private static Train train;
-    private static Schedule schedule;
-    private static Station station;
     private static Transaction tx;
     private static Query query;
 
@@ -46,19 +42,16 @@ public class TrainService {
             trains = getSession().createSQLQuery( "SELECT TRAIN_ID, PASSENGERS, " +
                     "T2.DEPARTURE_CITY AS DEPARTURE_INFO, DEPARTURE_TIME, " +
                     "T2.ARRIVAL_CITY AS ARRIVAL_INFO, ARRIVAL_TIME, AVAILABLE " +
-
-                    "FROM TRAINS " +
-                    "JOIN STATIONS S on TRAINS.TRAIN_STATION_FK = S.STATION_ID " +
-                    "JOIN STATIONS_SCHEDULES SS on S.STATION_ID = SS.STATION_STATION_ID " +
-                    "JOIN SCHEDULES S2 on SS.schedules_SCHEDULE_ID = S2.SCHEDULE_ID " +
-                    "JOIN TRIPS T2 on S.trip_TRIP_ID = T2.TRIP_ID " +
-                    "JOIN TICKETS T on TRAINS.TRAIN_ID = T.TRAIN_TICKET_FK").list();
+                    "FROM TRAINS " + "JOIN STATIONS S on TRAINS.TRAIN_STATION_FK = S.STATION_ID " +
+                    "JOIN TRIPS_STATIONS t on TRIP_TRIP_ID = S.STATION_ID " +
+                    "JOIN TRIPS T2 on t.TRIP_TRIP_ID = T2.TRIP_ID " +
+                    "JOIN SCHEDULES SS on S.STATION_ID = SS.SCHEDULE_ID").list();
 
             tx.commit();
         } catch (Exception e){
             if (tx != null)
                 tx.rollback();
-            MyLogger.getFileLogger().severe(e.toString());
+            MyLogger.getMyLogger().writeLog(e.toString(), 3);
         }
 
         return trains;
@@ -69,7 +62,7 @@ public class TrainService {
      * @param ID ID tied to Train object
      * @return Train object if exists
      */
-    public static List<Train> getTrainByID(int ID){
+    public static Train getTrainByID(int ID){
         addRequest("GET: train by ID: " + ID + ".", new Date(System.currentTimeMillis()));
 
         try {
@@ -77,56 +70,76 @@ public class TrainService {
             query = getSession().createQuery( "FROM TRAIN WHERE trainID = :id", Train.class);
             query.setParameter("id", ID);
 
-            trains = query.getResultList();
+            train = (Train) query.getSingleResult();
 
             tx.commit();
         } catch (HibernateException e){
             if (tx != null)
                 tx.rollback();
-            MyLogger.getFileLogger().severe(e.toString());
+
+            MyLogger.getMyLogger().writeLog(e.toString(), 3);
         }
 
-        return trains;
+        return train;
     }
 
     /**
      *
+     * @param trainID
+     * @param departureStation
+     * @param arrivalStation
+     * @param departureDate
+     * @param arrivalDate
      */
-    public static void createRoute(String departureCity, String arrivalCity, String departureStation, String arrivalStation, String departureDate, String arrivalDate){
-        Date arrival = null;
-        Date departure = null;
-        schedule = new Schedule();
+    public static void createRoute(int trainID, String departureStation, String arrivalStation, String departureDate, String arrivalDate){
+        Date arrival;
+        Date departure;
+
+        Schedule schedule = new Schedule();
         train = new Train();
-        ticket = new Ticket();
-        station = new Station();
-        trip = new Trip();
+        Ticket ticket = new Ticket();
+        Station station1 = new Station();
+        Station station2 = new Station();
+        Trip trip = new Trip();
 
         try {
-            DateFormat formatter = new SimpleDateFormat("yyyy-MM-DD");
+            DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 
             arrival = formatter.parse(arrivalDate);
             departure = formatter.parse(departureDate);
 
-            String description = departureStation + ": " + arrivalCity + departure.toString() + "\n" +
-                    arrivalStation + ": " + departureCity + arrival.toString();
-
             schedule.setArrivalTime(arrival);
             schedule.setDepartureTime(departure);
 
-            trip.setArrivalCity(departureStation + ": " + arrivalCity);
-            trip.setDepartureCity(arrivalStation + ": " + departureCity);
+            trip.setArrivalCity(departureStation + ": " + arrivalStation);
+            trip.setDepartureCity(arrivalStation + ": " + departureStation);
+            trip.setTrainId(trainID);
+
+            ticket.setTicketID(trainID);
+            ticket.setDescription(departureStation, arrivalStation, departureStation,
+                    arrivalStation, departureDate, arrivalDate);
+
+            station1.setState(Generators.getAState());
+            station1.setCity(Generators.getACity());
+            station1.setName(departureStation);
+
+            station2.setState(Generators.getAState());
+            station2.setCity(Generators.getACity());
+            station2.setName(arrivalStation);
 
             train.setPassengers(0);
             train.setAvailable(true);
+            train.setTrainId(trainID);
+            train.setTicketID(trainID);
+            train.setStation(station1);
 
-            ticket.setDescription(departureStation, arrivalCity, departureStation,
-                    arrivalStation, departureDate, arrivalDate);
-
+            save(station1);
+            save(station2);
             save(schedule);
             TicketService.save(ticket);
             save(train);
         } catch (Exception e){
-            MyLogger.getFileLogger().severe(e.toString());
+            MyLogger.getMyLogger().writeLog(e.toString(), 3);
         }
     }
 
@@ -141,13 +154,21 @@ public class TrainService {
         try {
             tx = getSession().beginTransaction();
 
+            // Delete ticket_id = train_id
+            query = getSession().createQuery("DELETE TICKET where ticketID = :id");
+            query.setParameter("id", train.getTrainId());
+            query.executeUpdate();
+
+            query = getSession().createSQLQuery("DELETE FROM STATIONS_TRAINS WHERE trains_TRAIN_ID = :trainID");
+            query.setParameter("trainID", train.getTrainId());
+            query.executeUpdate();
             getSession().delete(train);
 
             tx.commit();
-        } catch (HibernateException e){
+        } catch (Exception e){
             if (tx != null)
                 tx.rollback();
-            MyLogger.getFileLogger().severe(e.toString());
+            MyLogger.getMyLogger().writeLog(e.toString(), 3);
         }
     }
 
@@ -156,6 +177,8 @@ public class TrainService {
      * @param train Train object
      */
     public static void save(Train train) {
+        Random rand = new Random();
+
         addRequest("POST: saved train with ID: " + train.getTrainId() + ".", new Date(System.currentTimeMillis()));
 
         try {
@@ -164,10 +187,10 @@ public class TrainService {
             getSession().save(train);
 
             tx.commit();
-        } catch (HibernateException e) {
+        } catch (Exception e) {
             if (tx != null)
                 tx.rollback();
-            MyLogger.getFileLogger().severe(e.toString());
+            MyLogger.getMyLogger().writeLog(e.toString(), 3);
         }
     }
 
@@ -184,10 +207,10 @@ public class TrainService {
             getSession().save(schedule);
 
             tx.commit();
-        } catch (HibernateException e) {
+        } catch (Exception e) {
             if (tx != null)
                 tx.rollback();
-            MyLogger.getFileLogger().severe(e.toString());
+            MyLogger.getMyLogger().writeLog(e.toString(), 3);
         }
     }
 
@@ -207,7 +230,7 @@ public class TrainService {
         } catch (HibernateException e) {
             if (tx != null)
                 tx.rollback();
-            MyLogger.getFileLogger().severe(e.toString());
+            MyLogger.getMyLogger().writeLog(e.toString(), 3);
         }
     }
 }

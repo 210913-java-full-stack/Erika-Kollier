@@ -65,16 +65,34 @@ public class Train {
     @ManyToMany
     @JoinTable(name="JUNCTION", joinColumns = {@JoinColumn(name = "TRAIN_ID")}, inverseJoinColumns = {@JoinColumn(name = "USER_ID")})
     private List<User> userList = new LinkedList<>();
+    public List<User> getUserList() {
+        return userList;
+    }
+    public void setUserList(List<User> userList) {
+        this.userList = userList;
+    }
 
     // One train can have multiple tickets pointing to it
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "TRAIN_TICKET_FK", nullable = true)
+    @OneToMany
+    @JoinColumn(name = "TRAIN_TICKET_FK")
     private List<Ticket> tickets;
+    public List<Ticket> getTickets() {
+        return tickets;
+    }
+    public void setTickets(List<Ticket> tickets) {
+        this.tickets = tickets;
+    }
 
     // Many trains to one station
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "TRAIN_STATION_FK", nullable = false)
     private Station station;
+    public Station getStation() {
+        return station;
+    }
+    public void setStation(Station station) {
+        this.station = station;
+    }
 
     @Override
     public String toString(){

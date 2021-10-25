@@ -39,4 +39,12 @@ public class Schedule {
     // Many schedules, one station
     @ManyToOne(cascade = CascadeType.ALL)
     private Station station;
+
+    public Station getStation() {
+        return station;
+    }
+
+    public void setStation(Station station) {
+        this.station = station;
+    }
 }

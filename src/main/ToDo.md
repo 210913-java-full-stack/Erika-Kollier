@@ -27,7 +27,7 @@
 ##Models
 ````
 • Train
-    Every Train has a destination
+    Every Train has a destCity
     - Variables
         (String) Starting Destination
         (String) Ending Destination

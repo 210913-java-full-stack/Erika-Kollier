@@ -44,7 +44,7 @@
               data-bs-target="#modal4"
               aria-expanded="false"
             >
-                View Train Routes
+                Create Train Route
             </a>
             </li>
             <li class="nav-item dropdown">
@@ -81,7 +81,7 @@
                     >Ticket Purchase</a
                   >
                 </li>
- 
+
               </ul>
             </li>
           </ul>
@@ -106,7 +106,7 @@
         }
 
       </style>
-      
+
       <div class="modal-dialog modal-dialog-scrollable">
         <div class="modal" id="modal1" tabindex="-1">
           <div class="modal-dialog">
@@ -135,7 +135,7 @@
                   </thead>
                   <tr>
                   <tbody id = "viewTickets">
-                    
+
                   </tbody>
                 </table>
               </div>
@@ -172,7 +172,7 @@
               </div>
               <div class="modal-body">
                 <form id = "purchaseTicketForm">
-                <label for="city" class="currentCity">From</label>
+                <label for="currentCity" class="currentCity">From</label>
                 <input
                   type="text"
                   id="currentCity"
@@ -183,7 +183,7 @@
                   required
                   autofocus
                 />
-                <label for="city" class="destCity">To</label>
+                <label for="destCity" class="destCity">To</label>
                 <input
                   type="text"
                   id="destCity"
@@ -206,7 +206,7 @@
               <label for = "arrival">Arrival</label>
               <input type = "datetime-local" id = "arrival" name = "arrival" class="form-control select-date"/>
             </div>
-          
+
               <div class="modal-footer">
                 <button
                   type="button"
@@ -252,20 +252,7 @@
                   value=""
                   required
                   autofocus
-                  autocomplete="off" 
-                />
-                <label for="totalPassengers">Total Passengers</label>
-                <input
-                  type="number"
-                  id="totalPassengers"
-                  name="totalPassengers"
-                  class="form-control"
-                  placeholder="Enter # of Passengers"
-                  value=""
-                  required
-                  autofocus
-                  autocomplete="off" 
-                  
+                  autocomplete="off"
                 />
 
                 <div class = "input-grp">
@@ -283,10 +270,10 @@
                 <input type = "datetime-local" id = "departureDate" name = "departureDate" class="form-control select-date" value = ""/>
               </div>
               <div class = "input-grp">
-              <label for = "arrivalDate">Arrival Date</label>
-              <input type = "datetime-local" id = "arrivalDate" name = "arrivalDate" class="form-control select-date" value = ""/>
+              <label for = "arrival">Arrival Date</label>
+              <input type = "datetime-local" id = "arrivalDate" name = "arrival" class="form-control select-date" value = ""/>
             </div>
-          
+
               <div class="modal-footer">
                 <button
                   type="button"
@@ -302,8 +289,10 @@
             </form>
             </div>
           </div>
+          </div>
         </div>
-      </div> 
+      </div>
+      </div>
     </nav>
 <!------------------------------View List of Train Info------------------------------------------->
     <style>

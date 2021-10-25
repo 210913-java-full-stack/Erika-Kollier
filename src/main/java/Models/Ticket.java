@@ -36,16 +36,32 @@ public class Ticket {
         this.description = departureStation + ": " + arrivalCity + departureDate + "\n" +
                 arrivalStation + ": " + departureCity + arrivalDate;
     }
+    public void setDescription(String currentCity, String departureTime, String destCity, String arrivalTime){
+        this.description = currentCity + " " + departureTime + "\n" +
+                destCity + " " + arrivalTime;
+    }
 
     // FK for UserInfo
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "USERID_TICKET_FK", nullable = false)
+    @JoinColumn(name = "USERNAME_TICKET_FK")
     private UserInfo userInfo;
+    public UserInfo getUserInfo() {
+        return userInfo;
+    }
+    public void setUserInfo(UserInfo userInfo) {
+        this.userInfo = userInfo;
+    }
 
     // FK for Train
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "TRAIN_ID_FK")
     private Train train;
+    public Train getTrain() {
+        return train;
+    }
+    public void setTrain(Train train) {
+        this.train = train;
+    }
 
     @Override
     public String toString(){

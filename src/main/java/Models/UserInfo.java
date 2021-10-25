@@ -11,7 +11,12 @@ public class UserInfo{
 
     }
 
-    @Id
+    public UserInfo(UUID userID, String username, String password) {
+        this.userID = userID;
+        this.username = username;
+        this.password = password;
+    }
+
     @Column(name = "USER_ID", columnDefinition = "BINARY(36)", unique = true)
     private UUID userID;
     public UUID getUserID() {
@@ -21,6 +26,7 @@ public class UserInfo{
         this.userID = userID;
     }
 
+    @Id
     @Column(name = "USERNAME", unique = true, nullable = false)
     private String username;
     public String getUsername() {
@@ -28,15 +34,6 @@ public class UserInfo{
     }
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    @Column(name = "TICKET_ID", unique = true)
-    private int ticketID;
-    public int getTicketID() {
-        return ticketID;
-    }
-    public void setTicketID(int ticketID) {
-        this.ticketID = ticketID;
     }
 
     @Column(name = "PASSWORD", nullable = false)
@@ -51,12 +48,30 @@ public class UserInfo{
     // WILL BE CONNECTED TO TICKETS, USERS, ROLES
     @OneToMany(mappedBy = "userInfo")
     private List<Ticket> tickets;
+    public List<Ticket> getTickets() {
+        return tickets;
+    }
+    public void setTickets(List<Ticket> tickets) {
+        this.tickets = tickets;
+    }
 
     @OneToOne(mappedBy = "userInfo")
     private User user;
+    public User getUser() {
+        return user;
+    }
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     @ManyToOne
     private Role role;
+    public Role getRole() {
+        return role;
+    }
+    public void setRole(Role role) {
+        this.role = role;
+    }
 
     @Override
     public String toString(){

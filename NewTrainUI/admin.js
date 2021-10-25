@@ -23,14 +23,14 @@ function createATrain() {
 
  function submitForm(e) {
    e.preventDefault();
-   let trainID = document.getElementById("trainID").value; //departureCity
-   let totalPassengers = document.getElementById("totalPassengers").value;
+   let trainID = document.getElementById("trainID").value;
    let departureStation = document.getElementById("departureStation").value;
    let arrivalStation = document.getElementById("arrivalStation").value;
    let departureDate = document.getElementById("departureDate").value
    let arrivalDate = document.getElementById("arrivalDate").value;
    const token = localStorage.getItem("Token");
 
+    // if trainID is not already in table then deny route creation
 
      tbody.innerHTML += `
         <tr>
@@ -56,16 +56,22 @@ function createATrain() {
     }
 }
 
-    let baseUrl = "http://localhost:8080/Erika-Kollier/createTrain";
+    let baseUrl = "http://localhost:8080/Erika-Kollier/train?create";
 
-   let newEntry = {train: {departureCity: departureCity, arrivalCity: arrivalCity, departureStation: departureStation, arrivalStation: arrivalStation, departureDate: departureDate, arrivalDate: arrivalDate}}
+   let newEntry = {
+       trainID: trainID,
+       departureStation: departureStation,
+       arrivalStation: arrivalStation,
+       departureDate: departureDate,
+       arrivalDate: arrivalDate
+   }
    console.log(newEntry)
 
 
    fetch(baseUrl, {
      method:"POST",
      headers: {
-      "Content-Type": "application/json;charset=utf-8", 
+      "Content-Type": "application/json;charset=utf-8",
       "Authorization": token
      },
      body: JSON.stringify(newEntry),
@@ -100,8 +106,8 @@ function createATrain() {
   btn.closest("tr").remove();
 }
    form.addEventListener("submit", submitForm)
-   trainTable.addEventListener("click", deleteRow) 
- 
+   trainTable.addEventListener("click", deleteRow)
+
   }
 
 
@@ -134,6 +140,7 @@ function populateTable(json) {
   try {
     for (let i = 0; i < rows; i++) {
       let tr = table.insertRow(0);
+      tr.id = i;
         var btn = document.createElement('input');
         btn.type = "button";
         btn.value = "Cancel";
@@ -148,6 +155,7 @@ function populateTable(json) {
             "text-align: center; " +
             "align-items: flex-start; " +
             "top: 5px; ";
+        btn.onclick = function(){cancelRoute(this)};
 
       for (let value of values.pop()) {
         let cell = tr.insertCell(-1);
@@ -158,6 +166,31 @@ function populateTable(json) {
   } catch (error) {
     console.log("Error:", error);
   }
+}
+
+/** Cancel Train Route **/
+function cancelRoute(element){
+    let table = document.getElementById("TrainRouteTable");
+    let row = table.getElementsByTagName('tr').item(element.parentNode.rowIndex - 1);
+    let id = row.getElementsByTagName("td").item(0).innerText;
+    let deleteTrainURL = "http://localhost:8080/Erika-Kollier/train?delete";
+
+    fetch(deleteTrainURL, {
+        method:"POST",
+        headers: {
+            "Content-Type": "application/json;charset=utf-8",
+            "ID": id
+        },
+    })
+        .then(response => response.json())
+        .then(function (response) {
+            if (Object.values(response).pop() === "Train has been deleted..."){
+                table.deleteRow(element.parentNode.rowIndex - 1);
+            }
+        })
+        .catch((err) => {
+            console.log(err);
+        })
 }
 
 /***CREATE A TICKET, VIEW TICKET FOR CHECKIN OR CANCEL */
@@ -195,10 +228,14 @@ function onAddTickets(e) {
   
   `
 
-  let baseUrl = "http://localhost:8080/Erika-Kollier/createTicket";
+  let baseUrl = "http://localhost:8080/Erika-Kollier/ticket?new";
 
-  let newTicket = {train: {currentCity: currentCity, destination: destination, totalTickets: totalTickets, 
-  departDate: departDate, arrivalDate: arrivalDate}}
+  let newTicket = {
+      currentCity: currentCity,
+      destination: destination,
+      totalTickets: totalTickets,
+      departDate: departDate,
+      arrivalDate: arrivalDate}
   console.log(newTicket)
 
 
@@ -261,7 +298,7 @@ tableEl.addEventListener("click", onCheckinRow)
 }
 
 
-(async function getTicketList() {
+/*(async function getTicketList() {
   let ticketUrl = 'http://localhost:8080/Erika-Kollier/myTickets';
   const token = localStorage.getItem("Token");
 
@@ -294,5 +331,5 @@ function populateTable(json) {
   } catch (error) {
     console.log("Error:", error);
   }
- }
+ }*/
 

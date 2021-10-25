@@ -44,4 +44,10 @@ public class Trip {
     // One trip can have many stations
     @OneToMany(cascade = CascadeType.ALL)
     private List<Station> stations;
+    public List<Station> getStations() {
+        return stations;
+    }
+    public void setStations(List<Station> stations) {
+        this.stations = stations;
+    }
 }

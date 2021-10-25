@@ -38,7 +38,7 @@ public class JWTUtil {
             parsed = true;
         }catch (JwtException e){
             // JWT is invalid
-            MyLogger.getFileLogger().warning(e.toString());
+            MyLogger.getMyLogger().writeLog(e.toString(), 3);
         }
 
         return parsed;

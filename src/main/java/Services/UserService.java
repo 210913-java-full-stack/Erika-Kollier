@@ -1,12 +1,14 @@
 package Services;
 
 import Logging.MyLogger;
+import Models.Role;
 import Models.User;
 import Models.UserInfo;
 import org.hibernate.HibernateException;
 import org.hibernate.Transaction;
 
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -37,16 +39,16 @@ public class UserService {
             tx = getSession().beginTransaction();
 
             // This is a cop out. I want the Criteria select to match this
-            users = getSession().createSQLQuery( "SELECT FIRST_NAME, LAST_NAME, USERNAME, TICKET_ID " +
+            users = getSession().createSQLQuery( "SELECT FIRST_NAME, LAST_NAME, USERNAME " +
                     "FROM USERS " +
-                    "JOIN USER_INFOS UI on UI.USER_ID = USERS.userInfo_USER_ID " +
+                    "JOIN USER_INFOS UI on UI.USERNAME = USERS.userInfo_USERNAME " +
                     "JOIN ROLES R on R.ROLE_ID = UI.role_ROLE_ID").list();
 
             tx.commit();
         } catch (Exception e){
             if (tx != null)
                 tx.rollback();
-            MyLogger.getFileLogger().severe(e.toString());
+            MyLogger.getMyLogger().writeLog(e.toString(), 3);
         }
 
         return users;
@@ -71,10 +73,38 @@ public class UserService {
             tx.commit();
         } catch (HibernateException e){
             tx.rollback();
-            MyLogger.getFileLogger().severe(e.toString());
+            MyLogger.getMyLogger().writeLog(e.toString(), 3);
         }
 
         return users;
+    }
+
+    /**
+     * Returns the user role based on their username
+     * @param username User's username
+     * @return int designated the role
+     */
+    public static int getRoleID(String username){
+        addRequest("GET: user's ID for User: " + username + ".", new Date(System.currentTimeMillis()));
+
+        int roleID = 0;
+
+        try {
+            tx = getSession().beginTransaction();
+
+            TypedQuery<Role> typedQuery = getSession().createQuery( "select role from USER_INFO where username = :username", Role.class);
+            typedQuery.setParameter("username", username);
+
+            roleID = typedQuery.getResultList().get(0).getRoleID();
+
+            tx.commit();
+        } catch (Exception e){
+            tx.rollback();
+            getSession().flush();
+            MyLogger.getMyLogger().writeLog(e.toString(), 3);
+        }
+
+        return roleID;
     }
 
     /**
@@ -97,8 +127,34 @@ public class UserService {
         userInfo.setUsername(username);
         userInfo.setPassword(password);
 
-        save(userInfo);
-        save(user);
+        saveProper(user, userInfo);
+    }
+
+    /**
+     * This assigns the proper foreign keys upon saving
+     * @param user User Object
+     * @param userInfo UserInfo Object
+     */
+    public static void saveProper(User user, UserInfo userInfo){
+        getSession().save(user);
+        getSession().save(userInfo);
+
+        query = getSession().createQuery("UPDATE USER_INFO SET role.roleID = :value WHERE username = :username");
+
+        if (userInfo.getUsername() != "KMART"){
+            query.setParameter("value", 0);
+            query.setParameter("username", userInfo.getUsername());
+        } else {
+            query.setParameter("value", 1);
+            query.setParameter("username", userInfo.getUsername());
+        }
+
+        query = getSession().createQuery("update USER set userInfo.username = :username where firstName = :firstName");
+        query.setParameter("username", userInfo.getUsername());
+        query.setParameter("firstName", user.getFirstName());
+        query.executeUpdate();
+
+        getSession().flush();
     }
 
     /**
@@ -117,7 +173,7 @@ public class UserService {
         } catch (HibernateException e) {
             if (tx != null)
                 tx.rollback();
-            MyLogger.getFileLogger().severe(e.toString());
+            MyLogger.getMyLogger().writeLog(e.toString(), 3);
         }
     }
 
@@ -137,7 +193,7 @@ public class UserService {
         } catch (HibernateException e) {
             if (tx != null)
                 tx.rollback();
-            MyLogger.getFileLogger().severe(e.toString());
+            MyLogger.getMyLogger().writeLog(e.toString(), 3);
         }
     }
 
@@ -158,7 +214,7 @@ public class UserService {
         } catch (HibernateException e){
             if (tx != null)
                 tx.rollback();
-            MyLogger.getFileLogger().severe(e.toString());
+            MyLogger.getMyLogger().writeLog(e.toString(), 3);
         }
     }
 }
