@@ -33,8 +33,8 @@ public class Ticket {
         return description;
     }
     public void setDescription(String departureCity, String arrivalCity, String departureStation, String arrivalStation, String departureDate, String arrivalDate) {
-        this.description = departureStation + ": " + arrivalCity + departureDate + "\n" +
-                arrivalStation + ": " + departureCity + arrivalDate;
+        this.description = departureStation + ": " + arrivalCity + " " + departureDate + "\n" +
+                arrivalStation + ": " + departureCity + " " + arrivalDate;
     }
     public void setDescription(String currentCity, String departureTime, String destCity, String arrivalTime){
         this.description = currentCity + " " + departureTime + "\n" +

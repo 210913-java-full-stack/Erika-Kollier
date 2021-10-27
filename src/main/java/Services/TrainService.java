@@ -42,10 +42,11 @@ public class TrainService {
             trains = getSession().createSQLQuery( "SELECT TRAIN_ID, PASSENGERS, " +
                     "T2.DEPARTURE_CITY AS DEPARTURE_INFO, DEPARTURE_TIME, " +
                     "T2.ARRIVAL_CITY AS ARRIVAL_INFO, ARRIVAL_TIME, AVAILABLE " +
-                    "FROM TRAINS " + "JOIN STATIONS S on TRAINS.TRAIN_STATION_FK = S.STATION_ID " +
-                    "JOIN TRIPS_STATIONS t on TRIP_TRIP_ID = S.STATION_ID " +
+                    "FROM TRAINS " +
+                    "JOIN STATIONS S on TRAINS.TRAIN_STATION_FK = S.STATION_ID " +
+                    "JOIN TRIPS_STATIONS t on t.stations_STATION_ID = S.STATION_ID " +
                     "JOIN TRIPS T2 on t.TRIP_TRIP_ID = T2.TRIP_ID " +
-                    "JOIN SCHEDULES SS on S.STATION_ID = SS.SCHEDULE_ID").list();
+                    "JOIN SCHEDULES SS on S.STATION_ID = SS.DummyStationRow").list();
 
             tx.commit();
         } catch (Exception e){
@@ -84,14 +85,57 @@ public class TrainService {
     }
 
     /**
-     *
-     * @param trainID
+     * Returns the TrainID dependent on the station's name
+     * @param station The name of the station to get the train ID from
+     * @return TrainID
+     */
+    public static int getTrainByStation(String station){
+        int trainID = 0; int stationID = 0;
+
+        try {
+            tx = getSession().beginTransaction();
+
+            query = getSession().createSQLQuery("SELECT STATION_ID FROM STATIONS" +
+                " WHERE NAME = :stationName");
+            query.setParameter("stationName", station);
+
+            for (Object o : query.getResultList()){
+                stationID = (int) o;
+            }
+
+            tx.commit();
+
+            tx = getSession().beginTransaction();
+
+            query = getSession().createSQLQuery("SELECT TRAIN_ID " +
+                    "FROM TRAINS " +
+                    "JOIN STATIONS_TRAINS ST ON TRAINS.TRAIN_ID = ST.trains_TRAIN_ID " +
+                    "WHERE STATION_STATION_ID = :stationID");
+            query.setParameter("stationID", stationID);
+
+            for (Object o : query.getResultList()){
+                trainID = (int) o;
+            }
+
+            tx.commit();
+        } catch (Exception e) {
+            if (tx != null)
+                tx.rollback();
+
+            MyLogger.getMyLogger().writeLog(e.toString(), 4);
+        }
+
+        return trainID;
+    }
+
+    /**
+     * Create route and persist it to the database
      * @param departureStation
      * @param arrivalStation
      * @param departureDate
      * @param arrivalDate
      */
-    public static void createRoute(int trainID, String departureStation, String arrivalStation, String departureDate, String arrivalDate){
+    public static int createRoute(String departureStation, String arrivalStation, String departureDate, String arrivalDate){
         Date arrival;
         Date departure;
 
@@ -103,44 +147,73 @@ public class TrainService {
         Trip trip = new Trip();
 
         try {
-            DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
 
             arrival = formatter.parse(arrivalDate);
             departure = formatter.parse(departureDate);
-
-            schedule.setArrivalTime(arrival);
-            schedule.setDepartureTime(departure);
-
-            trip.setArrivalCity(departureStation + ": " + arrivalStation);
-            trip.setDepartureCity(arrivalStation + ": " + departureStation);
-            trip.setTrainId(trainID);
-
-            ticket.setTicketID(trainID);
-            ticket.setDescription(departureStation, arrivalStation, departureStation,
-                    arrivalStation, departureDate, arrivalDate);
 
             station1.setState(Generators.getAState());
             station1.setCity(Generators.getACity());
             station1.setName(departureStation);
 
+            train.setPassengers(0);
+            train.setAvailable(true);
+            train.setStation(station1);
+
+            save(station1);
+            int id = save(train);
+
+            schedule.setArrivalTime(arrival);
+            schedule.setDepartureTime(departure);
+
             station2.setState(Generators.getAState());
             station2.setCity(Generators.getACity());
             station2.setName(arrivalStation);
 
-            train.setPassengers(0);
-            train.setAvailable(true);
-            train.setTrainId(trainID);
-            train.setTicketID(trainID);
-            train.setStation(station1);
+            trip.setArrivalCity(arrivalStation);
+            trip.setDepartureCity(departureStation);
+            trip.setTripID(id);
 
-            save(station1);
+            ticket.setTicketID(id);
+            ticket.setDescription(departureStation, arrivalStation, departureStation,
+                    arrivalStation, departureDate, arrivalDate);
+            ticket.setTrain(getSession().find(Train.class, id));
+
+            train.setTicketID(TicketService.save(ticket));
+            getSession().update(train);
+
+            save(trip);
             save(station2);
             save(schedule);
-            TicketService.save(ticket);
-            save(train);
         } catch (Exception e){
             MyLogger.getMyLogger().writeLog(e.toString(), 3);
         }
+
+        setNewRouteFK(train.getTrainId(), station1.getStationID(), trip.getTripID());
+
+        return train.getTrainId();
+    }
+
+    /**
+     * Sets foreign key constraints because I don't trust hibernate to do it
+     * @param trainID The new train's ID
+     */
+    private static void setNewRouteFK(int trainID, int stationId, int tripID){
+        // Set TRIPS_STATIONS and TRAINS.TRAIN_STATION_FK
+        query = getSession().createSQLQuery("UPDATE TICKETS SET TRAIN_TICKET_FK = :trainID WHERE TRAIN_ID_FK = :trainID2");
+        query.setParameter("trainID", trainID);
+        query.setParameter("trainID2", trainID);
+        query.executeUpdate();
+
+        query = getSession().createSQLQuery("INSERT INTO TRIPS_STATIONS(TRIP_TRIP_ID, stations_STATION_ID) VALUES (:tripID, :stationID)");
+        query.setParameter("tripID", tripID);
+        query.setParameter("stationID", stationId);
+        query.executeUpdate();
+
+        query = getSession().createSQLQuery("UPDATE SCHEDULES SET DummyStationRow = :stationID WHERE SCHEDULE_ID = :stationID2");
+        query.setParameter("stationID", stationId);
+        query.setParameter("stationID2", stationId);
+        query.executeUpdate();
     }
 
     /**
@@ -148,9 +221,9 @@ public class TrainService {
      *
      * @param train UserInfo object
      */
-    public static void delete(Train train){
+    public static boolean delete(Train train){
         addRequest("POST: deleted train with ID: " + train.getTrainId() + ".", new Date(System.currentTimeMillis()));
-
+        boolean failed = false;
         try {
             tx = getSession().beginTransaction();
 
@@ -162,29 +235,33 @@ public class TrainService {
             query = getSession().createSQLQuery("DELETE FROM STATIONS_TRAINS WHERE trains_TRAIN_ID = :trainID");
             query.setParameter("trainID", train.getTrainId());
             query.executeUpdate();
+
+            getSession().delete(getSession().find(Ticket.class, train.getTicketID()));
             getSession().delete(train);
 
             tx.commit();
         } catch (Exception e){
+            failed = true;
             if (tx != null)
                 tx.rollback();
             MyLogger.getMyLogger().writeLog(e.toString(), 3);
         }
+
+        return failed;
     }
 
     /**
      * This method saves a Train object to the Database
      * @param train Train object
      */
-    public static void save(Train train) {
-        Random rand = new Random();
-
+    public static int save(Train train) {
+        int id = 0;
         addRequest("POST: saved train with ID: " + train.getTrainId() + ".", new Date(System.currentTimeMillis()));
 
         try {
             tx = getSession().beginTransaction();
 
-            getSession().save(train);
+            id = (Integer) getSession().save(train);
 
             tx.commit();
         } catch (Exception e) {
@@ -192,6 +269,8 @@ public class TrainService {
                 tx.rollback();
             MyLogger.getMyLogger().writeLog(e.toString(), 3);
         }
+
+        return id;
     }
 
     /**
@@ -225,6 +304,26 @@ public class TrainService {
             tx = getSession().beginTransaction();
 
             getSession().save(station);
+
+            tx.commit();
+        } catch (HibernateException e) {
+            if (tx != null)
+                tx.rollback();
+            MyLogger.getMyLogger().writeLog(e.toString(), 3);
+        }
+    }
+
+    /**
+     * This method saves a Trip object to the Database
+     * @param trip Trip object
+     */
+    public static void save(Trip trip) {
+        addRequest("POST: saved station with ID: " + trip.getTripID() + ".", new Date(System.currentTimeMillis()));
+
+        try {
+            tx = getSession().beginTransaction();
+
+            getSession().save(trip);
 
             tx.commit();
         } catch (HibernateException e) {

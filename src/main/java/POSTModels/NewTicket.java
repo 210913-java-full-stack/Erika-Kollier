@@ -1,63 +1,60 @@
 package POSTModels;
 
-import java.util.Date;
-
 public class NewTicket {
-    int tickets;
-    String currentCity, destCity;
-    Date departure, arrival;
+    int totalTickets, tid;
+    String departureStation, arrivalStation, username;
 
     public NewTicket() {
     }
 
-    public String getCurrentCity() {
-        return currentCity;
+    public int getTid() {
+        return tid;
     }
 
-    public void setCurrentCity(String currentCity) {
-        this.currentCity = currentCity;
+    public void setTid(int tid) {
+        this.tid = tid;
     }
 
-    public String getDestCity() {
-        return destCity;
+    public String getUsername() {
+        return username;
     }
 
-    public void setDestCity(String destCity) {
-        this.destCity = destCity;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public int getTickets() {
-        return tickets;
+    public int getTotalTickets() {
+        return totalTickets;
     }
 
-    public void setTickets(int tickets) {
-        this.tickets = tickets;
+    public void setTotalTickets(int totalTickets) {
+        this.totalTickets = totalTickets;
     }
 
-    public Date getDeparture() {
-        return departure;
+    public String getDepartureStation() {
+        return departureStation;
     }
 
-    public void setDeparture(Date departure) {
-        this.departure = departure;
+    public void setDepartureStation(String departureStation) {
+        this.departureStation = departureStation;
     }
 
-    public Date getArrival() {
-        return arrival;
+    public String getArrivalStation() {
+        return arrivalStation;
     }
 
-    public void setArrival(Date arrival) {
-        this.arrival = arrival;
+    public void setArrivalStation(String arrivalStation) {
+        this.arrivalStation = arrivalStation;
     }
 
     @Override
     public String toString() {
-        return "NewTicket {" + '\n' +
-                "\tcurrentCity=" + currentCity + ",\n" +
-                "\tdestCity=" + destCity + ",\n" +
-                "\ttickets=" + tickets + ",\n" +
-                "\tdeparture=" + departure + ",\n" +
-                "\tarrival=" + arrival + ",\n" +
+        return "NewTicket {\n" +
+                "totalTickets=" + totalTickets + '\n' +
+                "tid=" + tid + '\n' +
+                "departureStation=" + departureStation + '\n' +
+                "arrivalStation=" + arrivalStation + '\n' +
+                "username=" + username + '\n' +
                 '}';
     }
 }

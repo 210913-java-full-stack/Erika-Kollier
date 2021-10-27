@@ -36,6 +36,7 @@ function userLogin() {
         let token = responseValues.pop();
 
         localStorage.setItem("Token", token);
+        localStorage.setItem("Current User", userUsername);
 
           if (userExists && roleID === 1) {
               window.location.href = "adminView.html";

@@ -58,7 +58,6 @@ public class Station {
     // Many schedules, one station
     @OneToMany
     private List<Schedule> schedules;
-
     public List<Schedule> getSchedules() {
         return schedules;
     }

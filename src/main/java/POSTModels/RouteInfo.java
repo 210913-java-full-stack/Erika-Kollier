@@ -2,7 +2,6 @@ package POSTModels;
 
 public class RouteInfo {
     private String departureStation, arrivalStation, departureDate, arrivalDate;
-    private int trainID;
 
     public RouteInfo() {
     }
@@ -21,14 +20,6 @@ public class RouteInfo {
 
     public void setArrivalStation(String arrivalStation) {
         this.arrivalStation = arrivalStation;
-    }
-
-    public int getTrainID() {
-        return trainID;
-    }
-
-    public void setTrainID(int trainID) {
-        this.trainID = trainID;
     }
 
     public String getDepartureDate() {
@@ -54,7 +45,6 @@ public class RouteInfo {
                 "arrivalStation=" + arrivalStation + '\n' +
                 "departureDate=" + departureDate + '\n' +
                 "arrivalDate=" + arrivalDate + '\n' +
-                "trainID=" + trainID + '\n' +
                 "}";
     }
 }

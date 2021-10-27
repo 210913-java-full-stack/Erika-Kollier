@@ -48,18 +48,8 @@ public class MyLogger {
 
     private String getLogFileName() {
         String today = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        File file = null;
 
-        try {
-            file = new File("D:\\Programming Files\\Revature\\Erika-Kollier\\src\\main\\resources\\logs\\" + today + ".log");
-            if(!file.exists()) {
-                file.createNewFile();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return file.getPath();
+        return "D:\\Programming Files\\Revature\\Erika-Kollier\\src\\main\\resources\\logs\\"+ today + ".log";
     }
 
     private String formatLogEntry(String message){

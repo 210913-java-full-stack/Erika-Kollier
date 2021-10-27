@@ -12,9 +12,6 @@
       crossorigin="anonymous"
     />
     <script src="passenger.js"></script>
-    <script src = "ticketPurchase.js"></script>
-    <!-- <script src="ticketPurchase.js"></script> -->
-
     <title>PassengerView</title>
   </head>
   <body>
@@ -58,6 +55,7 @@
                     href="#"
                     data-bs-toggle="modal"
                     data-bs-target="#modal1"
+                    onclick="getTicketList()"
                     >Check In/Cancel Ticket</a
                   >
                 </li>
@@ -112,13 +110,10 @@
         <table class="table table-hover" id="userTickets">
           <thead>
             <tr>
-              <!-- <th class="userView" scope="col">Train ID</th>
-              <th class="userView" scope="col">Ticket ID</th> -->
+              <th class="userView" scope="col">Train ID</th>
               <th class="userView" scope="col">Departure City</th>
               <th class="userView" scope="col">Arrival City</th>
               <th class="userView" scope="col">Total Tickets</th>
-              <th class="userView" scope="col">Arrival Date</th>
-              <th class="userView" scope="col">Departure Date</th>
             </tr>
           </thead>
           <tr>
@@ -135,9 +130,6 @@
         >
           Close
         </button>
-        <!-- <button type="button" class="btn btn-primary">
-          Submit
-        </button> -->
       </div>
     </div>
   </div>
@@ -145,74 +137,69 @@
 </div>
 
 <!--Purchase Ticket Modal-->
-<div class="modal-dialog modal-dialog-scrollable">
-<div class="modal" id="modal2" tabindex="-1">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Ticket Purchase</h5>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
-      </div>
-      <div class="modal-body">
-        <form id = "purchaseTicketForm">
-        <label for="currentCity" class="currentCity">From</label>
-        <input
-          type="text"
-          id="currentCity"
-          name="currentCity"
-          class="form-control"
-          placeholder="Current Location"
-          value=""
-          required
-          autofocus
-        />
-        <label for="destCity" class="destCity">To</label>
-        <input
-          type="text"
-          id="destCity"
-          name="destCity"
-          class="form-control"
-          placeholder="Destination"
-          value=""
-          required
-          autofocus
-        />
-        <div class = "input-grp">
-          <label for = "tickets">Tickets</label>
-          <input type = "number" id ="tickets" name ="tickets" class="form-control" value="1"/>
+      <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal" id="modal2" tabindex="-1">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Ticket Purchase</h5>
+                <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                ></button>
+              </div>
+              <div class="modal-body">
+                <form id = "purchaseTicketForm">
+                  <label for="currentCity" class="currentCity">Departure Station</label>
+                  <select class="form-select" id="currentCity">
+                    <option selected>--</option>
+                    <option value="Pilot 15">Pilot 15</option>
+                    <option value="Linus Station 3">Linus Station 3</option>
+                    <option value="Aero Station">Aero Station</option>
+                    <option value="Achilles Heel">Achilles Heel</option>
+                    <option value="Sesame Street">Sesame Street</option>
+                    <option value="Torcher's Den">Torcher's Den</option>
+                    <option value="Rain Forest">Rain Forest</option>
+                    <option value="Hamlet's Fen">Hamlet's Fen</option>
+                  </select>
+
+                  <label for="destCity" class="destCity">Arrival Station</label>
+                  <select class="form-select" id="destCity">
+                    <option selected>--</option>
+                    <option value="Pilot 15">Pilot 15</option>
+                    <option value="Linus Station 3">Linus Station 3</option>
+                    <option value="Aero Station">Aero Station</option>
+                    <option value="Achilles Heel">Achilles Heel</option>
+                    <option value="Sesame Street">Sesame Street</option>
+                    <option value="Torcher's Den">Torcher's Den</option>
+                    <option value="Rain Forest">Rain Forest</option>
+                    <option value="Hamlet's Fen">Hamlet's Fen</option>
+                  </select>
+                  <div class = "input-grp">
+                    <label for = "tickets">Tickets</label>
+                    <input type = "number" id ="tickets" name ="tickets" class="form-control" value="1"/>
+                  </div>
+
+                  <div class="modal-footer">
+                    <button
+                            type="button"
+                            class="btn btn-secondary"
+                            data-bs-dismiss="modal"
+                    >
+                      Close
+                    </button>
+                    <button type="submit" onClick = "createATicket()" class="btn btn-primary">
+                      Purchase
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class = "input-grp">
-        <label for = "departure">Departure</label>
-        <input type = "datetime-local" id = "departure" name ="departure" class="form-control select-date"/>
       </div>
-      <div class = "input-grp">
-      <label for = "arrival">Arrival</label>
-      <input type = "datetime-local" id = "arrival" name = "arrival" class="form-control select-date"/>
-    </div>
-  
-      <div class="modal-footer">
-        <button
-          type="button"
-          class="btn btn-secondary"
-          data-bs-dismiss="modal"
-        >
-          Close
-        </button>
-        <button type="submit" class="btn btn-primary">
-          Purchase
-        </button>
-      </div>
-    </form>
-    </div>
-  </div>
-</div>
-</div>
-</div>
     </nav>
 <!------------------------------View List of Train Info------------------------------------------->
     <style>
@@ -238,6 +225,7 @@
             <th scope="col">Departure Location</th>
             <th scope="col">Departure Time</th>
             <th scope="col">Availability</th>
+            <th scope="col">Cancel Trip</th>
           </tr>
         </thead>
         <tbody id="TrainRouteTable"></tbody>
@@ -246,70 +234,6 @@
         </tbody>
       </table>
     </div>
-
-    <script>
-      /******** PURCHASE TICKET AND CheckIN & DELETE TICKET************/
-      //Add fetch logic for purchase ticket, delete, checkin
-
-            const form = document.getElementById("purchaseTicketForm")
-            const tbody = document.getElementById("viewTickets")
-            const tableEl = document.getElementById("userTickets")
-      
-
-            function onAddTickets(e) {
-              e.preventDefault();
-              // alert("this works")
-              const currentCity = document.getElementById("currentCity").value;
-              const destCity = document.getElementById("destCity").value;
-              const tickets = document.getElementById("tickets").value;
-              const departure = document.getElementById("departure").value;
-              const arrival= document.getElementById("arrival").value;
-              // alert(currentCity + " " + destCity + " " + tickets + " "+ departure + " " +arrival)
-              alert("Ticket(s) Purchased")
-              tbody.innerHTML += `
-              <tr> 
- 
-                    <td>${currentCity}</td>
-                    <td>${destCity}</td>
-                    <td>${tickets}</td>
-                    <td>${departure}</td>
-                    <td>${arrival}</td>
-                    <td><button type = "button" class = "btn-warning">Cancel</button></td>
-                    <td><button type = "button" class = "btn-primary">CheckIn</button></td>
-                    
-              </tr>
-              
-              `
-            }
-            // only want to respond to the delete button associated with the row on the table. 
-            // closest finds the closest element (button)
-            //classList property is read-only, however, you can modify it by using the, toggle add() and remove() methods.
-            function onDeleteRow(e){
-              if(!e.target.classList.contains("btn-warning")) {
-                return;
-              }
-              alert("Your ticket will be canceled")
-              const btn = e.target;
-              btn.closest("tr").remove();
-            }
-
-            function onCheckinRow(e){
-              if(!e.target.classList.contains("btn-primary")) {
-                return;
-              }
-              alert("You have successfully checked in")
-              const btn = e.target;
-              btn.closest('tr').alert("checked in")
-
-            }
-
-
-            form.addEventListener('submit', onAddTickets)
-            //delete row from table
-            tableEl.addEventListener("click", onDeleteRow) 
-            tableEl.addEventListener("click", onCheckinRow)
-
-    </script>
 
     <script
       src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"

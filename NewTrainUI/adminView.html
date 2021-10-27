@@ -12,7 +12,6 @@
       crossorigin="anonymous"
     />
     <script src="admin.js"></script>
-    <script src = "ticketPurchase.js"></script>
     <title>AdminView</title>
   </head>
   <body>
@@ -69,6 +68,7 @@
                     href="#"
                     data-bs-toggle="modal"
                     data-bs-target="#modal1"
+                    onclick="getTicketList()"
                     >Check In/Cancel Ticket</a
                   >
                 </li>
@@ -112,7 +112,7 @@
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title">Check in/Cancel Ticket</h5>
+                <h5 class="modal-title">Check-In/Cancel Ticket</h5>
                 <button
                   type="button"
                   class="btn-close"
@@ -124,13 +124,10 @@
                 <table class="table table-hover" id="userTickets">
                   <thead>
                     <tr>
-                      <!-- <th class="userView" scope="col">Train ID</th>
-                      <th class="userView" scope="col">Ticket ID</th> -->
+                      <th class="userView" scope="col">Train ID</th>
                       <th class="userView" scope="col">Departure City</th>
                       <th class="userView" scope="col">Arrival City</th>
                       <th class="userView" scope="col">Total Tickets</th>
-                      <th class="userView" scope="col">Arrival Date</th>
-                      <th class="userView" scope="col">Departure Date</th>
                     </tr>
                   </thead>
                   <tr>
@@ -147,9 +144,6 @@
                 >
                   Close
                 </button>
-                <!-- <button type="button" class="btn btn-primary">
-                  Submit
-                </button> -->
               </div>
             </div>
           </div>
@@ -172,40 +166,35 @@
               </div>
               <div class="modal-body">
                 <form id = "purchaseTicketForm">
-                <label for="currentCity" class="currentCity">From</label>
-                <input
-                  type="text"
-                  id="currentCity"
-                  name="currentCity"
-                  class="form-control"
-                  placeholder="Current Location"
-                  value=""
-                  required
-                  autofocus
-                />
-                <label for="destCity" class="destCity">To</label>
-                <input
-                  type="text"
-                  id="destCity"
-                  name="destCity"
-                  class="form-control"
-                  placeholder="Destination"
-                  value=""
-                  required
-                  autofocus
-                />
+                <label for="currentCity" class="currentCity">Departure Station</label>
+                  <select class="form-select" id="currentCity">
+                    <option selected>--</option>
+                    <option value="Pilot 15">Pilot 15</option>
+                    <option value="Linus Station 3">Linus Station 3</option>
+                    <option value="Aero Station">Aero Station</option>
+                    <option value="Achilles Heel">Achilles Heel</option>
+                    <option value="Sesame Street">Sesame Street</option>
+                    <option value="Torcher's Den">Torcher's Den</option>
+                    <option value="Rain Forest">Rain Forest</option>
+                    <option value="Hamlet's Fen">Hamlet's Fen</option>
+                  </select>
+
+                <label for="destCity" class="destCity">Arrival Station</label>
+                  <select class="form-select" id="destCity">
+                    <option selected>--</option>
+                    <option value="Pilot 15">Pilot 15</option>
+                    <option value="Linus Station 3">Linus Station 3</option>
+                    <option value="Aero Station">Aero Station</option>
+                    <option value="Achilles Heel">Achilles Heel</option>
+                    <option value="Sesame Street">Sesame Street</option>
+                    <option value="Torcher's Den">Torcher's Den</option>
+                    <option value="Rain Forest">Rain Forest</option>
+                    <option value="Hamlet's Fen">Hamlet's Fen</option>
+                  </select>
                 <div class = "input-grp">
                   <label for = "tickets">Tickets</label>
                   <input type = "number" id ="tickets" name ="tickets" class="form-control" value="1"/>
                 </div>
-                <div class = "input-grp">
-                <label for = "departure">Departure</label>
-                <input type = "datetime-local" id = "departure" name ="departure" class="form-control select-date"/>
-              </div>
-              <div class = "input-grp">
-              <label for = "arrival">Arrival</label>
-              <input type = "datetime-local" id = "arrival" name = "arrival" class="form-control select-date"/>
-            </div>
 
               <div class="modal-footer">
                 <button
@@ -215,7 +204,7 @@
                 >
                   Close
                 </button>
-                <button type="submit" onClick = "createATicket()"class="btn btn-primary">
+                <button type="submit" onClick = "createATicket()" class="btn btn-primary">
                   Purchase
                 </button>
               </div>
@@ -242,18 +231,6 @@
               </div>
               <div class="modal-body">
                 <form id = "createTrain">
-                <label for="trainID">Train ID</label>
-                <input
-                  type="number"
-                  id="trainID"
-                  name="trainID"
-                  class="form-control"
-                  placeholder="Enter Train ID"
-                  value=""
-                  required
-                  autofocus
-                  autocomplete="off"
-                />
 
                 <div class = "input-grp">
                   <label for = "departureStation">Arrival Station</label>
@@ -270,7 +247,7 @@
                 <input type = "datetime-local" id = "departureDate" name = "departureDate" class="form-control select-date" value = ""/>
               </div>
               <div class = "input-grp">
-              <label for = "arrival">Arrival Date</label>
+              <label for = "arrivalDate">Arrival Date</label>
               <input type = "datetime-local" id = "arrivalDate" name = "arrival" class="form-control select-date" value = ""/>
             </div>
 

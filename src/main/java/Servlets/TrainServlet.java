@@ -86,11 +86,12 @@ public class TrainServlet extends HttpServlet {
                         RouteInfo newRoute = mapper.readValue(jsonText, RouteInfo.class);
 
                         // Do newRoute thing here
-                        TrainService.createRoute(newRoute.getTrainID(), newRoute.getDepartureStation(),
+                        int newTrainID = TrainService.createRoute(newRoute.getDepartureStation(),
                                 newRoute.getArrivalStation(), newRoute.getDepartureDate(),
                                 newRoute.getArrivalDate());
 
-                        jObj.put("Status", "Information Received and Stored...");
+                        jObj.put("Status", "Processed");
+                        jObj.put("New Train ID", newTrainID);
                         response.setStatus(202);
                         response.setContentType("application/json");
                     } else {
@@ -98,20 +99,7 @@ public class TrainServlet extends HttpServlet {
                         response.setContentType("application/json");
                         jObj.put("Status", "Unauthorized Access");
                     }
-
-                    response.getWriter().write(jObj.toString());
-                } catch (Exception e) {
-                    MyLogger.getMyLogger().writeLog(e.toString(), 3);
-                }
-            } else if ("delete".equals(paramInfo[0])){
-                try {
-                    Train train = TrainService.getTrainByID(Integer.parseInt(request.getHeader("ID")));
-                    System.out.println(train.toString());
-                    TrainService.delete(train);
-
-                    jObj.put("Status", "Train has been deleted...");
-                    response.setStatus(202);
-                    response.setContentType("application/json");
+                    System.out.println(jObj);
                     response.getWriter().write(jObj.toString());
                 } catch (Exception e) {
                     MyLogger.getMyLogger().writeLog(e.toString(), 3);
@@ -119,6 +107,37 @@ public class TrainServlet extends HttpServlet {
             }
         } catch (Exception e) {
             MyLogger.getMyLogger().writeLog(e.toString(), 3);
+        }
+    }
+
+    @Override
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        JSONObject jObj = new JSONObject();
+
+        try {
+            paramInfo = RequestArgChecker.handleRequest(request, response);
+
+            if ("delete".equals(paramInfo[0])) {
+                try {
+                    Train train = TrainService.getTrainByID(Integer.parseInt(request.getHeader("ID")));
+                    System.out.println(train.toString());
+
+                    if(TrainService.delete(train)){
+                        jObj.put("Status", "Train has failed to delete...");
+                        response.setStatus(500);
+                    } else {
+                        jObj.put("Status", "Train has been deleted...");
+                        response.setStatus(202);
+                    }
+
+                    response.setContentType("application/json");
+                    response.getWriter().write(jObj.toString());
+                } catch (Exception e) {
+                    MyLogger.getMyLogger().writeLog(e.toString(), 3);
+                }
+            }
+        } catch (Exception e) {
+            MyLogger.getMyLogger().writeLog(e.toString(), 4);
         }
     }
 }

@@ -11,7 +11,7 @@ public class Schedule {
     private int scheduleID;
 
     @Id
-    @Column(name = "SCHEDULE_ID")
+    @Column(name = "SCHEDULE_ID", columnDefinition = "datetime")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int getScheduleID() {
         return scheduleID;
@@ -39,12 +39,4 @@ public class Schedule {
     // Many schedules, one station
     @ManyToOne(cascade = CascadeType.ALL)
     private Station station;
-
-    public Station getStation() {
-        return station;
-    }
-
-    public void setStation(Station station) {
-        this.station = station;
-    }
 }

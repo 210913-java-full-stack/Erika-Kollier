@@ -16,10 +16,10 @@ public class Trip {
     @Column(name = "TRIP_ID", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int tripID;
-    public int getTrainId() {
+    public int getTripID() {
         return tripID;
     }
-    public void setTrainId(int id) {
+    public void setTripID(int id) {
         this.tripID = id;
     }
 
@@ -50,4 +50,5 @@ public class Trip {
     public void setStations(List<Station> stations) {
         this.stations = stations;
     }
+    public void addStation(Station station){ this.stations.add(station); }
 }

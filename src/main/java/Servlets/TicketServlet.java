@@ -7,8 +7,11 @@ package Servlets;
  */
 
 import Logging.MyLogger;
+import Models.Ticket;
 import POSTModels.NewTicket;
 import Services.TicketService;
+import Services.TrainService;
+import Utils.JWTUtil;
 import Utils.RequestArgChecker;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONObject;
@@ -20,10 +23,18 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Scanner;
 
-@WebServlet(name = "TicketServlet", value = {"/ticket", "/ticket?new"})
+@WebServlet(name = "TicketServlet", value = {"/ticket", "/ticket?new", "/ticket?cancel", "/ticket?checkin", "/ticket?myTickets"})
 public class TicketServlet extends HttpServlet {
+    // Global parameters
+    int trainID = 0;
+    int id = 0;
+    String[] paramInfo = {};
+    InputStream requestBody = null;
+    String jsonText;
+
     /**
      * This get method returns a single Ticket object, or all Ticket objects based on arguments passed in the HTTP request
      * String array 'paramInfo' contains: paramInfo[0] = parameter, paramInfo[1] = value
@@ -35,8 +46,6 @@ public class TicketServlet extends HttpServlet {
         response.setStatus(202);
         response.setContentType("application/json");
         JSONObject jOBj = new JSONObject();
-        String[] paramInfo;
-        int id = 0;
 
         try {
             paramInfo = RequestArgChecker.handleRequest(request, response);
@@ -44,15 +53,30 @@ public class TicketServlet extends HttpServlet {
             if ("id".equals(paramInfo[0])) {
                 try {
                     id = (Integer.parseInt(paramInfo[1]));
+                    jOBj.put("Requested Ticket", TicketService.getByID(id));
                 } catch (NumberFormatException e) {
                     MyLogger.getMyLogger().writeLog(e.toString(), 3);
                 }
+            } else if ("myTickets".equals(paramInfo[0])) {
+                String username;
 
-                jOBj.put("Requested Ticket", TicketService.getByID(id));
-            } else {
+                try {
+                    username = (paramInfo[1]);
+                    ArrayList<Ticket> myTickets = (ArrayList<Ticket>) TicketService.getByUser(username);
+
+                    if (myTickets != null) {
+                        for (Ticket myTicket : myTickets) {
+                            jOBj.put(username + "'s Tickets", myTicket);
+                        }
+                    } else {
+                        jOBj.put("Status", "User Has No Tickets");
+                    }
+                } catch (Exception e) {
+                    MyLogger.getMyLogger().writeLog(e.toString(), 3);
+                }
+            } else if ((paramInfo[0] == null)) {
                 jOBj.put("All Tickets", TicketService.getAllTickets());
             }
-
             response.getWriter().print(jOBj);
         } catch (Exception e){
             MyLogger.getMyLogger().writeLog(e.toString(), 3);
@@ -61,38 +85,131 @@ public class TicketServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response){
-        String[] paramInfo;
-        InputStream requestBody = null;
-
+        JSONObject jOBj = new JSONObject();
+        response.setContentType("application/json");
         response.setStatus(202);
 
         // Create ticket and assign it to User
         try {
             paramInfo = RequestArgChecker.handleRequest(request, response);
+        } catch (Exception e) {
+            MyLogger.getMyLogger().writeLog(e.toString(), 4);
+        }
 
-            if ("new".equals(paramInfo[0])) {
-                try {
+        try {
+            String token = request.getHeader("Authorization");
+            if (JWTUtil.parseJWT(token)) {
+                if ("new".equals(paramInfo[0])) {
+                    try {
+                        requestBody = request.getInputStream();
+                        Scanner sc = new Scanner(requestBody, StandardCharsets.UTF_8.name());
+                        jsonText = sc.useDelimiter("\\A").next();
+
+                        ObjectMapper mapper = new ObjectMapper();
+                        NewTicket newTicket = mapper.readValue(jsonText, NewTicket.class);
+
+                        TicketService.create(newTicket.getUsername(), newTicket.getTid(), newTicket.getTotalTickets(), newTicket.getArrivalStation(),
+                                newTicket.getDepartureStation());
+
+                        jOBj.clear();
+                        jOBj.put("Status", "Successful Ticket to User Assigning");
+
+                        response.getWriter().write(jOBj.toString());
+                    } catch (IOException e) {
+                        MyLogger.getMyLogger().writeLog(e.toString(), 3);
+                    }
+                } else if ("getID".equals(paramInfo[0])) {
                     requestBody = request.getInputStream();
                     Scanner sc = new Scanner(requestBody, StandardCharsets.UTF_8.name());
-                    String jsonText = sc.useDelimiter("\\A").next();
+                    jsonText = sc.useDelimiter("\\A").next();
 
                     ObjectMapper mapper = new ObjectMapper();
                     NewTicket newTicket = mapper.readValue(jsonText, NewTicket.class);
 
-                    TicketService.create(newTicket.getTickets(), newTicket.getDestCity(),
-                            newTicket.getCurrentCity(), newTicket.getDeparture(), newTicket.getArrival());
+                    trainID = TrainService.getTrainByStation(newTicket.getDepartureStation());
+                    jOBj.clear();
+                    jOBj.put("trainID", trainID);
 
-                    response.getWriter().write("Route creation complete.");
-                } catch (IOException e) {
-                    MyLogger.getMyLogger().writeLog(e.toString(), 3);
+                    response.getWriter().write(jOBj.toString());
+                } else if ("cancel".equals(paramInfo[0])) {
+                    requestBody = request.getInputStream();
+                    Scanner sc = new Scanner(requestBody, StandardCharsets.UTF_8.name());
+                    jsonText = sc.useDelimiter("\\A").next();
                 }
-            } else if ("purchase".equals(paramInfo[0])) {
-
-            } else {
-
             }
-        } catch (Exception e){
-            MyLogger.getMyLogger().writeLog(e.toString(), 3);
+        } catch (Exception e) {
+            MyLogger.getMyLogger().writeLog(e.toString(), 5);
         }
+    }
+
+    @Override
+    protected void doPut(HttpServletRequest request, HttpServletResponse response) {
+        JSONObject jOBj = new JSONObject();
+        response.setContentType("application/json");
+        response.setStatus(202);
+
+        try {
+            paramInfo = RequestArgChecker.handleRequest(request, response);
+        } catch (Exception e) {
+            MyLogger.getMyLogger().writeLog(e.toString(), 4);
+        }
+
+        try {
+            String token = request.getHeader("Authorization");
+            if (JWTUtil.parseJWT(token)) {
+                if ("checkin".equals(paramInfo[0])) {
+                    try {
+                        String username = request.getHeader("Username");
+                        int trainID = Integer.parseInt(request.getHeader("TrainID"));
+
+                        TicketService.checkIn(username, trainID);
+
+                        jOBj.put("Status", username + " Successful Check-In");
+
+                        response.getWriter().write(jOBj.toString());
+                    } catch (Exception e) {
+                        MyLogger.getMyLogger().writeLog(e.toString(), 3);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            MyLogger.getMyLogger().writeLog(e.toString(), 5);
+        }
+    }
+
+    @Override
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response){
+        JSONObject jOBj = new JSONObject();
+        response.setContentType("application/json");
+        response.setStatus(202);
+
+        try {
+            paramInfo = RequestArgChecker.handleRequest(request, response);
+        } catch (Exception e) {
+            MyLogger.getMyLogger().writeLog(e.toString(), 4);
+        }
+
+        try {
+            String token = request.getHeader("Authorization");
+            if (JWTUtil.parseJWT(token)) {
+                if ("cancel".equals(paramInfo[0])) {
+                    try {
+                        String username = request.getHeader("Username");
+                        int trainID = Integer.parseInt(request.getHeader("TrainID"));
+                        boolean success = TicketService.cancelTicket(username, trainID);
+
+                        jOBj.put("Status", username + " " + "Ticket Cancel Success = "
+                                + success);
+
+                        response.getWriter().write(jOBj.toString());
+                    } catch (Exception e) {
+                        MyLogger.getMyLogger().writeLog(e.toString(), 3);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            MyLogger.getMyLogger().writeLog(e.toString(), 5);
+        }
+
     }
 }
