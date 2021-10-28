@@ -44,4 +44,14 @@ public class RegisterInfo {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    @Override
+    public String toString() {
+        return "RegisterInfo {\n" +
+                "\t firstname=" + firstname + '\n' +
+                "\t lastname=" + lastname + '\n' +
+                "\t username=" + username + '\n' +
+                "\t password=" + password + '\n' +
+                '}';
+    }
 }

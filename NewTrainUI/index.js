@@ -75,11 +75,15 @@ function userRegister() {
   })
     .then((response) => response.json())
     .then(function (response){
-      let token = Object.value(response).toString();
-      localStorage.setItem("Token", token);
+      let token = Object.values(response).pop();
+      if (token === "Failed"){
+          alert("Account Creation Failed!");
+      } else {
+          localStorage.setItem("Token", token);
+          window.location.href = "passengerView.html";
+      }
     })
     .catch((err) => {
       console.log(err);
     });
-  window.location.href = "passengerView.html";
 }

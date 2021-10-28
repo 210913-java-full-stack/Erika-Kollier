@@ -120,30 +120,47 @@ public class UserService {
      * @param username Username
      * @param password Password
      */
-    public static void register(String firstName, String lastName, String username, String password){
-        UUID generatedID = UUID.randomUUID();
-        user = new User();
-        userInfo = new UserInfo();
-        Role role = new Role();
+    public static boolean register(String firstName, String lastName, String username, String password){
+        boolean success;
 
-        role.setRoleID(0);
+        try {
+            tx = getSession().beginTransaction();
 
-        user.setUserID(generatedID);
-        user.setFirstName(firstName);
-        user.setLastName(lastName);
+            if (getSession().find(UserInfo.class, username) == null) {
 
-        userInfo.setUserID(generatedID);
-        userInfo.setUsername(username);
-        userInfo.setPassword(password);
-        userInfo.setRole(role);
-        userInfo.setUser(user);
+                UUID generatedID = UUID.randomUUID();
+                user = new User();
+                userInfo = new UserInfo();
+                Role role = getSession().find(Role.class, 0);
 
-        role.getUserInfo().add(userInfo);
-        role.setUserInfo(role.getUserInfo());
+                user.setUserID(generatedID);
+                user.setFirstName(firstName);
+                user.setLastName(lastName);
 
-        user.setUserInfo(userInfo);
+                userInfo.setUserID(generatedID);
+                userInfo.setUsername(username);
+                userInfo.setPassword(password);
+                userInfo.setRole(role);
+                userInfo.setUser(user);
 
-        saveProper(user, userInfo);
+                role.getUserInfo().add(userInfo);
+                getSession().update(role);
+
+                user.setUserInfo(userInfo);
+
+                tx.commit();
+                saveProper(user, userInfo);
+                success = true;
+            } else {
+                success = false;
+            }
+        } catch (Exception e) {
+            if (tx != null)
+                tx.rollback();
+            success = false;
+            MyLogger.getMyLogger().writeLog(e.toString(), 4);
+        }
+        return success;
     }
 
     /**
@@ -152,25 +169,35 @@ public class UserService {
      * @param userInfo UserInfo Object
      */
     public static void saveProper(User user, UserInfo userInfo){
-        getSession().save(user);
-        getSession().save(userInfo);
+        save(user);
+        save(userInfo);
 
-        query = getSession().createQuery("UPDATE USER_INFO SET role.roleID = :value WHERE username = :username");
+        try {
+            tx = getSession().beginTransaction();
 
-        if (userInfo.getUsername() != "KMART"){
-            query.setParameter("value", 0);
+            query = getSession().createQuery("UPDATE USER_INFO SET role.roleID = :value WHERE username = :username");
+
+            if (userInfo.getUsername() != "KMART") {
+                query.setParameter("value", 0);
+                query.setParameter("username", userInfo.getUsername());
+            } else {
+                query.setParameter("value", 1);
+                query.setParameter("username", userInfo.getUsername());
+            }
+
+            query = getSession().createQuery("update USER set userInfo.username = :username where firstName = :firstName");
             query.setParameter("username", userInfo.getUsername());
-        } else {
-            query.setParameter("value", 1);
-            query.setParameter("username", userInfo.getUsername());
+            query.setParameter("firstName", user.getFirstName());
+            query.executeUpdate();
+
+            tx.commit();
+        } catch (Exception e) {
+            if (tx != null)
+                tx.rollback();
+
+            MyLogger.getMyLogger().writeLog(e.toString(), 4);
         }
 
-        query = getSession().createQuery("update USER set userInfo.username = :username where firstName = :firstName");
-        query.setParameter("username", userInfo.getUsername());
-        query.setParameter("firstName", user.getFirstName());
-        query.executeUpdate();
-
-        getSession().flush();
     }
 
     /**

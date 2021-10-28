@@ -40,14 +40,19 @@ public class RegisterServlet extends HttpServlet {
             ObjectMapper mapper = new ObjectMapper();
             RegisterInfo newUser = mapper.readValue(jsonText, RegisterInfo.class);
 
-            UserService.register(newUser.getFirstname(),
+            if (UserService.register(newUser.getFirstname(),
                     newUser.getLastname(), newUser.getUsername(),
-                    newUser.getPassword());
-
-            jObj.put("Token", JWTUtil.createJWT(request));
-            response.setStatus(202);
-            response.setContentType("application/json");
-            response.getWriter().write(jObj.toString());
+                    newUser.getPassword())){
+                jObj.put("Token", JWTUtil.createJWT(request));
+                response.setStatus(202);
+                response.setContentType("application/json");
+                response.getWriter().write(jObj.toString());
+            } else {
+                jObj.put("Status", "Failed");
+                response.setStatus(500);
+                response.setContentType("application/json");
+                response.getWriter().write(jObj.toString());
+            }
         } catch (IOException e) {
             MyLogger.getMyLogger().writeLog(e.toString(), 3);
         }

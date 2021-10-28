@@ -1,6 +1,7 @@
 package Models;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -13,6 +14,7 @@ import java.util.List;
 @Entity(name = "ROLE")
 public class Role{
     public Role(){
+        userInfo = new ArrayList<>();
     }
 
     public Role(int roleID) {
