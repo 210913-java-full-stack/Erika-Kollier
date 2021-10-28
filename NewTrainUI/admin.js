@@ -95,12 +95,10 @@ function createATrain() {
       "Authorization": token
     }
   }).then(response => {
-    console.log(response)
   })
   if(!e.target.classList.contains("deleteButton")) {
     return;
   }
-  alert("Train Route Canceled")
   const btn = e.target;
   btn.closest("tr").remove();
 }
@@ -155,7 +153,7 @@ function populateTable(json) {
             "text-align: center; " +
             "align-items: flex-start; " +
             "top: 5px; ";
-        btn.onclick = function(){cancelRoute(this)};
+        btn.onclick = function(){cancelRoute(btn)};
 
       for (let value of values.pop()) {
         let cell = tr.insertCell(-1);
@@ -174,6 +172,8 @@ function cancelRoute(element){
     let row = table.getElementsByTagName('tr').item(element.parentNode.rowIndex - 1);
     let id = row.getElementsByTagName("td").item(0).innerText;
     let deleteTrainURL = "http://localhost:8080/Erika-Kollier/train?delete";
+
+    console.log(id);
 
     fetch(deleteTrainURL, {
         method:"DELETE",
@@ -452,9 +452,6 @@ function getPassengerList() {
             } else {
                 alert(response)
             }
-
-            console.log(Object.values(response).pop());
-
         })
 }
 
@@ -466,9 +463,6 @@ function populatePassengerTable(json) {
     let table = document.getElementById("ViewPassengerList")
     let rows = Object.values(json).pop().length;
     let values = Object.values(json).pop();
-
-    console.log(rows);
-
     try {
         for (let i = 0; i < rows; i++) {
             let tr = table.insertRow(0);
@@ -480,4 +474,11 @@ function populatePassengerTable(json) {
     } catch (error) {
         console.log("Error:", error);
     }
+}
+
+function clearAllTableData(){
+    let passengerListTbody = document.getElementById("ViewPassengerList")
+    let userTicketsListBody = document.getElementById("userTickets")
+    userTicketsListBody.innerHTML = "";
+    passengerListTbody.innerHTML = "";
 }

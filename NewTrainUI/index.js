@@ -56,7 +56,6 @@ function userRegister() {
   let userLastname = document.getElementById("lastname").value;
   let userUsername = document.getElementById("username").value;
   let userPassword = document.getElementById("password").value;
-  console.log(userFirstname, userLastname, userUsername, userPassword);
 
   let userData = {
       firstname: userFirstname,

@@ -148,7 +148,6 @@ public class TrainServlet extends HttpServlet {
             if ("delete".equals(paramInfo[0])) {
                 try {
                     Train train = TrainService.getTrainByID(Integer.parseInt(request.getHeader("ID")));
-                    System.out.println(train.toString());
 
                     if(TrainService.delete(train)){
                         jObj.put("Status", "Train has failed to delete...");

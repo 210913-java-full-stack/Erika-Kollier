@@ -1,13 +1,16 @@
 package Logging;
 
-import java.io.File;
-import java.io.IOException;
-
 import java.io.FileWriter;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ *  This class is used handle the writing of logs to a file
+ *  * @date 10/21/2021
+ *  * @author Kollier Martin and Erika Johnson
+ */
 public class MyLogger {
     private static MyLogger myLogger;
     private static int threshold;

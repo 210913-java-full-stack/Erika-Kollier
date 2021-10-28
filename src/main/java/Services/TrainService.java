@@ -222,7 +222,7 @@ public class TrainService {
             MyLogger.getMyLogger().writeLog(e.toString(), 3);
         }
 
-        setNewRouteFK(train.getTrainId(), station1.getStationID(), trip.getTripID());
+        setNewRouteFK(train.getTrainId(), station1.getStationID(), trip.getTripID(), schedule.getScheduleID());
 
         return train.getTrainId();
     }
@@ -231,7 +231,7 @@ public class TrainService {
      * Sets foreign key constraints because I don't trust hibernate to do it
      * @param trainID The new train's ID
      */
-    private static void setNewRouteFK(int trainID, int stationId, int tripID){
+    private static void setNewRouteFK(int trainID, int stationId, int tripID, int scheduleID){
         query = getSession().createSQLQuery("UPDATE TICKETS SET TRAIN_TICKET_FK = :trainID WHERE TRAIN_ID_FK = :trainID2");
         query.setParameter("trainID", trainID);
         query.setParameter("trainID2", trainID);
@@ -242,9 +242,9 @@ public class TrainService {
         query.setParameter("stationID", stationId);
         query.executeUpdate();
 
-        query = getSession().createSQLQuery("UPDATE SCHEDULES SET DummyStationRow = :stationID WHERE SCHEDULE_ID = :stationID2");
+        query = getSession().createSQLQuery("UPDATE SCHEDULES SET DummyStationRow = :stationID WHERE SCHEDULE_ID = :scheduleID");
         query.setParameter("stationID", stationId);
-        query.setParameter("stationID2", stationId);
+        query.setParameter("scheduleID", scheduleID);
         query.executeUpdate();
     }
 
@@ -259,16 +259,22 @@ public class TrainService {
         try {
             tx = getSession().beginTransaction();
 
-            // Delete ticket_id = train_id
-            query = getSession().createQuery("DELETE TICKET where ticketID = :id");
+            query = getSession().createSQLQuery("SELECT TICKET_ID FROM TICKETS where TRAIN_ID_FK = :id");
             query.setParameter("id", train.getTrainId());
+            int TID = query.getFirstResult();
+
+            query = getSession().createQuery("DELETE TICKET where ticketID = :id");
+            query.setParameter("id", TID);
+            query.executeUpdate();
+
+            query = getSession().createSQLQuery("UPDATE TICKETS SET TRAIN_ID_FK = NULL WHERE TRAIN_ID_FK = :trainID");
+            query.setParameter("trainID", train.getTrainId());
             query.executeUpdate();
 
             query = getSession().createSQLQuery("DELETE FROM STATIONS_TRAINS WHERE trains_TRAIN_ID = :trainID");
             query.setParameter("trainID", train.getTrainId());
             query.executeUpdate();
 
-            getSession().delete(getSession().find(Ticket.class, train.getTicketID()));
             getSession().delete(train);
 
             tx.commit();

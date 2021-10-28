@@ -124,6 +124,9 @@ public class UserService {
         UUID generatedID = UUID.randomUUID();
         user = new User();
         userInfo = new UserInfo();
+        Role role = new Role();
+
+        role.setRoleID(0);
 
         user.setUserID(generatedID);
         user.setFirstName(firstName);
@@ -132,6 +135,13 @@ public class UserService {
         userInfo.setUserID(generatedID);
         userInfo.setUsername(username);
         userInfo.setPassword(password);
+        userInfo.setRole(role);
+        userInfo.setUser(user);
+
+        role.getUserInfo().add(userInfo);
+        role.setUserInfo(role.getUserInfo());
+
+        user.setUserInfo(userInfo);
 
         saveProper(user, userInfo);
     }
