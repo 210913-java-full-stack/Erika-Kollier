@@ -5,6 +5,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Enumeration;
 
+/**
+ * This class handles token creation and parsing
+ * @date 10/21/2021
+ * @author Kollier Martin and Erika Johnson
+ **/
+
 public class RequestArgChecker {
     private static String paramName, paramValue;
     private static String[] paramValues;

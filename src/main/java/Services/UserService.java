@@ -17,6 +17,12 @@ import java.util.UUID;
 import static Global.GlobalPersistence.getSession;
 import static Utils.ServiceRequests.addRequest;
 
+/**
+ * This class is a part of the service layer that handles User requests
+ * @date 10/21/2021
+ * @author Kollier Martin and Erika Johnson
+ */
+
 public class UserService {
     private static List<User> users;
     private static User user;
@@ -65,7 +71,7 @@ public class UserService {
         try {
             tx = getSession().beginTransaction();
 
-            query = getSession().createQuery( "FROM USER WHERE firstName = :firstName", User.class);
+            query = getSession().createSQLQuery( "SELECT * FROM USERS WHERE FIRST_NAME = :firstName");
             query.setParameter("firstName", name);
 
             users = query.getResultList();

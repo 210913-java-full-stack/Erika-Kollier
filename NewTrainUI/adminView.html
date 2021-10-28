@@ -81,7 +81,16 @@
                     >Ticket Purchase</a
                   >
                 </li>
-
+                <li>
+                  <a
+                        class="dropdown-item"
+                        href="#"
+                        data-bs-toggle="modal"
+                        data-bs-target="#modal3"
+                        onclick="getPassengerList()"
+                  >View Passengers with Tickets</a
+                  >
+                </li>
               </ul>
             </li>
           </ul>
@@ -124,13 +133,13 @@
                 <table class="table table-hover" id="userTickets">
                   <thead>
                     <tr>
+                      <th class="userView" scope="col">Ticket ID</th>
                       <th class="userView" scope="col">Train ID</th>
-                      <th class="userView" scope="col">Departure City</th>
-                      <th class="userView" scope="col">Arrival City</th>
-                      <th class="userView" scope="col">Total Tickets</th>
+                      <th class="userView" scope="col">Description</th>
+                      <th class="userView" scope="col">Cancel</th>
+                      <th class="userView" scope="col">Check-In</th>
                     </tr>
                   </thead>
-                  <tr>
                   <tbody id = "viewTickets">
 
                   </tbody>
@@ -141,6 +150,7 @@
                   type="button"
                   class="btn btn-secondary"
                   data-bs-dismiss="modal"
+                  onclick=""
                 >
                   Close
                 </button>
@@ -213,6 +223,59 @@
           </div>
         </div>
       </div>
+
+        <!---View Passengers with Tickets-->
+
+        <style>
+
+          table#allPassengers.table.table-hover{
+            position: relative;
+            top:-10px;
+          }
+
+        </style>
+
+        <div class="modal-dialog modal-dialog-scrollable">
+          <div class="modal" id="modal3" tabindex="-1">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">View Passengers with Tickets</h5>
+                  <button
+                          type="button"
+                          class="btn-close"
+                          data-bs-dismiss="modal"
+                          aria-label="Close"
+                  ></button>
+                </div>
+                <div class="modal-body">
+                  <table class="table table-hover" id="allPassengers">
+                    <thead>
+                    <tr>
+                      <th scope="col">Ticket ID</th>
+                      <th scope="col">Train ID</th>
+                      <th scope="col">First Name</th>
+                      <th scope="col">Last Name</th>
+                    </tr>
+                    </thead>
+                    <tbody id = "ViewPassengerList">
+
+                    </tbody>
+                  </table>
+                </div>
+                <div class="modal-footer">
+                  <button
+                          type="button"
+                          class="btn btn-secondary"
+                          data-bs-dismiss="modal"
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
       <!--Schedule/Create a Train Route-->
 

@@ -11,6 +11,12 @@ import java.sql.Date;
 import static Global.GlobalPersistence.getSession;
 import static Utils.ServiceRequests.addRequest;
 
+/**
+ * This class is a part of the service layer that handles Login requests
+ * @date 10/21/2021
+ * @author Kollier Martin and Erika Johnson
+ */
+
 public class LoginService {
     private static boolean isValid;
     private static UserInfo userInfo;

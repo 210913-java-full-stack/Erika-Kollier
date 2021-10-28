@@ -4,6 +4,12 @@ import javax.persistence.*;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * This class is used to declare the POJO, Train
+ * @date 10/23/2021
+ * @author Kollier Martin and Erika Johnson
+ */
+
 @Table(name = "TRAINS")
 @Entity(name = "TRAIN")
 public class Train {

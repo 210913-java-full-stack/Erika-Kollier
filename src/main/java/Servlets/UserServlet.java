@@ -1,11 +1,5 @@
 package Servlets;
 
-/**
- * @Description This servlet processes the user HTTP methods to get and return a User as requested, and if permitted
- * @Authors Kollier Martin and Erika Johnson
- * @Date 10/19/2021
- */
-
 import Logging.MyLogger;
 import Services.UserService;
 import Utils.RequestArgChecker;
@@ -19,7 +13,13 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.stream.Collectors;
 
-@WebServlet(name = "UserServlet", value = {"/user", "/user?firstName"})
+/**
+ * This servlet processes the user HTTP methods to get and return a User as requested, and if permitted
+ * @author Kollier Martin and Erika Johnson
+ * @date 10/23/2021
+ */
+
+@WebServlet(name = "UserServlet", value = {"/user", "/user?"})
 public class UserServlet extends HttpServlet {
     /**
      * This get method returns a single User object, or all User objects based on arguments passed in the HTTP request
@@ -49,10 +49,5 @@ public class UserServlet extends HttpServlet {
         }
 
         response.getWriter().print(jOBj);
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
     }
 }

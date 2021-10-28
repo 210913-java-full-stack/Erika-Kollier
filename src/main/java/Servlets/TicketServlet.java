@@ -1,11 +1,5 @@
 package Servlets;
 
-/**
- * @Description This servlet processes the user HTTP methods to get and return Ticket Info as requested, and if permitted
- * @Authors Kollier Martin and Erika Johnson
- * @Date 10/19/2021
- */
-
 import Logging.MyLogger;
 import Models.Ticket;
 import POSTModels.NewTicket;
@@ -15,7 +9,6 @@ import Utils.JWTUtil;
 import Utils.RequestArgChecker;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONObject;
-
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -26,7 +19,13 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-@WebServlet(name = "TicketServlet", value = {"/ticket", "/ticket?new", "/ticket?cancel", "/ticket?checkin", "/ticket?myTickets"})
+/**
+ * This servlet processes the user HTTP methods to get and return Ticket Info as requested, and if permitted
+ * @author Kollier Martin and Erika Johnson
+ * @date 10/23/2021
+ */
+
+@WebServlet(name = "TicketServlet", value = {"/ticket", "/ticket?"})
 public class TicketServlet extends HttpServlet {
     // Global parameters
     int trainID = 0;
@@ -62,12 +61,10 @@ public class TicketServlet extends HttpServlet {
 
                 try {
                     username = (paramInfo[1]);
-                    ArrayList<Ticket> myTickets = (ArrayList<Ticket>) TicketService.getByUser(username);
+                    ArrayList<Object> myTickets = (ArrayList<Object>) TicketService.getByUser(username);
 
                     if (myTickets != null) {
-                        for (Ticket myTicket : myTickets) {
-                            jOBj.put(username + "'s Tickets", myTicket);
-                        }
+                        jOBj.put(username + "'s Tickets", myTickets);
                     } else {
                         jOBj.put("Status", "User Has No Tickets");
                     }
@@ -83,6 +80,11 @@ public class TicketServlet extends HttpServlet {
         }
     }
 
+    /**
+     * Every POST request is handled in this method. It changes data within the server
+     * @param request Client Request
+     * @param response Response to Client
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response){
         JSONObject jOBj = new JSONObject();
@@ -131,10 +133,6 @@ public class TicketServlet extends HttpServlet {
                     jOBj.put("trainID", trainID);
 
                     response.getWriter().write(jOBj.toString());
-                } else if ("cancel".equals(paramInfo[0])) {
-                    requestBody = request.getInputStream();
-                    Scanner sc = new Scanner(requestBody, StandardCharsets.UTF_8.name());
-                    jsonText = sc.useDelimiter("\\A").next();
                 }
             }
         } catch (Exception e) {
@@ -142,6 +140,11 @@ public class TicketServlet extends HttpServlet {
         }
     }
 
+    /**
+     * Every PUT request is handled in this method. It modifies the data within the server
+     * @param request Client Request
+     * @param response Response to Client
+     */
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response) {
         JSONObject jOBj = new JSONObject();
@@ -177,6 +180,11 @@ public class TicketServlet extends HttpServlet {
         }
     }
 
+    /**
+     * Every DELETE request is handled in this method. It deletes data within the server
+     * @param request Client Request
+     * @param response Response to Client
+     */
     @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response){
         JSONObject jOBj = new JSONObject();

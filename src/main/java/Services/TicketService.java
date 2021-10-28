@@ -16,6 +16,12 @@ import java.util.List;
 import static Global.GlobalPersistence.getSession;
 import static Utils.ServiceRequests.addRequest;
 
+/**
+ * This class is a part of the service layer that handles Ticket requests
+ * @date 10/21/2021
+ * @author Kollier Martin and Erika Johnson
+ */
+
 public class TicketService {
     private static List<Ticket> tickets;
     private static Ticket ticket;
@@ -59,7 +65,7 @@ public class TicketService {
 
         try {
             tx = getSession().beginTransaction();
-            query = getSession().createQuery( "FROM TICKET WHERE ticketID = :id", Ticket.class);
+            query = getSession().createSQLQuery( "SELECT * FROM TICKETS WHERE TICKET_ID = :id");
             query.setParameter("id", id);
 
             tickets = query.getResultList();
@@ -79,15 +85,19 @@ public class TicketService {
      * @param username Username tied to UserInfo object
      * @return Ticket(s) object if exists
      */
-    public static List<Ticket> getByUser(String username){
+    public static List<Object> getByUser(String username){
         addRequest("GET: get Tickets for User: " + username + ".", new Date(System.currentTimeMillis()));
 
+        ArrayList<Object> myTickets = new ArrayList();
         try {
             tx = getSession().beginTransaction();
-            query = getSession().createQuery( "FROM TICKET WHERE userInfo.username = :id", Ticket.class);
+            query = getSession().createSQLQuery("SELECT TICKET_ID, TRAIN_ID_FK, DESCRIPTION " +
+                            "FROM TICKETS " +
+                            "JOIN USER_INFOS UI on UI.USERNAME = TICKETS.USERNAME_TICKET_FK " +
+                    "WHERE USERNAME = :id");
             query.setParameter("id", username);
 
-            tickets = query.getResultList();
+            myTickets = (ArrayList<Object>) query.getResultList();
 
             tx.commit();
         } catch (HibernateException e){
@@ -96,7 +106,7 @@ public class TicketService {
             MyLogger.getMyLogger().writeLog(e.toString(), 3);
         }
 
-        return tickets;
+        return myTickets;
     }
 
     /**
@@ -150,15 +160,12 @@ public class TicketService {
     public static boolean create(String username, int trainID, int ticketValue, String departureStation, String arrivalStation) {
         boolean success = true;
         for (int i = 0; i < ticketValue; i++){
-            getSession().flush();
             ticket = new Ticket();
             Timestamp departureDate = null;
             Timestamp arrivalDate = null;
 
             try {
                 tx = getSession().beginTransaction();
-
-                // Get dates from schedule and assign them to the description
 
                 // Arrival Date Query
                 query = getSession().createSQLQuery("SELECT ARRIVAL_TIME " +
@@ -170,10 +177,7 @@ public class TicketService {
                 query.setParameter("trainID", trainID);
                 arrivalDate = (Timestamp) query.getSingleResult();
 
-                tx.commit();
-
                 // Departure Date Query
-                tx = getSession().beginTransaction();
 
                 query = getSession().createSQLQuery("SELECT DEPARTURE_TIME " +
                         "FROM SCHEDULES " +
@@ -184,15 +188,13 @@ public class TicketService {
                 query.setParameter("trainID", trainID);
                 departureDate = (Timestamp) query.getSingleResult();
 
-                tx.commit();
-
                 // Set ticket information
-                tx = getSession().beginTransaction();
-
                 ticket.setDescription(departureStation + " Station:", departureDate.toString(),
                         arrivalStation + " Station:", arrivalDate.toString());
 
                 Train train = getSession().find(Train.class, trainID);
+                train.setPassengers(train.getPassengers() + ticketValue);
+                getSession().update(train);
                 ticket.setTrain(train);
 
                 UserInfo userInfo = getSession().find(UserInfo.class, username);
@@ -296,8 +298,6 @@ public class TicketService {
                     "WHERE TRAIN_ID_FK = :trainID");
             query.setParameter("trainID", trainID);
             int ticketID = (Integer) query.getResultList().get(1);
-
-            System.out.println("DEBUG - " + ticketID);
 
             Ticket ticket = getSession().find(Ticket.class, ticketID);
             UserInfo userInfo = getSession().find(UserInfo.class, username);

@@ -12,6 +12,8 @@ import java.util.Date;
 
 /**
  * This class is used to record every request made in a single session.
+ * @date 10/21/2021
+ * @author Kollier Martin and Erika Johnson
  */
 public abstract class ServiceRequests {
     // The request count for this session

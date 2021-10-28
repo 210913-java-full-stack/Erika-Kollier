@@ -10,6 +10,11 @@ import static Global.GlobalPersistence.*;
 import static DBPopulation.Generators.*;
 import Services.UserService;
 
+/**
+ * This class is used populate certain tables in the DB and create new admins
+ * @date 10/25/2021
+ * @author Kollier Martin and Erika Johnson
+ */
 public class UserAndUserInfo {
     static Transaction tx = null;
     static Scanner scn = new Scanner(System.in);

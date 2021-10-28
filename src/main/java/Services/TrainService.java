@@ -6,17 +6,21 @@ import org.hibernate.HibernateException;
 import org.hibernate.Transaction;
 
 import javax.persistence.Query;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Random;
 
 import DBPopulation.Generators;
 
 import static Global.GlobalPersistence.getSession;
 import static Utils.ServiceRequests.addRequest;
+
+/**
+ * This class is a part of the service layer that handles Ticket requests
+ * @date 10/21/2021
+ * @author Kollier Martin and Erika Johnson
+ */
 
 public class TrainService {
     private static List<Train> trains;
@@ -38,7 +42,6 @@ public class TrainService {
         try {
             tx = getSession().beginTransaction();
 
-            // This is a cop out. I want the Criteria select to match this
             trains = getSession().createSQLQuery( "SELECT TRAIN_ID, PASSENGERS, " +
                     "T2.DEPARTURE_CITY AS DEPARTURE_INFO, DEPARTURE_TIME, " +
                     "T2.ARRIVAL_CITY AS ARRIVAL_INFO, ARRIVAL_TIME, AVAILABLE " +
@@ -129,11 +132,41 @@ public class TrainService {
     }
 
     /**
+     * Get all passengers and their designated trains
+     * @return List of passengers
+     */
+    public static ArrayList<Object> getAllPassengers(){
+        ArrayList<Object> passengers = new ArrayList<>();
+
+        try{
+            tx = getSession().beginTransaction();
+
+            query = getSession().createSQLQuery("SELECT T.TICKET_ID, TRAIN_ID, FIRST_NAME, LAST_NAME " +
+                    "FROM USERS " +
+                    "JOIN USER_INFOS UI on UI.USERNAME = USERS.userInfo_USERNAME " +
+                    "JOIN TICKETS T on UI.USERNAME = T.USERNAME_TICKET_FK " +
+                    "JOIN TRAINS T2 on T.TRAIN_TICKET_FK = T2.TRAIN_ID " +
+                    "WHERE T2.TRAIN_ID = T.TRAIN_TICKET_FK");
+
+            passengers = (ArrayList<Object>) query.getResultList();
+
+            tx.commit();
+        } catch (Exception e) {
+            if (tx != null)
+                tx.rollback();
+
+            MyLogger.getMyLogger().writeLog(e.toString(), 3);
+        }
+
+        return passengers;
+    }
+
+    /**
      * Create route and persist it to the database
-     * @param departureStation
-     * @param arrivalStation
-     * @param departureDate
-     * @param arrivalDate
+     * @param departureStation Station the train is departing from
+     * @param arrivalStation Station the train is arriving to
+     * @param departureDate Departure date
+     * @param arrivalDate Arrival date
      */
     public static int createRoute(String departureStation, String arrivalStation, String departureDate, String arrivalDate){
         Date arrival;
@@ -199,7 +232,6 @@ public class TrainService {
      * @param trainID The new train's ID
      */
     private static void setNewRouteFK(int trainID, int stationId, int tripID){
-        // Set TRIPS_STATIONS and TRAINS.TRAIN_STATION_FK
         query = getSession().createSQLQuery("UPDATE TICKETS SET TRAIN_TICKET_FK = :trainID WHERE TRAIN_ID_FK = :trainID2");
         query.setParameter("trainID", trainID);
         query.setParameter("trainID2", trainID);

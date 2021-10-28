@@ -1,5 +1,11 @@
 package POSTModels;
 
+/**
+ * This class is used to handle POST Request data for the specified 'Purchase Tickets' transaction
+ * @date 10/24/2021
+ * @author Kollier Martin and Erika Johnson
+ */
+
 public class NewTicket {
     int totalTickets, tid;
     String departureStation, arrivalStation, username;

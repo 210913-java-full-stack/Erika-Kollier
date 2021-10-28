@@ -7,6 +7,12 @@ import io.jsonwebtoken.security.Keys;
 import javax.servlet.http.HttpServletRequest;
 import java.security.Key;
 
+/**
+ * This class handles token creation and parsing
+ * @date 10/23/2021
+ * @author Kollier Martin and Erika Johnson
+ **/
+
 public class JWTUtil {
     private static Key key;
 

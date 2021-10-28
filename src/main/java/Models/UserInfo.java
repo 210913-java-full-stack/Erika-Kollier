@@ -4,6 +4,11 @@ import javax.persistence.*;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * This class is used to declare the POJO, UserInfo
+ * @date 10/23/2021
+ * @author Kollier Martin and Erika Johnson
+ */
 @Table(name = "USER_INFOS")
 @Entity(name = "USER_INFO")
 public class UserInfo{

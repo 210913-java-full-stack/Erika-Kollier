@@ -14,13 +14,14 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
+/**
+ * This servlet processes the user HTTP methods and handles the passing of a Registered User as requested, and if permitted
+ * @author Kollier Martin and Erika Johnson
+ * @date 10/23/2021
+ */
+
 @WebServlet(name = "RegisterServlet", value = "/register")
 public class RegisterServlet extends HttpServlet {
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response){
-
-    }
-
     /**
      * Handles the request for user registration
      * @param request Request from client

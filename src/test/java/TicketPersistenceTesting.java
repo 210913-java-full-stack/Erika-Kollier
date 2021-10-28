@@ -1,18 +1,12 @@
 import Models.Train;
-import Models.User;
+
 import Models.UserInfo;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.query.NativeQuery;
 import org.hibernate.query.Query;
-import org.json.JSONObject;
 import org.junit.jupiter.api.*;
 
-import java.sql.Date;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 import static Global.GlobalPersistence.*;
 

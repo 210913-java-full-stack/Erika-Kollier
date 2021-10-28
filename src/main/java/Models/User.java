@@ -5,6 +5,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * This class is used to declare the POJO, User
+ * @date 10/23/2021
+ * @author Kollier Martin and Erika Johnson
+ */
 @Table(name = "USERS")
 @Entity(name = "USER")
 public class User {

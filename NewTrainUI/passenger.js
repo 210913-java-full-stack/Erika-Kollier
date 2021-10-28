@@ -9,10 +9,11 @@ function userLogout() {
     window.location.href = "index.html";
 }
 
-let url = "http://localhost:8080/Erika-Kollier/ticketPurchase";
-const form = document.getElementById("purchaseTicketForm");
-
-/***LIST OF PASSENGER INFO AND TRAIN INFO, DISPLAYED WITHIN A TABLE */
+/***
+ *
+ * LIST OF PASSENGER INFO AND TRAIN INFO, DISPLAYED WITHIN A TABLE
+ *
+ ***/
 (async function getTrainList() {
     let trainUrl = 'http://localhost:8080/Erika-Kollier/train';
     const token = localStorage.getItem("Token");
@@ -48,7 +49,9 @@ function populateTable(json) {
     }
 }
 
-/***CREATE A TICKET, VIEW TICKET FOR CHECKIN OR CANCEL */
+/***
+ * CREATE A TICKET, VIEW TICKET FOR CHECKIN OR CANCEL
+ ***/
 function createATicket() {
 
     const form = document.getElementById("purchaseTicketForm")
@@ -125,6 +128,10 @@ function createATicket() {
     form.addEventListener('submit', onAddTickets)
 }
 
+/**
+ * This contains the logic to cancel  a ticket
+ * @param json The response from the backend
+ */
 function deleteTicket(e) {
     const tbody = document.getElementById("viewTickets")
     const tid = tbody.getElementsByTagName("tr")[0].innerText[0];
@@ -152,11 +159,15 @@ function deleteTicket(e) {
         })
 }
 
+/**
+ * This contains the logic to checkIn for a ticket
+ * @param json The response from the backend
+ */
 function checkIn(e) {
     const tbody = document.getElementById("viewTickets")
     const checkInUrl = "http://localhost:8080/Erika-Kollier/ticket?checkin"
     const token = localStorage.getItem("Token");
-    const tid = tbody.getElementsByTagName("tr")[0].innerText[0];
+    const tid = tbody.getElementsByTagName("tr")[0].innerText[3];
     const username = localStorage.getItem("Current User");
 
     fetch(checkInUrl, {
@@ -172,7 +183,16 @@ function checkIn(e) {
         .then(function (response) {
             if (Object.values(response).pop() === localStorage.getItem("Current User") + " Successful Check-In") {
                 alert("You have successfully checked in!")
-                e.className = "btn-success"
+                e.style = "background-color:#44C525; " +
+                    "color:white; " +
+                    "position: relative; " +
+                    "padding: 1px 6px; " +
+                    "align: center; " +
+                    "left: 8px; " +
+                    "display: inline-block; " +
+                    "text-align: center; " +
+                    "align-items: flex-start; " +
+                    "top: 5px; ";
                 e.textContent = "Checked In!"
                 e.value = "Checked In!"
                 e.disabled = true;
@@ -182,7 +202,9 @@ function checkIn(e) {
         })
 }
 
-
+/**
+ * Get TicketList returns the current User's owned tickets
+ */
 function getTicketList() {
     let ticketUrl = 'http://localhost:8080/Erika-Kollier/ticket?myTickets=' + localStorage.getItem("Current User");
     const token = localStorage.getItem("Token");
@@ -206,22 +228,59 @@ function getTicketList() {
         })
 }
 
+/**
+ * This contains the logic to populate the list with 'getTicketList()'
+ * @param json The response from the backend
+ */
 function populateTicketTable(json) {
     let table = document.getElementById("viewTickets")
     let rows = Object.values(json).length;
-    let values = Object.values(json);
+    let values = Object.values(json).pop();
 
     try {
         for (let i = 0; i < rows; i++) {
             let tr = table.insertRow(0);
-            for (let value of values) {
+            let cancelBtn = document.createElement('input');
+            cancelBtn.type = "button";
+            cancelBtn.value = "Cancel";
+            cancelBtn.textContent = "Cancel";
+            cancelBtn.className = "ticketButtons";
+            cancelBtn.onclick = function(){deleteTicket(this)};
+            cancelBtn.style = "background-color:#C1371A; " +
+                "color:white; " +
+                "position: relative; " +
+                "padding: 1px 6px; " +
+                "align: center; " +
+                "left: 8px; " +
+                "display: inline-block; " +
+                "text-align: center; " +
+                "align-items: flex-start; " +
+                "top: 5px; ";
+
+            let checkInBtn = document.createElement('input');
+            checkInBtn.type = "button";
+            checkInBtn.value = "Check-In";
+            checkInBtn.textContent = "Check-In";
+            checkInBtn.className = "ticketButtons";
+            checkInBtn.onclick = function(){checkIn(this)};
+            checkInBtn.style = "background-color:#0d6efd; " +
+                "color:white; " +
+                "position: relative; " +
+                "padding: 1px 6px; " +
+                "align: center; " +
+                "left: 80px; " +
+                "display: inline-block; " +
+                "text-align: center; " +
+                "align-items: flex-start; " +
+                "top: -24px; ";
+            for (let value of values.pop()) {
                 let cell = tr.insertCell(-1);
                 cell.innerHTML = value;
+                tr.append(cancelBtn);
+                tr.append(checkInBtn);
             }
         }
     } catch (error) {
         console.log("Error:", error);
     }
 }
-
-  

@@ -2,6 +2,12 @@ package Models;
 
 import javax.persistence.*;
 
+/**
+ * This class is used to declare the POJO, Ticket
+ * @date 10/23/2021
+ * @author Kollier Martin and Erika Johnson
+ */
+
 @Table(name = "TICKETS")
 @Entity(name = "TICKET")
 public class Ticket {

@@ -2,6 +2,12 @@ package DBPopulation;
 
 import java.util.Random;
 
+/**
+ * This class is used as a random name, city, and state generator
+ * @date 10/25/2021
+ * @author Kollier Martin and Erika Johnson
+ */
+
 public class Generators {
     static String[] states = {
             "Freeport",
@@ -85,15 +91,21 @@ public class Generators {
         return states[index];
     }
 
-    public static String[] getNames() {
-        return names;
+    public static String getAName() {
+        Random rand = new Random();
+        int index = rand.nextInt(names.length);
+        return names[index];
     }
 
-    public static String[] getPasswords() {
-        return passwords;
+    public static String getAPassword() {
+        Random rand = new Random();
+        int index = rand.nextInt(passwords.length);
+        return passwords[index];
     }
 
-    public static String[] getUsernames() {
-        return usernames;
+    public static String getAUsername() {
+        Random rand = new Random();
+        int index = rand.nextInt(usernames.length);
+        return usernames[index];
     }
 }

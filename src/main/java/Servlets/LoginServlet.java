@@ -12,15 +12,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * This servlet processes the user HTTP methods and handles the validation of an existing User as requested, and if permitted
+ * @author Kollier Martin and Erika Johnson
+ * @date 10/23/2021
+ */
+
 @WebServlet(name = "LoginServlet", value = {"/login", "/login?"})
 public class LoginServlet extends HttpServlet {
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) {
-        // Request successful
-        response.setStatus(202);
-        response.setContentType("application/json");
-    }
-
+    /**
+     * Every POST request is handled in this method. It changes data within the server
+     * @param request Client Request
+     * @param response Response to Client
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) {
         JSONObject jObj = new JSONObject();

@@ -3,6 +3,11 @@ package Models;
 import javax.persistence.*;
 import java.util.List;
 
+/**
+ * This class is used to declare the POJO, Trip
+ * @date 10/23/2021
+ * @author Kollier Martin and Erika Johnson
+ */
 @Table(name = "TRIPS")
 @Entity(name = "TRIP")
 public class Trip {
