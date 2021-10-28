@@ -10,6 +10,8 @@
   * setItem method sets the token to the local storage, token is converted into a json object
   */
 
+window.onload = (function(){populateField()});
+
 function userLogin() {
   let userUsername = document.getElementById("username").value;
   let userPassword = document.getElementById("password").value;
@@ -86,4 +88,22 @@ function userRegister() {
     .catch((err) => {
       console.log(err);
     });
+}
+
+let username = document.getElementById("username");
+let password = document.getElementById("password");
+
+function rememberMe() {
+    localStorage.username = username.value;
+    localStorage.password = password.value;
+}
+
+function populateField() {
+    let username = document.getElementById("username");
+    let password = document.getElementById("password");
+
+    if (localStorage.getItem("username") !== null) {
+        username.value = localStorage.username;
+        password.value = localStorage.password;
+    }
 }

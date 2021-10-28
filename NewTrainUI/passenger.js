@@ -85,17 +85,6 @@ function createATicket() {
                 let username = localStorage.getItem("Current User")
 
                 alert("Ticket(s) Purchased")
-                tbody.innerHTML += `
-            <tr> 
-                <td>${trainID}</td>
-                <td>${departureStation}</td>
-                <td>${arrivalStation}</td>
-                <td>${totalTickets}</td>
-                <td><button type = "button" class = "btn-warning" onclick="deleteTicket(this)">Cancel</button></td>
-                <td><button type = "button" class = "btn-primary" onclick="checkIn(this)">Check-In</button></td>
-                
-            </tr>
-            `
                 // This POST method is used for backend ticket creation
                 let newTicket = {
                     username: username,
