@@ -13,6 +13,10 @@ Eastern Train Route is a kiosk inside a train station that allows passengers to 
 - [x] As an administrator, I can cancel a train route.
 - [x] As an administrator, I can see all users with tickets for a specific train route.
 
+### Bonus Features ToDo :
+- [ ] As an administrator, I can cancel a ticket for any train.
+- [ ] As a conductor, I can initiate takeoff the train leaving the station. (No more new tickets or cancellations)
+
 ## Technologies Used
 * Java 8 
 * JavaScript ES6
@@ -27,7 +31,7 @@ Eastern Train Route is a kiosk inside a train station that allows passengers to 
 ## Getting Started
 
 #### Clone the repo
-> https://github.com/210913-java-full-stack/Erika-Kollier.git
+> git clone https://github.com/210913-java-full-stack/Erika-Kollier
 > 
 > After cloning this is how your hierarchy should look.
 
@@ -78,22 +82,7 @@ Eastern Train Route is a kiosk inside a train station that allows passengers to 
 </hibernate-configuration>
 ```
 ## Usage
-#### -- Optional --
-> If you would like to populate the DB with custom Users, you could run [UserAndUserInfo](/src/main/java/DBPopulation/UserAndUserInfo.java)
-
-> Otherwise, start the application and open [Index](NewTrainUI/index.html)
-
-### Start Application
-![image](https://user-images.githubusercontent.com/42616274/140779196-45b9e28e-9244-4387-b3b6-5b4916745b41.png)
-
-### Click 'Sign Up'
-![image](https://user-images.githubusercontent.com/42616274/140779342-b161a78a-786d-45ac-932f-5c405845f8d0.png)
-
-### Input Your Information
-![image](https://user-images.githubusercontent.com/42616274/140784018-d1ae8ede-b37a-4209-b2b3-0b28bd1b46c3.png)
-
-### Navigate The Basic User Interface
-![image](https://user-images.githubusercontent.com/42616274/140784169-9c07cd70-ea1b-484f-b665-c6ba6cea767b.png)
+This project is straightforward, but here is an In-Depth [Guide](images/README.md) for proper usage.
 
 ## Contributors
 
