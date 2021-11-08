@@ -1,6 +1,6 @@
 # Usage
 In this guide I will show you the elements on the screen that you can interact with. <br />
-Every interaction works as it should in the backend. The frontend has hiccups, but the [Disclosure](main/README.md/##Disclosure) says so.
+Every interaction works as it should in the backend. The frontend has hiccups, but the [Disclosure](https://github.com/210913-java-full-stack/Erika-Kollier/blob/main/README.md#disclosure) says so.
 
 ## Eastern Train Co User Guide
 `1. Start Application`
