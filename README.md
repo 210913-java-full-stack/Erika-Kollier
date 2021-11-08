@@ -84,6 +84,11 @@ Eastern Train Route is a kiosk inside a train station that allows passengers to 
 ## Usage
 This project is straightforward, but here is an In-Depth [Guide](images/README.md) for proper usage.
 
+## Disclosure
+This main [branch](Erika-Kollier/tree/main) contains the final product, with bugs. <br />
+The main-patch1 [branch](Erika-Kollier/tree/main-patch1) contains the final product with no bugs. <br />
+It is your choice to decide which branch you would like run from.
+
 ## Contributors
 
 > Kollier Martin & Erika Johnson
