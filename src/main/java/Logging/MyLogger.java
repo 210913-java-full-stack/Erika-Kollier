@@ -52,7 +52,7 @@ public class MyLogger {
     private String getLogFileName() {
         String today = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
-        return "D:\\Programming Files\\Revature\\Erika-Kollier\\src\\main\\resources\\logs\\"+ today + ".log";
+        return today + ".log";
     }
 
     private String formatLogEntry(String message){
